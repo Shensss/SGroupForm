@@ -1,0 +1,157 @@
+<template>
+    <div class="upload">
+        <el-button @click="clickHandle">
+            <el-icon type="upload"></el-icon>
+            点击上传
+        </el-button>
+        <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
+        <file-view v-if="fileView" :view="view" :remove="remove" v-model="fileList"></file-view>
+    </div>
+</template>
+
+<script>
+import FileView from '../SFile/fileView'
+
+export default {
+  name: 'sUpload',
+  components: { FileView },
+  data () {
+    return {
+      fileList: [],
+      file: '',
+      fileTypeToAccept: {
+        '.pdf': 'application/pdf',
+        '.gif': 'image/gif',
+        '.jpeg': 'image/jpeg',
+        '.jpg': 'image/jpeg',
+        '.png': 'image/png',
+        '.txt': 'text/plain',
+        '.zip': 'application/zip',
+        '.csv': 'text/csv',
+        '.xls': 'application/vnd.ms-excel',
+        '.xlsx':
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        '.pptx':
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        '.doc': 'application/msword',
+        '.docx':
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      }
+    }
+  },
+  props: {
+    // 值
+    value: {
+      type: String,
+      default: ''
+    },
+    // 配置
+    accept: {
+      type: String,
+      default: ''
+    },
+    fileView: {
+      type: Boolean,
+      default: true
+    },
+    size: {
+      type: Number,
+      default: 50
+    },
+    remove: {
+      type: Boolean,
+      default: false
+    },
+    view: {
+      type: String,
+      default: 'file'
+    }
+  },
+  computed: {
+    fileType () {
+      let fileTypeArr = []
+      if (this.accept) {
+        this.accept.split(',').map(item => {
+          if (this.fileTypeToAccept[item]) {
+            fileTypeArr.push(this.fileTypeToAccept[item])
+          }
+        })
+      } else {
+        fileTypeArr = []
+      }
+      return fileTypeArr.join(',')
+    }
+  },
+  methods: {
+    clickHandle () {
+      this.$refs.input.click()
+    },
+    checkType (fileName) {
+      if (!this.opt.accept) return true
+      const index = fileName.lastIndexOf('.')
+      const extension = fileName.substring(index).toLowerCase()
+      const allowedType = this.opt.accept.split(',')
+      if (allowedType.indexOf(extension) >= 0) {
+        return true
+      } else {
+        this.$message.error('不支持' + extension + '格式')
+        return false
+      }
+    },
+    handleChange () {
+      const file = this.$refs.input.files[0]
+      const access = this.checkType(file.name)
+      if (!access) return
+
+      if (file.size > this.size * 1024 * 1024) {
+        return this.$message.error(`文件${file.name}过大!`)
+      }
+      const formData = new FormData()
+      formData.append('fileArray', file)
+      this.$Apis.systemUpload(formData).then(res => {
+        const { success, data } = res
+        if (success) {
+          const result = data.resultList[0]
+          const domain = data.domain
+          this.fileList.push({
+            name: result.originalFilename,
+            url: domain + result.fileUrl
+          })
+          this.$refs.input.value = ''
+          this.$emit('handleComplete', data)
+        }
+      })
+    },
+    buildFileList () {
+      this.value.split(',').map(item => {
+        this.fileList.push({
+          name: item.split('&&')[1],
+          url: item.split('&&')[0]
+        })
+      })
+    }
+  },
+  mounted () {
+    if (this.value) {
+      this.buildFileList()
+    }
+  },
+  watch: {
+    fileList (val) {
+      const str = []
+      val.map(item => {
+        str.push(item.url + '&&' + item.name)
+      })
+      this.$emit('input', str.join(','))
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.upload {
+    input {
+        display: none;
+    }
+}
+</style>
