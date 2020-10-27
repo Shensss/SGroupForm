@@ -141,6 +141,20 @@ form:[
 <tr>
     <td>view:String   // 'file'/'image' 预览模式</td>
 </tr>
+<tr>
+    <td rowspan="4">code</td>
+    <td>wrap:Boolean, // true/false 能否换行</td>
+    <td rowspan="4">无</td>
+</tr>
+<tr>
+    <td>readOnly:Boolean   // true/false 是否只读</td>
+</tr>
+<tr>
+    <td>tabSize:Number   // 缩进距离，默认2</td>
+</tr>
+<tr>
+    <td>fontSize:Number   // 字体大小，默认14</td>
+</tr>
 </table>
 
 -----
@@ -206,3 +220,8 @@ methods:{
 ...
 
 ```
+Api
+---
+#####getItem
+    使用：this.$ref.form.getItem
+    功能：通过参数key可以获取指定项，用于修改或者查看
