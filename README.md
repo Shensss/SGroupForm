@@ -16,9 +16,19 @@ Vue.use(sGroupForm,option)
 ```
 option可不传,或者传以下参数
 ```
-import PubSub from 'pubsub-js' // 需要安装
 option={
-  Pubsub: Pubsub// 使用pubsub时需要传入
+    UploadConfig: {             // 全局上传配置，也可以在item中传入
+      path: '',                 // 接口地址
+      data: [                   // 上传参数
+        {                       // 上传参数1 文件
+          key: 'fileArray',     // file对应的key
+          value: 'file'         // file关键字对应上传的文件
+        }
+      ],
+      domain: '',               // 接口返回文件路径url回显的前缀
+      url: 'data.result.url',   // 接口返回文件路径url回显的取值
+      name: 'data.result.name'  // 接口返回文件名称name回显的取值
+    }
 }
 ```
 组件中使用
@@ -155,5 +165,44 @@ props:{
     labelPostion:'top',
     labelWidth:'10px'
 }
+
+```
+事件指令v-change、v-blur、v-focus,以下以change为例
+```
+<s-group-form ref="form"
+              :form="form"
+              v-model="formData"
+              :item-style="itemStyle"
+              :props="props"
+              v-change="change">
+</s-group-form>
+...
+methods:{
+    change(config,value){
+        // config 当前触发事件的对应项配置
+        // value 当前项的值
+    }
+}
+...
+
+```
+事件指令修饰符 .number、.label 可以给指定的项绑定事件，number标识数组序号，label对应配置的label值即可
+```
+<s-group-form ref="form"
+              :form="form"
+              v-model="formData"
+              :item-style="itemStyle"
+              :props="props"
+              v-change.number.0="change"
+              v-change.label.姓名="change">
+</s-group-form>
+...
+methods:{
+    change(config,value){
+        // config 当前触发事件的对应项配置
+        // value 当前项的值
+    }
+}
+...
 
 ```

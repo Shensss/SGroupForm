@@ -31,18 +31,18 @@ export default {
   },
   methods: {
     change (val) {
-      if(this.config.change){
-        this.config.change(val)
+      if (this.config.change) {
+        this.config.change(this.config, val)
       }
     },
-    focus (val) {
-      if(this.config.focus){
-        this.config.focus(val)
+    focus () {
+      if (this.config.focus) {
+        this.config.focus(this.config, this.value)
       }
     },
-    blur (val) {
-      if(this.config.blur){
-        this.config.blur(val)
+    blur () {
+      if (this.config.blur) {
+        this.config.blur(this.config, this.value)
       }
     }
   }

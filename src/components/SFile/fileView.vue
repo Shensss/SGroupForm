@@ -42,6 +42,10 @@ export default {
     view: {
       type: String,
       default: 'file'
+    },
+    path: {
+      type: String,
+      default: ''
     }
   },
   filters: {

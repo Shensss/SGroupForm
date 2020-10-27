@@ -103,6 +103,9 @@ export default {
         }
       }
     },
+    change (config, val) {
+      this.$emit('change', config, val)
+    },
     getItem (target) {
       const result = []
       Object.keys(this.groups).map(key => {

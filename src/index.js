@@ -22,55 +22,42 @@ import {
 import 'element-ui/lib/theme-chalk/index.css'
 import sGroupForm from './components/SForm/index.vue'
 
+function bindEvent (eventName, binding, form) {
+  const { value, modifiers, rawName } = binding
+  if (modifiers.label) {
+    form.map(item => {
+      if (item.label === rawName.split('.')[2]) {
+        item[eventName] = value
+      }
+    })
+  } else if (modifiers.number) {
+    form[rawName.split('.')[2]][eventName] = value
+  } else {
+    form.map(item => {
+      item[eventName] = value
+    })
+  }
+}
+
 /* istanbul ignore next */
 sGroupForm.install = function (Vue, opt = {}) {
   Vue.component('sGroupForm', sGroupForm)
-  if (opt.PubSub) {
-    Vue.prototype.$PubSub = opt.PubSub
-  }
   if (opt.UploadConfig) {
     Vue.prototype.$UploadConfig = opt.UploadConfig
   }
-  Vue.directive('item-change', {
+  Vue.directive('change', {
     bind: function (el, binding, vnode) {
-      const {
-        value,
-        modifiers
-      } = binding
-      const form = vnode.context.form
-      form.map(item => {
-        if (item.label === Object.keys(modifiers)[0]) {
-          item.change = value
-        }
-      })
+      bindEvent('change', binding, vnode.context.form)
     }
   })
-  Vue.directive('item-blur', {
+  Vue.directive('blur', {
     bind: function (el, binding, vnode) {
-      const {
-        value,
-        modifiers
-      } = binding
-      const form = vnode.context.form
-      form.map(item => {
-        if (item.label === Object.keys(modifiers)[0]) {
-          item.blur = value
-        }
-      })
+      bindEvent('blur', binding, vnode.context.form)
     }
   })
-  Vue.directive('item-focus', {
+  Vue.directive('focus', {
     bind: function (el, binding, vnode) {
-      const {
-        value,
-        modifiers
-      } = binding
-      const form = vnode.context.form
-      form.map(item => {
-        if (item.label === Object.keys(modifiers)[0]) {
-          item.focus = value
-        }
-      })
+      bindEvent('focus', binding, vnode.context.form)
     }
   })
 
