@@ -12,7 +12,7 @@
                 </template>
             </el-collapse-item>
         </el-collapse>
-        <template v-for="(item) in unGroup['undefined']">
+        <template v-for="(item) in unGroups">
             <items v-if="showFunction(item.show)"
                    :key="item._code"
                    :config="item"
@@ -33,7 +33,7 @@ export default {
   data () {
     return {
       groups: {},
-      unGroup: {}
+      unGroups: []
     }
   },
   computed: {
@@ -76,7 +76,7 @@ export default {
     initGroup () {
       const groups = utils.lodash.groupBy(this.form, 'group')
       this.groups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
-      this.unGroup = utils.lodash.pick(groups, Object.keys(groups).filter(key => key === 'undefined'))
+      this.unGroups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
     },
     setValue (key, value) {
       const newValue = utils.lodash.cloneDeep(this.value)
@@ -102,6 +102,28 @@ export default {
           return false
         }
       }
+    },
+    getItem (target) {
+      const result = []
+      Object.keys(this.groups).map(key => {
+        this.groups[key].map(item => {
+          if (item.key === target || item.label === target) {
+            result.push(item)
+          }
+        })
+      })
+      if (this.unGroups) {
+        this.unGroups.map(item => {
+          if (item.key === target || item.label === target) {
+            result.push(item)
+          }
+        })
+      }
+      return result
+    },
+    setItem () {
+      console.log(this.groups)
+      console.log(this.unGroups)
     }
   }
 }

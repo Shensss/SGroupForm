@@ -1,7 +1,7 @@
 <template>
     <div class="upload">
         <el-button @click="clickHandle">
-            <el-icon type="upload"></el-icon>
+            <i class="el-icon-upload"></i>
             点击上传
         </el-button>
         <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
@@ -11,6 +11,8 @@
 
 <script>
 import FileView from '../SFile/fileView'
+import axios from 'axios'
+import utils from '../../utils'
 
 export default {
   name: 'sUpload',
@@ -65,6 +67,12 @@ export default {
     view: {
       type: String,
       default: 'file'
+    },
+    asyncConfig: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   computed: {
@@ -80,6 +88,9 @@ export default {
         fileTypeArr = []
       }
       return fileTypeArr.join(',')
+    },
+    config () {
+      return utils.lodash.merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   methods: {
@@ -87,10 +98,10 @@ export default {
       this.$refs.input.click()
     },
     checkType (fileName) {
-      if (!this.opt.accept) return true
+      if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
-      const allowedType = this.opt.accept.split(',')
+      const allowedType = this.accept.split(',')
       if (allowedType.indexOf(extension) >= 0) {
         return true
       } else {
@@ -101,21 +112,27 @@ export default {
     handleChange () {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
-      if (!access) return
+      if (!access) {
+        this.$refs.input.value = ''
+        return
+      }
 
       if (file.size > this.size * 1024 * 1024) {
+        this.$refs.input.value = ''
         return this.$message.error(`文件${file.name}过大!`)
       }
       const formData = new FormData()
-      formData.append('fileArray', file)
-      this.$Apis.systemUpload(formData).then(res => {
+      this.config.data.map(item => {
+        if (item.value === 'file') {
+          formData.append(item.key, file)
+        }
+      })
+      axios.post(this.config.path, formData).then(res => {
         const { success, data } = res
         if (success) {
-          const result = data.resultList[0]
-          const domain = data.domain
           this.fileList.push({
-            name: result.originalFilename,
-            url: domain + result.fileUrl
+            name: utils.lodash.get(this.asyncConfig.name),
+            url: this.config.domain + utils.lodash.get(this.config.url)
           })
           this.$refs.input.value = ''
           this.$emit('handleComplete', data)

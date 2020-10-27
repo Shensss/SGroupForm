@@ -31,13 +31,19 @@ export default {
   },
   methods: {
     change (val) {
-      this.$PubSub.publish('form-item-change', { config: this.config, value: val })
+      if(this.config.change){
+        this.config.change(val)
+      }
     },
-    focus () {
-      this.$PubSub.publish('form-item-focus', this.config)
+    focus (val) {
+      if(this.config.focus){
+        this.config.focus(val)
+      }
     },
-    blur () {
-      this.$PubSub.publish('form-item-blur', this.config)
+    blur (val) {
+      if(this.config.blur){
+        this.config.blur(val)
+      }
     }
   }
 }

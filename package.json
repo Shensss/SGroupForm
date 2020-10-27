@@ -1,7 +1,7 @@
 {
   "name": "s-group-form",
   "description": "",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "author": "shen",
   "license": "MIT",
   "private": false,
@@ -12,6 +12,7 @@
     "build": "webpack --display-error-details --config webpack.config.js"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "element-ui": "^2.13.2",
     "lodash": "^4.17.20",
     "vue": "^2.6.11"

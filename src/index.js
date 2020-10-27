@@ -25,7 +25,55 @@ import sGroupForm from './components/SForm/index.vue'
 /* istanbul ignore next */
 sGroupForm.install = function (Vue, opt = {}) {
   Vue.component('sGroupForm', sGroupForm)
-  Vue.prototype.$PubSub = opt.PubSub
+  if (opt.PubSub) {
+    Vue.prototype.$PubSub = opt.PubSub
+  }
+  if (opt.UploadConfig) {
+    Vue.prototype.$UploadConfig = opt.UploadConfig
+  }
+  Vue.directive('item-change', {
+    bind: function (el, binding, vnode) {
+      const {
+        value,
+        modifiers
+      } = binding
+      const form = vnode.context.form
+      form.map(item => {
+        if (item.label === Object.keys(modifiers)[0]) {
+          item.change = value
+        }
+      })
+    }
+  })
+  Vue.directive('item-blur', {
+    bind: function (el, binding, vnode) {
+      const {
+        value,
+        modifiers
+      } = binding
+      const form = vnode.context.form
+      form.map(item => {
+        if (item.label === Object.keys(modifiers)[0]) {
+          item.blur = value
+        }
+      })
+    }
+  })
+  Vue.directive('item-focus', {
+    bind: function (el, binding, vnode) {
+      const {
+        value,
+        modifiers
+      } = binding
+      const form = vnode.context.form
+      form.map(item => {
+        if (item.label === Object.keys(modifiers)[0]) {
+          item.focus = value
+        }
+      })
+    }
+  })
+
   Vue.component(Switch.name, Switch)
   Vue.component(Slider.name, Slider)
   Vue.component(TimePicker.name, TimePicker)
