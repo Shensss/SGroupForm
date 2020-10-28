@@ -44,8 +44,10 @@ form接收一个数组
 ```
 form:[
         {
-              show: 'formData.a===1'        // 控制显示隐藏，formData为内部关键字，可以传入函数
+              show: 'formData.a===1',       // 控制显示隐藏，formData为内部关键字，可以传入函数
               label: '',                    // 名称
+              tipBefore: 'aaa',             // 输入框前面的提示 支持传入html
+              tipAfter: 'aaa',              // 输入框后面的提示 支持传入html
               key: 'a',                     // 字段 支持通过对象的path绑定值比如a、a.b、a[0] 
               type: 'input',                // 控件类型 支持列表列表在下方
               props: {},                    // 控件对应的属性
@@ -54,7 +56,7 @@ form:[
                     label:'',
                     value:''
                 }
-              ]
+              ],
               style:{},                     // form-item项的样式 覆盖itemStyle
               inputStyle: {},               // form-item项内部区域的样式
               rule: [                       // 表单验证规则
@@ -173,11 +175,11 @@ itemStyle:{
 }
 
 ```
-props接收一个对象,element中 el-form的可用属性均可
+props接收一个对象
 ```
 props:{
-    labelPostion:'top',
-    labelWidth:'10px'
+    labelPostion:'left',  // left/right label文本的对齐方式
+    labelWidth:'80px'     // label的宽度 当label宽度跟item宽度一样时可以呈现上下展示功能
 }
 
 ```

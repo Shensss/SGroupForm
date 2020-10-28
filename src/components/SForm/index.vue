@@ -1,14 +1,14 @@
 <template>
-    <el-form class="s-form" v-bind="props" :model="formData">
+    <el-form class="s-form" :inline="true" v-bind="props" :model="formData">
         <el-collapse v-if="Object.keys(groups).length>0" accordion>
             <el-collapse-item v-for="name in Object.keys(groups)" :key="name" :title="name">
-                <template v-for="(item) in groups[key]">
-                    <div :key="item._code"
-                         :is="'s-'+item.type"
-                         :config="item"
-                         :item-style="itemStyle"
-                         :value="formData[item._code]"
-                         @setValue="setValue"></div>
+                <template v-for="(item) in groups[name]">
+                    <items v-if="showFunction(item.show)"
+                           :key="item._code"
+                           :config="item"
+                           :value="formData[item._code]"
+                           :item-style="itemStyle"
+                           @setValue="setValue"></items>
                 </template>
             </el-collapse-item>
         </el-collapse>
@@ -148,6 +148,10 @@ export default {
                 flex-grow: 1;
             }
         }
+    }
+
+    /deep/ .el-collapse {
+        width: 100%;
     }
 
     /deep/ .el-form-item--mini {

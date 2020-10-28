@@ -1,6 +1,10 @@
 <template>
     <el-form-item :prop="config._code" :rules="config.rule" :style="style">
-        <span slot="label" class="label"><b class="required" v-if="config.label">*</b>{{config.label}}</span>
+        <template slot="label" class="label">
+            <b class="required" v-if="config.label">*</b>{{config.label}}
+            <template v-if="config.props&&config.props.labelSuffix">{{config.props.labelSuffix||'：'}}</template>
+        </template>
+        <div v-html="config.tipBefore"></div>
         <div v-if="singleTag.indexOf(config.type)>=0" :is="'el-'+config.type"
              :style="config.inputStyle"
              @change="change"
@@ -44,6 +48,7 @@
              v-bind="config.props"
              v-model="model">
         </div>
+        <div v-html="config.tipAfter"></div>
     </el-form-item>
 </template>
 
