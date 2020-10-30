@@ -17,8 +17,7 @@ import {
   RadioGroup,
   Checkbox,
   CheckboxGroup,
-  Cascader,
-  InputNumber
+  Cascader
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import sGroupForm from './components/SForm/index.vue'
@@ -81,7 +80,6 @@ sGroupForm.install = function (Vue, opt = {}) {
   Vue.component(RadioGroup.name, RadioGroup)
   Vue.component(CheckboxGroup.name, CheckboxGroup)
   Vue.component(Cascader.name, Cascader)
-  Vue.component(InputNumber.name, InputNumber)
 }
 
 export default sGroupForm

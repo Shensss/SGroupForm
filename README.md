@@ -46,8 +46,9 @@ form:[
         {
               show: 'formData.a===1',       // 控制显示隐藏，formData为内部关键字，可以传入函数
               label: '',                    // 名称
-              tipBefore: 'aaa',             // 输入框前面的提示 支持传入html
-              tipAfter: 'aaa',              // 输入框后面的提示 支持传入html
+              labelAdd: 'aaa',              // label后面插入 支持传入html
+              inputInsert: 'aaa',           // 输入框跟label之间插入 支持传入html
+              inputAdd: 'aaa',              // 输入框后面插入 支持传入html
               key: 'a',                     // 字段 支持通过对象的path绑定值比如a、a.b、a[0] 
               type: 'input',                // 控件类型 支持列表列表在下方
               props: {},                    // 控件对应的属性
@@ -175,11 +176,17 @@ itemStyle:{
 }
 
 ```
-props接收一个对象
+props接收一个对象,可以不传，以下为默认值
 ```
 props:{
     labelPostion:'left',  // left/right label文本的对齐方式
     labelWidth:'80px'     // label的宽度 当label宽度跟item宽度一样时可以呈现上下展示功能
+    mapper:{              // options的映射字段
+        label:'label',
+        value:'value',
+        children:'children' 
+    },
+    size:'medium'        //  medium / small / mini form内部组件的大小
 }
 
 ```
@@ -220,10 +227,30 @@ methods:{
     }
 }
 ...
-
 ```
-Api
+slot使用说明 以下key为form对应的key
+----
+#####content-key
+    需要配置type为slot
+#####labelAdd-key
+    也可在item项中传对应字段，item中的优先级高于slot
+#####inputAdd-key
+    也可在item项中传对应字段，item中的优先级高于slot
+#####inputInsert-key
+    也可在item项中传对应字段，item中的优先级高于slot
+
+
+Api使用说明
 ---
 #####getItem
-    使用：this.$ref.form.getItem
+    使用：this.$refs.form.getItem(key)
     功能：通过参数key可以获取指定项，用于修改或者查看
+#####addItem
+    使用：this.$refs.form.addItem(config,number)
+    功能：动态增加item项，config传入参数跟初始化的form当中的规则相同,number，为序号可以不传，为往最后插入
+#####removeItem
+    使用：this.$refs.form.removeItem(key)
+    功能：通过参数key匹配指定项删除
+#####getIndex
+    使用：this.$refs.form.getIndex(key)
+    功能：通过参数key可以获取指定项的序号    

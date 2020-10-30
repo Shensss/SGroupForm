@@ -9,9 +9,16 @@ export default {
   props: {
     value: String | Number,
     config: Object,
-    itemStyle: Object
+    itemStyle: Object,
+    props: Object
   },
   computed: {
+    mapper () {
+      return Object.assign(
+        this.props.mapper || {},
+        this.config.mapper || {}
+      )
+    },
     style () {
       const itemStyle = utils.lodash.cloneDeep(this.itemStyle)
       if (this.config.style) {
@@ -45,5 +52,8 @@ export default {
         this.config.blur(this.config, this.value)
       }
     }
+  },
+  created () {
+    console.log(this.props)
   }
 }

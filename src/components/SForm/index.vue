@@ -1,14 +1,28 @@
 <template>
-    <el-form class="s-form" :inline="true" v-bind="props" :model="formData">
+    <el-form class="s-form" :inline="true" v-bind="propsAll" :model="formData">
         <el-collapse v-if="Object.keys(groups).length>0" accordion>
             <el-collapse-item v-for="name in Object.keys(groups)" :key="name" :title="name">
                 <template v-for="(item) in groups[name]">
                     <items v-if="showFunction(item.show)"
                            :key="item._code"
                            :config="item"
+                           :props="propsAll"
                            :value="formData[item._code]"
                            :item-style="itemStyle"
-                           @setValue="setValue"></items>
+                           @setValue="setValue">
+                        <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
+                            <slot :name="'labelAdd-'+item.key" :option="option"></slot>
+                        </template>
+                        <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
+                            <slot :name="'inputInsert-'+item.key" :option="option"></slot>
+                        </template>
+                        <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
+                            <slot :name="'inputAdd-'+item.key" :option="option"></slot>
+                        </template>
+                        <template :slot="'content-'+item._code" slot-scope="{option}">
+                            <slot :name="'content-'+item.key" :option="option"></slot>
+                        </template>
+                    </items>
                 </template>
             </el-collapse-item>
         </el-collapse>
@@ -16,9 +30,23 @@
             <items v-if="showFunction(item.show)"
                    :key="item._code"
                    :config="item"
+                   :props="propsAll"
                    :value="formData[item._code]"
                    :item-style="itemStyle"
-                   @setValue="setValue"></items>
+                   @setValue="setValue">
+                <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
+                    <slot :name="'labelAdd-'+item.key" :option="option"></slot>
+                </template>
+                <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
+                    <slot :name="'inputInsert-'+item.key" :option="option"></slot>
+                </template>
+                <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
+                    <slot :name="'inputAdd-'+item.key" :option="option"></slot>
+                </template>
+                <template :slot="'content-'+item._code" slot-scope="{option}">
+                    <slot :name="'content-'+item.key" :option="option"></slot>
+                </template>
+            </items>
         </template>
     </el-form>
 </template>
@@ -33,13 +61,14 @@ export default {
   data () {
     return {
       groups: {},
-      unGroups: []
+      unGroups: [],
+      stageForm: []
     }
   },
   computed: {
     formData () {
       const formData = {}
-      this.form.map(item => {
+      this.stageForm.map(item => {
         if (!item._code) {
           item._code = utils.custom.randomCode(12)
         }
@@ -58,23 +87,40 @@ export default {
         }
       })
       return formData
+    },
+    propsAll () {
+      return utils.lodash.merge({
+        labelWidth: '80px',
+        labelPosition: 'left',
+        mapper: {
+          label: 'label',
+          value: 'value',
+          children: 'children'
+        }
+      }, this.props)
     }
   },
   props: {
     form: Array,
     value: Object,
     itemStyle: Object,
-    props: Object
+    props: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   created () {
     this.init()
   },
   methods: {
     init () {
+      this.stageForm = utils.lodash.cloneDeep(this.form)
       this.initGroup()
     },
     initGroup () {
-      const groups = utils.lodash.groupBy(this.form, 'group')
+      const groups = utils.lodash.groupBy(this.stageForm, 'group')
       this.groups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
       this.unGroups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
     },
@@ -106,6 +152,31 @@ export default {
     change (config, val) {
       this.$emit('change', config, val)
     },
+    addItem (item, number) {
+      const form = utils.lodash.cloneDeep(this.stageForm)
+      if (number || number === 0) {
+        form.splice(number, 0, item)
+      } else {
+        form.push(item)
+      }
+      this.stageForm = form
+      this.initGroup()
+    },
+    removeItem (target) {
+      utils.lodash.remove(this.stageForm, (item) => {
+        return target === item.key
+      })
+      this.initGroup()
+    },
+    getIndex (key) {
+      let index = null
+      this.stageForm.map((item, i) => {
+        if (item.key === key) {
+          index = i
+        }
+      })
+      return index
+    },
     getItem (target) {
       const result = []
       Object.keys(this.groups).map(key => {
@@ -123,10 +194,6 @@ export default {
         })
       }
       return result
-    },
-    setItem () {
-      console.log(this.groups)
-      console.log(this.unGroups)
     }
   }
 }
@@ -148,10 +215,6 @@ export default {
                 flex-grow: 1;
             }
         }
-    }
-
-    /deep/ .el-collapse {
-        width: 100%;
     }
 
     /deep/ .el-form-item--mini {
