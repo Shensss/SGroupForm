@@ -65,6 +65,11 @@ export default {
           return 'excel.png'
         case '.txt':
           return 'txt.png'
+        case '.png':
+        case '.jpg':
+        case '.jpeg':
+        case '.gif':
+          return 'image.png'
       }
     },
     imgLoad (target) {
@@ -120,12 +125,16 @@ export default {
     buildViewList () {
       let viewList = []
       if (typeof this.value === 'string') {
-        this.value.split(',').map(item => {
-          viewList.push({
-            name: item.split('&&')[1],
-            url: item.split('&&')[0]
+        if (this.value.indexOf('[{') < 0) {
+          this.value.split(',').map(item => {
+            viewList.push({
+              name: item.split('&&')[1],
+              url: item.split('&&')[0]
+            })
           })
-        })
+        } else {
+          viewList = JSON.parse(this.value)
+        }
       } else {
         viewList = this.value
       }

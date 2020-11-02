@@ -85,6 +85,9 @@ export default {
         if (itemInitValue) {
           formData[item._code] = itemInitValue
         }
+        if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key)) {
+          formData[item._code] = []
+        }
       })
       return formData
     },
@@ -111,7 +114,7 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     this.init()
   },
   methods: {

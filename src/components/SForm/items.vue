@@ -1,15 +1,16 @@
 <template>
-    <el-form-item :prop="config._code" :rules="config.rule" :style="style">
+    <el-form-item :class="props.labelWidth==='100%'?'full-content':''" :prop="config._code" :rules="config.rule"
+                  :style="style">
         <template slot="label" class="label">
             <b class="required" v-if="config.label">*</b>{{config.label}}
-            <span v-if="config.labelAdd" v-html="config.labelAdd"></span>
+            <span v-if="config.slotConfig&&config.slotConfig.labelAdd" v-html="config.slotConfig.labelAdd"></span>
             <slot v-else :name="'labelAdd-'+config._code" :option="config"></slot>
         </template>
         <template v-if="config.type==='slot'">
             <slot :name="'content-'+config._code" :option="config"></slot>
         </template>
         <template v-else>
-            <div v-if="config.inputInsert" v-html="config.inputInsert"></div>
+            <div v-if="config.slotConfig&&config.slotConfig.inputInsert" v-html="config.slotConfig.inputInsert"></div>
             <slot v-else :name="'inputInsert-'+config._code"></slot>
             <div v-if="singleTag.indexOf(config.type)>=0" :is="'el-'+config.type"
                  :style="config.inputStyle"
@@ -55,7 +56,7 @@
                  v-model="model">
             </div>
         </template>
-        <span v-if="config.inputAdd" v-html="config.inputAdd"></span>
+        <span v-if="config.slotConfig&&config.slotConfig.inputAdd" v-html="config.slotConfig.inputAdd"></span>
         <slot v-else :name="'inputAdd-'+config._code"></slot>
     </el-form-item>
 </template>
@@ -65,10 +66,11 @@ import formItem from '../../mixins/form.item'
 import SUpload from '../SUpload/upload'
 import SFileView from '../SFile/fileView'
 import SCode from '../SAce/ace'
+import SRichText from '../SRichText/richText'
 
 export default {
   name: 'items',
-  components: { SCode, SFileView, SUpload },
+  components: { SCode, SFileView, SUpload, SRichText },
   data () {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
@@ -77,6 +79,14 @@ export default {
       selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText']
     }
   },
-  mixins: [formItem]
+  mixins: [formItem],
+  mounted () {
+    console.log(this.config, 'aaa')
+  }
 }
 </script>
+<style>
+.full-content .el-form-item__content {
+    width: 100%;
+}
+</style>

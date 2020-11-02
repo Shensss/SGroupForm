@@ -1,11 +1,11 @@
 {
   "name": "s-group-form",
   "description": "",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "shen",
   "license": "MIT",
   "private": false,
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot --inline",
@@ -16,6 +16,7 @@
     "axios": "^0.20.0",
     "element-ui": "^2.13.2",
     "lodash": "^4.17.20",
+    "v-viewer": "^1.5.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {

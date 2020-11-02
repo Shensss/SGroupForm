@@ -52,8 +52,5 @@ export default {
         this.config.blur(this.config, this.value)
       }
     }
-  },
-  created () {
-    console.log(this.props)
   }
 }

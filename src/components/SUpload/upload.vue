@@ -128,24 +128,32 @@ export default {
         }
       })
       axios.post(this.config.path, formData).then(res => {
-        const { success, data } = res
-        if (success) {
-          this.fileList.push({
-            name: utils.lodash.get(this.asyncConfig.name),
-            url: this.config.domain + utils.lodash.get(this.config.url)
-          })
-          this.$refs.input.value = ''
-          this.$emit('handleComplete', data)
-        }
+        const { data } = res
+        this.fileList.push({
+          name: utils.lodash.get(data, this.config.name),
+          url: this.config.domain + utils.lodash.get(data, this.config.url)
+        })
+        this.$refs.input.value = ''
+        this.$emit('change')
       })
     },
     buildFileList () {
-      this.value.split(',').map(item => {
-        this.fileList.push({
-          name: item.split('&&')[1],
-          url: item.split('&&')[0]
-        })
-      })
+      let viewList = []
+      if (typeof this.value === 'string') {
+        if (this.value.indexOf('[{') < 0) {
+          this.value.split(',').map(item => {
+            viewList.push({
+              name: item.split('&&')[1],
+              url: item.split('&&')[0]
+            })
+          })
+        } else {
+          viewList = JSON.parse(this.value)
+        }
+      } else {
+        viewList = this.value
+      }
+      this.fileList = viewList
     }
   },
   mounted () {
@@ -156,10 +164,16 @@ export default {
   watch: {
     fileList (val) {
       const str = []
-      val.map(item => {
-        str.push(item.url + '&&' + item.name)
-      })
-      this.$emit('input', str.join(','))
+      if (this.config.getType === 'JSON') {
+        this.$emit('input', JSON.stringify(val))
+        this.$emit('change', JSON.stringify(val))
+      } else {
+        val.map(item => {
+          str.push(item.url + '&&' + item.name)
+        })
+        this.$emit('input', str.join(','))
+        this.$emit('change', str.join(','))
+      }
     }
   }
 }

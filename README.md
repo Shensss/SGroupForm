@@ -46,9 +46,11 @@ form:[
         {
               show: 'formData.a===1',       // 控制显示隐藏，formData为内部关键字，可以传入函数
               label: '',                    // 名称
-              labelAdd: 'aaa',              // label后面插入 支持传入html
-              inputInsert: 'aaa',           // 输入框跟label之间插入 支持传入html
-              inputAdd: 'aaa',              // 输入框后面插入 支持传入html
+              slotConfig:{
+                labelAdd: 'aaa',            // label后面插入 支持传入html
+                inputInsert: 'aaa',         // 输入框跟label之间插入 支持传入html
+                inputAdd: 'aaa',            // 输入框后面插入 支持传入html
+              },             
               key: 'a',                     // 字段 支持通过对象的path绑定值比如a、a.b、a[0] 
               type: 'input',                // 控件类型 支持列表列表在下方
               props: {},                    // 控件对应的属性
@@ -137,9 +139,12 @@ form:[
     <td> size:Number   // 文件大小，单位M 默认50M</td>
 </tr>
 <tr>
-    <td rowspan="2">upload</td>
+    <td rowspan="3">upload</td>
     <td>remove:Boolean, // true/false 能否移除</td>
-    <td rowspan="2">无</td>
+    <td rowspan="3">无</td>
+</tr>
+<tr>
+    <td>asyncConfig:Object   // 异步配置</td>
 </tr>
 <tr>
     <td>view:String   // 'file'/'image' 预览模式</td>
@@ -157,6 +162,20 @@ form:[
 </tr>
 <tr>
     <td>fontSize:Number   // 字体大小，默认14</td>
+</tr>
+<tr>
+    <td rowspan="4">richTxt</td>
+    <td>height:Number, // 300 编辑器高度</td>
+    <td rowspan="4">无</td>
+</tr>
+<tr>
+    <td>plugins:Object   // 插件</td>
+</tr>
+<tr>
+    <td>toolbar:Object   // 工具条</td>
+</tr>
+<tr>
+    <td>asyncConfig:Object   // 异步配置</td>
 </tr>
 </table>
 
@@ -231,13 +250,13 @@ methods:{
 slot使用说明 以下key为form对应的key
 ----
 #####content-key
-    需要配置type为slot
+    内容的slot，需要配置type为slot
 #####labelAdd-key
-    也可在item项中传对应字段，item中的优先级高于slot
+    label后面添加的slot，也可在item项中传对应字段，item中的优先级高于slot
 #####inputAdd-key
-    也可在item项中传对应字段，item中的优先级高于slot
+    内容区域后面添加的slot，也可在item项中传对应字段，item中的优先级高于slot
 #####inputInsert-key
-    也可在item项中传对应字段，item中的优先级高于slot
+    内容和label之间的slot，也可在item项中传对应字段，item中的优先级高于slot
 
 
 Api使用说明
