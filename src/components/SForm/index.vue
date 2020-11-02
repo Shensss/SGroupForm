@@ -1,5 +1,5 @@
 <template>
-    <el-form class="s-form" :inline="true" v-bind="propsAll" :model="formData">
+    <el-form class="s-form" :class="'form-'+type" :inline="true" v-bind="propsAll" :model="formData">
         <el-collapse v-if="Object.keys(groups).length>0" accordion>
             <el-collapse-item v-for="name in Object.keys(groups)" :key="name" :title="name">
                 <template v-for="(item) in groups[name]">
@@ -58,11 +58,17 @@ import Items from './items'
 export default {
   name: 'sGroupForm',
   components: { Items },
+  provide () {
+    return {
+      dict: this.dict
+    }
+  },
   data () {
     return {
       groups: {},
       unGroups: [],
-      stageForm: []
+      stageForm: [],
+      dict: {}
     }
   },
   computed: {
@@ -71,6 +77,49 @@ export default {
       this.stageForm.map(item => {
         if (!item._code) {
           item._code = utils.custom.randomCode(12)
+        }
+        if (this.type === 'readonly') {
+          let readType = item.type
+          switch (item.type) {
+            case 'input':
+              readType = 'text'
+              break
+            case 'radio':
+            case 'select':
+            case 'checkbox':
+            case 'switch':
+              readType = 'dict'
+              break
+            case 'cascader':
+              readType = 'treeDict'
+              break
+            case 'upload':
+              readType = 'fileView'
+              item.props = Object.assign({}, item.props)
+              item.props.remove = false
+              break
+            case 'code':
+              item.props = Object.assign({}, item.props)
+              item.props.readonly = true
+              break
+            case 'richText':
+              item.props = Object.assign({}, item.props)
+              item.props.readonly = true
+              break
+            case 'slider':
+              item.props = Object.assign({}, item.props)
+              item.props.disabled = true
+              break
+            case 'inputNumber':
+            case 'number':
+              readType = 'number'
+              break
+            case 'colorPicker':
+              item.props = Object.assign({}, item.props)
+              item.props.disabled = true
+              break
+          }
+          item.type = readType
         }
         let itemInitValue = ''
         if (Array.isArray(item.key)) {
@@ -107,6 +156,7 @@ export default {
     form: Array,
     value: Object,
     itemStyle: Object,
+    type: String,
     props: {
       type: Object,
       default: () => {
@@ -204,6 +254,10 @@ export default {
 
 <style lang="scss" scoped>
 .s-form {
+    &.form-readonly {
+
+    }
+
     &.el-form--inline {
         display: flex;
         justify-content: flex-start;

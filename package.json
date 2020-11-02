@@ -1,7 +1,7 @@
 {
   "name": "s-group-form",
   "description": "",
-  "version": "0.0.8",
+  "version": "0.0.81",
   "author": "shen",
   "license": "MIT",
   "private": false,
@@ -12,6 +12,8 @@
     "build": "webpack --display-error-details --config webpack.config.js"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.2.6",
+    "tinymce": "^5.5.1",
     "ace-builds": "^1.4.12",
     "axios": "^0.20.0",
     "element-ui": "^2.13.2",

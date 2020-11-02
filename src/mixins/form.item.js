@@ -1,10 +1,14 @@
 import utils from '../utils'
 
 export default {
-  data () {
+  provide () {
     return {
-      logic: ['&&', '||', '!', '=', '!=', '===', '==']
+      mapper: this.mapper,
+      config: this.config
     }
+  },
+  data () {
+    return {}
   },
   props: {
     value: String | Number,

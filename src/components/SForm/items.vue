@@ -63,26 +63,26 @@
 
 <script>
 import formItem from '../../mixins/form.item'
-import SUpload from '../SUpload/upload'
-import SFileView from '../SFile/fileView'
-import SCode from '../SAce/ace'
-import SRichText from '../SRichText/richText'
+import SUpload from '../items/SUpload/upload'
+import SFileView from '../items/SFile/fileView'
+import SCode from '../items/SAce/ace'
+import SRichText from '../items/SRichText/richText'
+import SText from '../items/SText/text'
+import SDict from '../items/SDict/dict'
+import STreeDict from '../items/SDict/treeDict'
 
 export default {
   name: 'items',
-  components: { SCode, SFileView, SUpload, SRichText },
+  components: { STreeDict, SCode, SFileView, SUpload, SRichText, SText, SDict },
   data () {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
       groupTag: ['radio', 'checkbox'],
       optionsTag: ['select'],
-      selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText']
+      selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict']
     }
   },
-  mixins: [formItem],
-  mounted () {
-    console.log(this.config, 'aaa')
-  }
+  mixins: [formItem]
 }
 </script>
 <style>
