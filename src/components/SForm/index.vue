@@ -79,47 +79,7 @@ export default {
           item._code = utils.custom.randomCode(12)
         }
         if (this.type === 'readonly') {
-          let readType = item.type
-          switch (item.type) {
-            case 'input':
-              readType = 'text'
-              break
-            case 'radio':
-            case 'select':
-            case 'checkbox':
-            case 'switch':
-              readType = 'dict'
-              break
-            case 'cascader':
-              readType = 'treeDict'
-              break
-            case 'upload':
-              readType = 'fileView'
-              item.props = Object.assign({}, item.props)
-              item.props.remove = false
-              break
-            case 'code':
-              item.props = Object.assign({}, item.props)
-              item.props.readonly = true
-              break
-            case 'richText':
-              item.props = Object.assign({}, item.props)
-              item.props.readonly = true
-              break
-            case 'slider':
-              item.props = Object.assign({}, item.props)
-              item.props.disabled = true
-              break
-            case 'inputNumber':
-            case 'number':
-              readType = 'number'
-              break
-            case 'colorPicker':
-              item.props = Object.assign({}, item.props)
-              item.props.disabled = true
-              break
-          }
-          item.type = readType
+          this.setRead(item)
         }
         let itemInitValue = ''
         if (Array.isArray(item.key)) {
@@ -176,6 +136,53 @@ export default {
       const groups = utils.lodash.groupBy(this.stageForm, 'group')
       this.groups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
       this.unGroups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
+    },
+    setRead (item) {
+      let readType = item.type
+      switch (item.type) {
+        case 'input':
+          readType = 'text'
+          break
+        case 'checkTag':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'radio':
+        case 'select':
+        case 'checkbox':
+        case 'switch':
+          readType = 'dict'
+          break
+        case 'cascader':
+          readType = 'treeDict'
+          break
+        case 'upload':
+          readType = 'fileView'
+          item.props = Object.assign({}, item.props)
+          item.props.remove = false
+          break
+        case 'code':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'richText':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'slider':
+          item.props = Object.assign({}, item.props)
+          item.props.disabled = true
+          break
+        case 'inputNumber':
+        case 'number':
+          readType = 'number'
+          break
+        case 'colorPicker':
+          item.props = Object.assign({}, item.props)
+          item.props.disabled = true
+          break
+      }
+      item.type = readType
     },
     setValue (key, value) {
       const newValue = utils.lodash.cloneDeep(this.value)

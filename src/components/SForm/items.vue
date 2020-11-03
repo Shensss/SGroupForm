@@ -70,16 +70,17 @@ import SRichText from '../items/SRichText/richText'
 import SText from '../items/SText/text'
 import SDict from '../items/SDict/dict'
 import STreeDict from '../items/SDict/treeDict'
+import SCheckTag from '../items/SCheckTag/checkTag'
 
 export default {
   name: 'items',
-  components: { STreeDict, SCode, SFileView, SUpload, SRichText, SText, SDict },
+  components: { STreeDict, SCheckTag, SCode, SFileView, SUpload, SRichText, SText, SDict },
   data () {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
       groupTag: ['radio', 'checkbox'],
       optionsTag: ['select'],
-      selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict']
+      selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict', 'checkTag']
     }
   },
   mixins: [formItem]

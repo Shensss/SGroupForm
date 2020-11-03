@@ -25,7 +25,8 @@ export default {
       editor: null,
       toggle: false,
       themePath: 'ace/theme/',
-      modePath: 'ace/mode/'
+      modePath: 'ace/mode/',
+      codeValue: this.value
     }
   },
   props: {
@@ -52,12 +53,24 @@ export default {
       default: 14
     }
   },
+  watch: {
+    value (newVal) {
+      console.log(newVal, 11111111111)
+      this.editor.setValue(newVal)
+    },
+    codeValue (val) {
+      this.$emit('input', val)
+    }
+  },
+  mounted () {
+    this.init()
+  },
   methods: {
     init () {
       this.editor = ace.edit(this.$refs.ace, {
         minLines: 10,
         fontSize: this.fontSize,
-        value: this.value,
+        value: this.codeValue,
         theme: this.themePath + this.theme,
         mode: this.modePath + this.mode,
         wrap: this.wrap,
@@ -74,7 +87,7 @@ export default {
         this.editor.setValue(this.value)
       }
       this.editor.on('change', () => {
-        this.$emit('input', this.editor.getValue())
+        this.codeValue = this.editor.getValue()
         this.$emit('change', this.editor.getValue())
       })
       this.editor.on('blur', () => {
@@ -84,9 +97,6 @@ export default {
         this.$emit('focus')
       })
     }
-  },
-  mounted () {
-    this.init()
   }
 }
 </script>
