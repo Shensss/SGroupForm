@@ -5,7 +5,7 @@
             点击上传
         </el-button>
         <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
-        <file-view v-if="fileView" :view="view" :remove="remove" v-model="fileList"></file-view>
+        <file-view v-if="fileView&&fileList.length>0" :view="view" :remove="remove" v-model="fileList"></file-view>
     </div>
 </template>
 
@@ -156,12 +156,13 @@ export default {
       this.fileList = viewList
     }
   },
-  mounted () {
-    if (this.value) {
-      this.buildFileList()
-    }
-  },
   watch: {
+    value: {
+      immediate: true,
+      handler () {
+        this.buildFileList()
+      }
+    },
     fileList (val) {
       const str = []
       if (this.config.getType === 'JSON') {

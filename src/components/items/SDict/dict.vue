@@ -1,5 +1,5 @@
 <template>
-    <div class="text">{{showValue}}</div>
+    <span class="dict">{{showValue}}</span>
 </template>
 
 <script>
@@ -9,31 +9,48 @@ export default {
   name: 'sDict',
   inject: ['config', 'mapper'],
   data () {
-    return {}
+    return {
+      showValue: ''
+    }
   },
   props: {
     value: {
       type: [String, Number, Array],
       default: ''
-    },
-    config: {
-      type: Object
     }
   },
-  computed: {
-    showValue () {
-      if (Array.isArray(this.value)) {
-        const arr = []
-        this.value.map(val => {
-          let is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, val))
-          if(is){
-            arr.push(is[this.mapper.label])
-          }
-        })
-        return arr.join(',')
-      } else {
-        const is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, this.value))
-        return is[this.mapper.label]
+  watch: {
+    value: {
+      deep: true,
+      immediate: true,
+      handler () {
+        this.buildShowValue()
+      }
+    },
+    config: {
+      deep: true,
+      immediate: true,
+      handler () {
+        this.buildShowValue()
+      }
+    }
+  },
+  methods: {
+    buildShowValue () {
+      if (this.value) {
+        if (Array.isArray(this.value)) {
+          const arr = []
+          this.value.map(val => {
+            let is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, val))
+            if (is) {
+              arr.push(is[this.mapper.label])
+            }
+          })
+          this.showValue = arr.join(',')
+        } else {
+          const is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, this.value))
+          this.showValue = is ? is[this.mapper.label] : this.value
+        }
       }
     }
   }
@@ -41,6 +58,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text {
+.dict {
 }
 </style>

@@ -46,6 +46,7 @@ form:[
         {
               show: 'formData.a===1',       // 控制显示隐藏，formData为内部关键字，可以传入函数
               label: '',                    // 名称
+              slotName:'name',              // 插槽名称 默认为key作为标识
               slotConfig:{
                 labelAdd: 'aaa',            // label后面插入 支持传入html
                 inputInsert: 'aaa',         // 输入框跟label之间插入 支持传入html

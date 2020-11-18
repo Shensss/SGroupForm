@@ -19,8 +19,16 @@ export default {
   computed: {
     mapper () {
       return Object.assign(
-        this.props.mapper || {},
-        this.config.mapper || {}
+        this.props.mapper || {
+          label: 'label',
+          value: 'value',
+          children: 'children'
+        },
+        this.config.mapper || {
+          label: 'label',
+          value: 'value',
+          children: 'children'
+        }
       )
     },
     style () {
@@ -33,7 +41,12 @@ export default {
     },
     model: {
       set (val) {
-        this.$emit('setValue', this.config.key, val)
+        if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
+          const current = utils.lodash.difference(val, this.value)
+          this.$emit('setValue', this.config.key, current)
+        } else {
+          this.$emit('setValue', this.config.key, val)
+        }
       },
       get () {
         return this.value
@@ -41,9 +54,9 @@ export default {
     }
   },
   methods: {
-    change (val) {
+    change (value) {
       if (this.config.change) {
-        this.config.change(this.config, val)
+        this.config.change(this.config, value)
       }
     },
     focus () {

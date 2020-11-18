@@ -9,7 +9,7 @@
                     :closable="!readonly">
                 {{item[mapper.label]}}
             </el-tag>
-            <span  @click="pick(item)" v-else-if="!readonly" class="el-tag noColor"
+            <span @click="pick(item)" v-else-if="!readonly" class="el-tag noColor"
                   :key="item[mapper.value]">
                 {{item[mapper.label]}}
             </span>

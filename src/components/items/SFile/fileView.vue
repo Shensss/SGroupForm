@@ -1,9 +1,9 @@
 <template>
     <div class="fileView">
         <ul v-if="view==='file'" class="fileList">
-            <li :key="'file'+index" v-for="(item,index) in viewList">
+            <li v-show="item.name" :key="'file'+index" v-for="(item,index) in viewList">
                 <p @click="previewHandle(item)">
-                    <img class="icon" :src="item.name|typeFilter|imgLoad"/>
+                    <img v-if="item.name" class="icon" :src="item.name|typeFilter|imgLoad"/>
                     {{item.name}}
                 </p>
                 <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"></i>
@@ -12,7 +12,7 @@
         <viewer v-if="view==='image'" :images="images">
             <ul class="imageList" :class="{remove:remove}">
                 <li :key="'file'+index" v-for="(item,index) in viewList">
-                    <img :src="item.url" :title="item.name">
+                    <img v-if="item.url" :src="item.url" :title="item.name">
                     <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"></i>
                 </li>
             </ul>

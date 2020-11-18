@@ -1,25 +1,26 @@
 import {
-  Button,
-  Form,
-  FormItem,
-  Input,
-  DatePicker,
-  Collapse,
-  CollapseItem,
-  Switch,
-  Slider,
-  TimePicker,
-  Rate,
-  ColorPicker,
-  Select,
-  Option,
-  Radio,
-  RadioGroup,
-  Checkbox,
-  CheckboxGroup,
-  Cascader,
-  InputNumber,
-  Tag
+	Button,
+	Form,
+	FormItem,
+	Input,
+	DatePicker,
+	Collapse,
+	CollapseItem,
+	Switch,
+	Slider,
+	TimePicker,
+	Rate,
+	ColorPicker,
+	Select,
+	Option,
+	Radio,
+	RadioGroup,
+	RadioButton,
+	Checkbox,
+	CheckboxGroup,
+	Cascader,
+	InputNumber,
+	Tag,
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import sGroupForm from './components/SForm/index.vue'
@@ -52,71 +53,93 @@ import 'tinymce/plugins/fullscreen' //全屏插件
 import 'tinymce/icons/default/icons'
 
 //本地化
+import SUpload from './components/items/SUpload/upload'
+import SFileView from './components/items/SFile/fileView'
+import SCode from './components/items/SAce/ace'
+import SRichText from './components/items/SRichText/richText'
+import SText from './components/items/SText/text'
+import SDict from './components/items/SDict/dict'
+import STreeDict from './components/items/SDict/treeDict'
+import SCheckTag from './components/items/SCheckTag/checkTag'
+import STime from './components/items/STime/time'
+import SNumber from './components/items/SNumber/number'
 
-function bindEvent (eventName, binding, form) {
-  const { value, modifiers, rawName } = binding
-  if (modifiers.label) {
-    form.map(item => {
-      if (item.label === rawName.split('.')[2]) {
-        item[eventName] = value
-      }
-    })
-  } else if (modifiers.number) {
-    form[rawName.split('.')[2]][eventName] = value
-  } else {
-    form.map(item => {
-      item[eventName] = value
-    })
-  }
+function bindEvent(eventName, binding, form) {
+	const { value, modifiers, rawName } = binding
+	if (modifiers.label) {
+		form.map((item) => {
+			if (item.label === rawName.split('.')[2]) {
+				item[eventName] = value
+			}
+		})
+	} else if (modifiers.number) {
+		form[rawName.split('.')[2]][eventName] = value
+	} else {
+		form.map((item) => {
+			item[eventName] = value
+		})
+	}
 }
 
 /* istanbul ignore next */
-sGroupForm.install = function (Vue, opt = {}) {
-  Vue.use(Viewer)
-  Vue.prototype.$tinymce = tinymce
-  Vue.use(VueTinymce)
-  Vue.prototype.$tinymce = tinymce
-  Vue.component('sGroupForm', sGroupForm)
-  if (opt.UploadConfig) {
-    Vue.prototype.$UploadConfig = opt.UploadConfig
-  }
-  Vue.directive('change', {
-    bind: function (el, binding, vnode) {
-      bindEvent('change', binding, vnode.context.form)
-    }
-  })
-  Vue.directive('blur', {
-    bind: function (el, binding, vnode) {
-      bindEvent('blur', binding, vnode.context.form)
-    }
-  })
-  Vue.directive('focus', {
-    bind: function (el, binding, vnode) {
-      bindEvent('focus', binding, vnode.context.form)
-    }
-  })
+sGroupForm.install = function(Vue, opt = {}) {
+	Vue.component('sGroupForm', sGroupForm)
+	Vue.directive('change', {
+		bind: function(el, binding, vnode) {
+			bindEvent('change', binding, vnode.context.form)
+		},
+	})
+	Vue.directive('blur', {
+		bind: function(el, binding, vnode) {
+			bindEvent('blur', binding, vnode.context.form)
+		},
+	})
+	Vue.directive('focus', {
+		bind: function(el, binding, vnode) {
+			bindEvent('focus', binding, vnode.context.form)
+		},
+	})
+	// element组件
+	Vue.component(Switch.name, Switch)
+	Vue.component(Slider.name, Slider)
+	Vue.component(TimePicker.name, TimePicker)
+	Vue.component(Rate.name, Rate)
+	Vue.component(ColorPicker.name, ColorPicker)
+	Vue.component(Form.name, Form)
+	Vue.component(Collapse.name, Collapse)
+	Vue.component(CollapseItem.name, CollapseItem)
+	Vue.component(Input.name, Input)
+	Vue.component(DatePicker.name, DatePicker)
+	Vue.component(FormItem.name, FormItem)
+	Vue.component(Button.name, Button)
+	Vue.component(Select.name, Select)
+	Vue.component(Option.name, Option)
+	Vue.component(Radio.name, Radio)
+	Vue.component(RadioButton.name, RadioButton)
+	Vue.component(Checkbox.name, Checkbox)
+	Vue.component(RadioGroup.name, RadioGroup)
+	Vue.component(CheckboxGroup.name, CheckboxGroup)
+	Vue.component(Cascader.name, Cascader)
+	Vue.component(InputNumber.name, InputNumber)
+	Vue.component(Tag.name, Tag)
+	// 自封装组件
+	Vue.component('Viewer', Viewer)
+	Vue.component('SUpload', SUpload)
+	if (opt.UploadConfig) {
+		Vue.prototype.$UploadConfig = opt.UploadConfig
+	}
+	Vue.component('SFileView', SFileView)
+	Vue.component('SCode', SCode)
+	Vue.component('SRichText', SRichText)
+	Vue.component('SText', SText)
+	Vue.component('SDict', SDict)
+	Vue.component('STreeDict', STreeDict)
+	Vue.component('SCheckTag', SCheckTag)
+	Vue.component('STime', STime)
+	Vue.component('SNumber', SNumber)
 
-  Vue.component(Switch.name, Switch)
-  Vue.component(Slider.name, Slider)
-  Vue.component(TimePicker.name, TimePicker)
-  Vue.component(Rate.name, Rate)
-  Vue.component(ColorPicker.name, ColorPicker)
-  Vue.component(Form.name, Form)
-  Vue.component(Collapse.name, Collapse)
-  Vue.component(CollapseItem.name, CollapseItem)
-  Vue.component(Input.name, Input)
-  Vue.component(DatePicker.name, DatePicker)
-  Vue.component(FormItem.name, FormItem)
-  Vue.component(Button.name, Button)
-  Vue.component(Select.name, Select)
-  Vue.component(Option.name, Option)
-  Vue.component(Radio.name, Radio)
-  Vue.component(Checkbox.name, Checkbox)
-  Vue.component(RadioGroup.name, RadioGroup)
-  Vue.component(CheckboxGroup.name, CheckboxGroup)
-  Vue.component(Cascader.name, Cascader)
-  Vue.component(InputNumber.name, InputNumber)
-  Vue.component(Tag.name, Tag)
+	Vue.component('VueTinymce', VueTinymce)
+	Vue.prototype.$tinymce = tinymce
 }
 
 export default sGroupForm
