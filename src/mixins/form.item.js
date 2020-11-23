@@ -11,6 +11,7 @@ export default {
     return {}
   },
   props: {
+    formData: Object,
     value: String | Number,
     config: Object,
     itemStyle: Object,
@@ -24,11 +25,7 @@ export default {
           value: 'value',
           children: 'children'
         },
-        this.config.mapper || {
-          label: 'label',
-          value: 'value',
-          children: 'children'
-        }
+        this.config.mapper
       )
     },
     style () {
@@ -56,17 +53,17 @@ export default {
   methods: {
     change (value) {
       if (this.config.change) {
-        this.config.change(this.config, value)
+        this.config.change(this.config, value, this.formData)
       }
     },
     focus () {
       if (this.config.focus) {
-        this.config.focus(this.config, this.value)
+        this.config.focus(this.config, this.value, this.formData)
       }
     },
     blur () {
       if (this.config.blur) {
-        this.config.blur(this.config, this.value)
+        this.config.blur(this.config, this.value, this.formData)
       }
     }
   }

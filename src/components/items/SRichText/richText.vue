@@ -1,9 +1,8 @@
 <template>
-    <div class="tinymce-editor">
-        <vue-tinymce
-                v-model="myValue"
-                :setting="init"/>
-    </div>
+  <div class="tinymce-editor">
+    <vue-tinymce v-model="myValue"
+                 :init="init" />
+  </div>
 </template>
 <script>
 import utils from '../../../utils'

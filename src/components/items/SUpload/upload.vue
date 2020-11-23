@@ -1,12 +1,19 @@
 <template>
-    <div class="upload">
-        <el-button @click="clickHandle">
-            <i class="el-icon-upload"></i>
-            点击上传
-        </el-button>
-        <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
-        <file-view v-if="fileView&&fileList.length>0" :view="view" :remove="remove" v-model="fileList"></file-view>
-    </div>
+  <div class="upload">
+    <el-button @click="clickHandle">
+      <i class="el-icon-upload"></i>
+      点击上传
+    </el-button>
+    <span v-html="tips"></span>
+    <input ref="input"
+           type="file"
+           :accept="fileType"
+           @change="handleChange" />
+    <file-view v-if="fileView&&fileList.length>0"
+               :view="view"
+               :remove="remove"
+               v-model="fileList"></file-view>
+  </div>
 </template>
 
 <script>
@@ -60,6 +67,7 @@ export default {
       type: Number,
       default: 50
     },
+    tips: String,
     remove: {
       type: Boolean,
       default: false
@@ -182,8 +190,11 @@ export default {
 
 <style lang="scss" scoped>
 .upload {
-    input {
-        display: none;
-    }
+  .el-button {
+    margin-right: 10px;
+  }
+  input {
+    display: none;
+  }
 }
 </style>

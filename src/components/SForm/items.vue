@@ -4,6 +4,7 @@
                 :rules="config.rule"
                 :style="style">
     <template slot="label"
+              v-if="config.label"
               class="label">
       <b class="required"
          v-if="config.label">*</b>{{config.label}}

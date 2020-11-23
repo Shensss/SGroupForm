@@ -1,62 +1,112 @@
 <template>
-    <el-form ref="instance" class="s-form" :class="'form-'+type" :inline="true" v-bind="propsAll" :model="formData">
-        <el-collapse v-if="Object.keys(groups).length>0" accordion>
-            <el-collapse-item v-for="name in Object.keys(groups)" :key="name" :title="name">
-                <template v-for="(item) in groups[name]">
-                    <items v-if="showFunction(item.show)"
-                           :key="item._code"
-                           :config="item"
-                           :props="propsAll"
-                           :value="formData[item._code]"
-                           :item-style="itemStyle"
-                           @setValue="setValue">
-                        <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
-                            <slot v-if="item.slotName" :name="'labelAdd-'+item.slotName" :option="option"></slot>
-                            <slot v-else :name="'labelAdd-'+item.key" :option="option"></slot>
-                        </template>
-                        <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
-                            <slot v-if="item.slotName" :name="'inputInsert-'+item.slotName" :option="option"></slot>
-                            <slot v-else :name="'inputInsert-'+item.key" :option="option"></slot>
-                        </template>
-                        <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
-                            <slot v-if="item.slotName" :name="'inputAdd-'+item.slotName" :option="option"></slot>
-                            <slot v-else :name="'inputAdd-'+item.key" :option="option"></slot>
-                        </template>
-                        <template :slot="'content-'+item._code" slot-scope="{option}">
-                            <slot v-if="item.slotName" :name="'content-'+item.slotName" :option="option"></slot>
-                            <slot v-else :name="'content-'+item.key" :option="option"></slot>
-                        </template>
-                    </items>
-                </template>
-            </el-collapse-item>
-        </el-collapse>
-        <template v-for="(item) in unGroups">
-            <items v-if="showFunction(item.show)"
-                   :key="item._code"
-                   :config="item"
-                   :props="propsAll"
-                   :value="formData[item._code]"
-                   :item-style="itemStyle"
-                   @setValue="setValue">
-                <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
-                    <slot v-if="item.slotName" :name="'labelAdd-'+item.slotName" :option="option"></slot>
-                    <slot v-else :name="'labelAdd-'+item.key" :option="option"></slot>
-                </template>
-                <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
-                    <slot v-if="item.slotName" :name="'inputInsert-'+item.slotName" :option="option"></slot>
-                    <slot v-else :name="'inputInsert-'+item.key" :option="option"></slot>
-                </template>
-                <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
-                    <slot v-if="item.slotName" :name="'inputAdd-'+item.slotName" :option="option"></slot>
-                    <slot v-else :name="'inputAdd-'+item.key" :option="option"></slot>
-                </template>
-                <template :slot="'content-'+item._code" slot-scope="{option}">
-                    <slot v-if="item.slotName" :name="'content-'+item.slotName" :option="option"></slot>
-                    <slot v-else :name="'content-'+item.key" :option="option"></slot>
-                </template>
-            </items>
+  <el-form ref="instance"
+           class="s-form"
+           :class="'form-'+type"
+           :inline="true"
+           v-bind="propsAll"
+           :model="formData">
+    <el-collapse v-if="Object.keys(groups).length>0"
+                 accordion>
+      <el-collapse-item v-for="name in Object.keys(groups)"
+                        :key="name"
+                        :title="name">
+        <template v-for="(item) in groups[name]">
+          <items v-if="showFunction(item.show)"
+                 :key="item._code"
+                 :config="item"
+                 :form-data="formData"
+                 :props="propsAll"
+                 :value="formData[item._code]"
+                 :item-style="itemStyle"
+                 @setValue="setValue">
+            <template :slot="'labelAdd-'+item._code"
+                      slot-scope="{option}">
+              <slot v-if="item.slotName"
+                    :name="'labelAdd-'+item.slotName"
+                    :option="option"></slot>
+              <slot v-else
+                    :name="'labelAdd-'+item.key"
+                    :option="option"></slot>
+            </template>
+            <template :slot="'inputInsert-'+item._code"
+                      slot-scope="{option}">
+              <slot v-if="item.slotName"
+                    :name="'inputInsert-'+item.slotName"
+                    :option="option"></slot>
+              <slot v-else
+                    :name="'inputInsert-'+item.key"
+                    :option="option"></slot>
+            </template>
+            <template :slot="'inputAdd-'+item._code"
+                      slot-scope="{option}">
+              <slot v-if="item.slotName"
+                    :name="'inputAdd-'+item.slotName"
+                    :option="option"></slot>
+              <slot v-else
+                    :name="'inputAdd-'+item.key"
+                    :option="option"></slot>
+            </template>
+            <template :slot="'content-'+item._code"
+                      slot-scope="{option}">
+              <slot v-if="item.slotName"
+                    :name="'content-'+item.slotName"
+                    :option="option"></slot>
+              <slot v-else
+                    :name="'content-'+item.key"
+                    :option="option"></slot>
+            </template>
+          </items>
         </template>
-    </el-form>
+      </el-collapse-item>
+    </el-collapse>
+    <template v-for="(item) in unGroups">
+      <items v-if="showFunction(item.show)"
+             :key="item._code"
+             :config="item"
+             :form-data="formData"
+             :props="propsAll"
+             :value="formData[item._code]"
+             :item-style="itemStyle"
+             @setValue="setValue">
+        <template :slot="'labelAdd-'+item._code"
+                  slot-scope="{option}">
+          <slot v-if="item.slotName"
+                :name="'labelAdd-'+item.slotName"
+                :option="option"></slot>
+          <slot v-else
+                :name="'labelAdd-'+item.key"
+                :option="option"></slot>
+        </template>
+        <template :slot="'inputInsert-'+item._code"
+                  slot-scope="{option}">
+          <slot v-if="item.slotName"
+                :name="'inputInsert-'+item.slotName"
+                :option="option"></slot>
+          <slot v-else
+                :name="'inputInsert-'+item.key"
+                :option="option"></slot>
+        </template>
+        <template :slot="'inputAdd-'+item._code"
+                  slot-scope="{option}">
+          <slot v-if="item.slotName"
+                :name="'inputAdd-'+item.slotName"
+                :option="option"></slot>
+          <slot v-else
+                :name="'inputAdd-'+item.key"
+                :option="option"></slot>
+        </template>
+        <template :slot="'content-'+item._code"
+                  slot-scope="{option}">
+          <slot v-if="item.slotName"
+                :name="'content-'+item.slotName"
+                :option="option"></slot>
+          <slot v-else
+                :name="'content-'+item.key"
+                :option="option"></slot>
+        </template>
+      </items>
+    </template>
+  </el-form>
 </template>
 
 <script>
@@ -99,7 +149,7 @@ export default {
         } else {
           itemInitValue = utils.lodash.get(this.value, item.key)
         }
-        if (itemInitValue!=='') {
+        if (itemInitValue !== '') {
           formData[item._code] = itemInitValue
         }
         if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key)) {
@@ -116,12 +166,7 @@ export default {
       }
       return utils.lodash.merge({
         labelWidth: '80px',
-        labelPosition: 'left',
-        mapper: {
-          label: 'label',
-          value: 'value',
-          children: 'children'
-        }
+        labelPosition: 'left'
       }, props)
     }
   },
@@ -313,74 +358,74 @@ export default {
 
 <style lang="scss" scoped>
 .s-form {
-    /deep/ .el-textarea__inner {
-        font-family: 微软雅黑, Microsoft YaHei UI, serif;
+  /deep/ .el-textarea__inner {
+    font-family: 微软雅黑, Microsoft YaHei UI, serif;
+  }
+
+  &.el-form--inline {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .el-form-item {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+
+      /deep/ .el-form-item__content {
+        flex: 1;
+      }
+    }
+  }
+
+  /deep/ .el-form-item--mini {
+    .el-form-item__label {
+      height: 28px;
+
+      .label {
+        height: 28px;
+      }
+    }
+  }
+
+  /deep/ .el-form-item--small {
+    .el-form-item__label {
+      height: 32px;
+
+      .label {
+        height: 32px;
+      }
+    }
+  }
+
+  /deep/ .el-form--label-top .el-form-item__label {
+    display: block;
+  }
+
+  /deep/ .is-required {
+    .required {
+      display: inline-block !important;
+    }
+  }
+
+  /deep/ .el-form-item__label {
+    height: 40px;
+
+    &:before {
+      display: none;
     }
 
-    &.el-form--inline {
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-
-        .el-form-item {
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: nowrap;
-
-            /deep/ .el-form-item__content {
-                flex: 1;
-            }
-        }
+    .required {
+      display: none;
+      color: #f56c6c;
+      margin-right: 4px;
     }
 
-    /deep/ .el-form-item--mini {
-        .el-form-item__label {
-            height: 28px;
-
-            .label {
-                height: 28px;
-            }
-        }
+    .label {
+      min-width: 2px;
+      display: inline-block;
+      height: 40px;
     }
-
-    /deep/ .el-form-item--small {
-        .el-form-item__label {
-            height: 32px;
-
-            .label {
-                height: 32px;
-            }
-        }
-    }
-
-    /deep/ .el-form--label-top .el-form-item__label {
-        display: block;
-    }
-
-    /deep/ .is-required {
-        .required {
-            display: inline-block !important;
-        }
-    }
-
-    /deep/ .el-form-item__label {
-        height: 40px;
-
-        &:before {
-            display: none;
-        }
-
-        .required {
-            display: none;
-            color: #F56C6C;
-            margin-right: 4px;
-        }
-
-        .label {
-            min-width: 2px;
-            display: inline-block;
-            height: 40px;
-        }
-    }
+  }
 }
 </style>

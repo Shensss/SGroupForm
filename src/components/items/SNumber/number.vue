@@ -15,7 +15,7 @@ export default {
   name: 'sNumber',
   data () {
     return {
-      myValue: ''
+      myValue: this.value
     }
   },
   props: {
@@ -30,8 +30,11 @@ export default {
     readonly: Boolean
   },
   watch: {
-    value (newValue) {
-      this.myValue = newValue
+    value: {
+      immediate: true,
+      handler (newValue) {
+        this.myValue = newValue
+      }
     },
     myValue (newValue) {
       this.$emit('input', newValue)
