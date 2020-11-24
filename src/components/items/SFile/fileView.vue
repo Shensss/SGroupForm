@@ -1,25 +1,39 @@
 <template>
-    <div class="fileView">
-        <ul v-if="view==='file'" class="fileList">
-            <li v-show="item.name" :key="'file'+index" v-for="(item,index) in viewList">
-                <p @click="previewHandle(item)">
-                    <img v-if="item.name" class="icon" :src="item.name|typeFilter|imgLoad"/>
-                    {{item.name}}
-                </p>
-                <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"></i>
-            </li>
-        </ul>
-        <viewer v-if="view==='image'" :images="images">
-            <ul class="imageList" :class="{remove:remove}">
-                <li :key="'file'+index" v-for="(item,index) in viewList">
-                    <img v-if="item.url" :src="item.url" :title="item.name">
-                    <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"></i>
-                </li>
-            </ul>
-        </viewer>
-    </div>
+  <div class="fileView">
+    <ul v-if="view==='file'"
+        class="fileList">
+      <li v-show="item.name"
+          :key="'file'+index"
+          v-for="(item,index) in viewList">
+        <p @click="previewHandle(item)">
+          <svg class="icon"
+               aria-hidden="true">
+            <use :xlink:href="item.name|typeFilter"></use>
+          </svg>
+          {{item.name}}
+        </p>
+        <i v-if="remove"
+           class="el-icon-delete"
+           @click="removeFile(item)"></i>
+      </li>
+    </ul>
+    <viewer v-if="view==='image'"
+            :images="images">
+      <ul class="imageList"
+          :class="{remove:remove}">
+        <li :key="'file'+index"
+            v-for="(item,index) in viewList">
+          <img v-if="item.url"
+               :src="item.url"
+               :title="item.name">
+          <i v-if="remove"
+             class="el-icon-delete"
+             @click="removeFile(item)"></i>
+        </li>
+      </ul>
+    </viewer>
+  </div>
 </template>
-
 <script>
 import utils from '../../../utils'
 
@@ -53,23 +67,26 @@ export default {
       const type = name && name.substr(name.lastIndexOf('.')).slice('.')
       switch (type) {
         case '.pdf':
-          return 'pdf.png'
+          return '#icon-ppt1'
         case '.doc':
         case '.docx':
-          return 'word.png'
+          return '#icon-word'
         case '.ppt':
         case '.pptx':
-          return 'ppt.png'
+          return '#icon-ppt'
         case '.xls':
         case '.xlsx':
-          return 'excel.png'
+          return '#icon-excel'
         case '.txt':
-          return 'txt.png'
+          return '#icon-txt'
         case '.png':
         case '.jpg':
         case '.jpeg':
         case '.gif':
-          return 'image.png'
+          return '#icon-Image_File'
+        case '.zip':
+        case '.rar':
+          return '#icon-yasuobao'
       }
     },
     imgLoad (target) {
@@ -140,113 +157,125 @@ export default {
       }
       this.viewList = viewList
     }
+  },
+  mounted () {
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = '//at.alicdn.com/t/font_427398_w4nnfsttez.js';
+    document.body.appendChild(s);
   }
 }
 </script>
-
 <style lang="scss" scoped>
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 .fileView {
-    width: 100%;
+  width: 100%;
 
-    .fileList {
-        margin: 0;
-        padding: 0;
+  .fileList {
+    margin: 0;
+    padding: 0;
 
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            line-height: 30px;
-            padding: 6px;
-            border: 1px dashed #f2f2f2;
-            margin-bottom: 5px;
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 30px;
+      padding: 6px;
+      border: 1px dashed #f2f2f2;
+      margin-bottom: 5px;
 
-            &:last-child {
-                margin-bottom: 0;
-            }
+      &:last-child {
+        margin-bottom: 0;
+      }
 
-            &:hover {
-                background-color: #eee;
-                color: #5ea9f8;
-            }
+      &:hover {
+        background-color: #eee;
+        color: #5ea9f8;
+      }
 
-            p {
-                margin-bottom: 0;
-                cursor: pointer;
-                margin-top: 0;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-
-                .icon {
-                    width: 24px;
-                    height: 24px;
-                    margin-right: 5px;
-                }
-            }
-        }
-    }
-
-    .imageList {
+      p {
+        margin-bottom: 0;
+        cursor: pointer;
+        margin-top: 0;
         display: flex;
         justify-content: flex-start;
-        flex-wrap: wrap;
-        margin: 0;
-        padding: 0;
+        align-items: center;
 
-        &.remove {
-            li:hover {
-                i {
-                    display: block;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: #fff;
-                    z-index: 2;
-                    font-size: 24px;
-                }
-
-                &:after {
-                    content: '';
-                    display: inline-block;
-                    position: absolute;
-                    top: 0;
-                    lefT: 0;
-                    width: 98px;
-                    height: 98px;
-                    z-index: 1;
-                    background-color: rgba(0, 0, 0, 0.4);
-                }
-            }
+        .icon {
+          width: 24px;
+          height: 24px;
+          margin-right: 5px;
         }
-
-        li {
-            width: 98px;
-            height: 98px;
-            border: 1px dashed #f2f2f2;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            position: relative;
-            margin-right: 8px;
-            margin-bottom: 8px;
-
-            img {
-                width: 98px;
-                height: 98px;
-            }
-
-            i {
-                display: none;
-            }
-
-            &:hover {
-                cursor: pointer;
-                background-color: rgba(0, 0, 0, 0.4);
-            }
-        }
+      }
     }
+  }
+
+  .imageList {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+    &.remove {
+      li:hover {
+        i {
+          display: block;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #fff;
+          z-index: 2;
+          font-size: 24px;
+        }
+
+        &:after {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 98px;
+          height: 98px;
+          z-index: 1;
+          background-color: rgba(0, 0, 0, 0.4);
+        }
+      }
+    }
+
+    li {
+      width: 98px;
+      height: 98px;
+      border: 1px dashed #f2f2f2;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      position: relative;
+      margin-right: 8px;
+      margin-bottom: 8px;
+
+      img {
+        width: 98px;
+        height: 98px;
+      }
+
+      i {
+        display: none;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
 }
 </style>

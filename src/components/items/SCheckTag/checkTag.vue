@@ -1,20 +1,22 @@
 <template>
-    <div class="checkTag">
-        <template v-for="item in list">
-            <el-tag v-if="item.check"
-                    :key="item[mapper.value]"
-                    :size="size"
-                    :disable-transitions="true"
-                    @close="remove(item)"
-                    :closable="!readonly">
-                {{item[mapper.label]}}
-            </el-tag>
-            <span @click="pick(item)" v-else-if="!readonly" class="el-tag noColor"
-                  :key="item[mapper.value]">
-                {{item[mapper.label]}}
-            </span>
-        </template>
-    </div>
+  <div class="checkTag">
+    <template v-for="item in list">
+      <el-tag v-if="item.check"
+              :key="item[mapper.value]"
+              :size="size"
+              :disable-transitions="true"
+              @close="remove(item)"
+              :closable="!readonly">
+        {{item[mapper.label]}}
+      </el-tag>
+      <span @click="pick(item)"
+            v-else-if="!readonly"
+            class="el-tag noColor"
+            :key="item[mapper.value]">
+        {{item[mapper.label]}}
+      </span>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -46,6 +48,7 @@ export default {
   },
   watch: {
     value: {
+      immediate: true,
       deep: true,
       handler () {
         this.init()
@@ -61,7 +64,6 @@ export default {
   },
   methods: {
     init () {
-      console.log(111)
       this.list = utils.lodash.cloneDeep(this.config.options)
       this.list.map(item => {
         if (this.value.indexOf(item[this.mapper.value]) >= 0) {
@@ -92,15 +94,15 @@ export default {
 
 <style lang="scss" scoped>
 .checkTag {
-    .el-tag {
-        margin-right: 8px;
-        cursor: pointer;
+  .el-tag {
+    margin-right: 8px;
+    cursor: pointer;
 
-        &.noColor {
-            background-color: transparent;
-            border-color: transparent;
-            color: #333;
-        }
+    &.noColor {
+      background-color: transparent;
+      border-color: transparent;
+      color: #333;
     }
+  }
 }
 </style>

@@ -86,17 +86,17 @@ sGroupForm.install = function (Vue, opt = {}) {
   Vue.component('sGroupForm', sGroupForm)
   Vue.directive('change', {
     bind: function (el, binding, vnode) {
-      bindEvent('change', binding, vnode.context.form)
+      bindEvent('change', binding, vnode.context.$children[0].form)
     },
   })
   Vue.directive('blur', {
     bind: function (el, binding, vnode) {
-      bindEvent('blur', binding, vnode.context.form)
+      bindEvent('blur', binding, vnode.context.$children[0].form)
     },
   })
   Vue.directive('focus', {
     bind: function (el, binding, vnode) {
-      bindEvent('focus', binding, vnode.context.form)
+      bindEvent('focus', binding, vnode.context.$children[0].form)
     },
   })
   // element组件

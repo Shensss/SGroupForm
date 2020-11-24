@@ -148,7 +148,7 @@ export default {
     buildFileList () {
       let viewList = []
       if (typeof this.value === 'string') {
-        if (this.value.indexOf('[{') < 0) {
+        if (this.value.indexOf('[{') < 0 && this.value.length > 0) {
           this.value.split(',').map(item => {
             viewList.push({
               name: item.split('&&')[1],

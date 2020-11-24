@@ -27,7 +27,7 @@
       <div v-if="singleTag.indexOf(config.type)>=0"
            :is="'el-'+config.type"
            :style="config.inputStyle"
-           @change="change"
+           @input="change"
            @focus="focus"
            @blur="blur"
            :options="config.options"
@@ -65,7 +65,7 @@
       </div>
       <div v-if="selfTag.indexOf(config.type)>=0"
            :is="'s-'+config.type"
-           @change="change"
+           @input="change"
            @focus="focus"
            @blur="blur"
            :style="config.inputStyle"
