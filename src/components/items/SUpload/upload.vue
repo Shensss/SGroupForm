@@ -159,7 +159,7 @@ export default {
           viewList = JSON.parse(this.value)
         }
       } else {
-        viewList = this.value
+        viewList = this.value || []
       }
       this.fileList = viewList
     }

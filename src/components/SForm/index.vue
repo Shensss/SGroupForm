@@ -126,38 +126,11 @@ export default {
       groups: {},
       unGroups: [],
       stageForm: [],
-      dict: {}
+      dict: {},
+      formData: {}
     }
   },
   computed: {
-    formData () {
-      const formData = {}
-      this.stageForm.map(item => {
-        if (!item._code) {
-          item._code = utils.custom.randomCode(12)
-        }
-        if (this.type === 'readonly') {
-          this.setRead(item)
-        }
-        let itemInitValue = ''
-        if (Array.isArray(item.key)) {
-          const valArray = []
-          item.key.map(k => {
-            valArray.push(utils.lodash.get(this.value, k))
-          })
-          itemInitValue = valArray
-        } else {
-          itemInitValue = utils.lodash.get(this.value, item.key)
-        }
-        if (itemInitValue !== '') {
-          formData[item._code] = itemInitValue
-        }
-        if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key)) {
-          formData[item._code] = []
-        }
-      })
-      return formData
-    },
     propsAll () {
       const props = utils.lodash.cloneDeep(this.props)
       if (props.labelPosition === 'top') {
@@ -194,6 +167,44 @@ export default {
     init () {
       this.stageForm = utils.lodash.cloneDeep(this.form)
       this.initGroup()
+      this.initFormData()
+    },
+    initFormData () {
+      const formData = {}
+      this.stageForm.map(item => {
+        if (!item._code) {
+          item._code = utils.custom.randomCode(12)
+        }
+        if (this.type === 'readonly') {
+          this.setRead(item)
+        }
+        if (item.initValue) {
+          formData[item._code] = item.initValue
+        } else {
+          let itemInitValue = ''
+          if (Array.isArray(item.key)) {
+            const valArray = []
+            item.key.map(k => {
+              valArray.push(utils.lodash.get(this.value, k))
+            })
+            itemInitValue = valArray
+          } else {
+            itemInitValue = utils.lodash.get(this.value, item.key)
+          }
+          if (itemInitValue !== '') {
+            formData[item._code] = itemInitValue
+          }
+
+          if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key) && !item.initValue) {
+            formData[item._code] = []
+          }
+          if (item.key) {
+            console.log("🚀 ~ file: index.vue ~ line 201 ~ initFormData ~ item", item)
+          }
+        }
+        this.setValue(item.key, formData[item._code])
+      })
+      this.formData = formData
     },
     initGroup () {
       const groups = utils.lodash.groupBy(this.stageForm, 'group')
