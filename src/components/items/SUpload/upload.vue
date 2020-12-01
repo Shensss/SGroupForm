@@ -10,6 +10,7 @@
            :accept="fileType"
            @change="handleChange" />
     <file-view v-if="fileView&&fileList.length>0"
+               :imageStyle="imageStyle"
                :view="view"
                :remove="remove"
                v-model="fileList"></file-view>
@@ -43,8 +44,8 @@ export default {
         '.pptx':
           'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
-        '.docx':
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        '.mp4': 'audio/mp4, video/mp4'
       }
     }
   },
@@ -77,6 +78,12 @@ export default {
       default: 'file'
     },
     asyncConfig: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    imageStyle: {
       type: Object,
       default: () => {
         return {}

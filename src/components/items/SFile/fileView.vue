@@ -22,16 +22,30 @@
       <ul class="imageList"
           :class="{remove:remove}">
         <li :key="'file'+index"
+            :style="imageStyle"
             v-for="(item,index) in viewList">
-          <img v-if="item.url"
-               :src="item.url"
-               :title="item.name">
-          <i v-if="remove"
-             class="el-icon-delete"
-             @click="removeFile(item)"></i>
+          <template v-if="item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
+            <video @click="viewVideo(item.url)"
+                   :src="item.url"></video>
+          </template>
+          <template v-else>
+            <img v-if="item.url"
+                 :src="item.url"
+                 :title="item.name">
+            <i v-if="remove"
+               class="el-icon-delete"
+               @click="removeFile(item)"></i>
+          </template>
         </li>
       </ul>
     </viewer>
+    <div class="model"
+         v-if="model">
+      <i @click="model=false"
+         class="el-icon el-icon-close"></i>
+      <video controls
+             :src="current"></video>
+    </div>
   </div>
 </template>
 <script>
@@ -41,6 +55,8 @@ export default {
   name: 'sFileView',
   data () {
     return {
+      current: '',
+      model: false,
       viewList: []
     }
   },
@@ -56,6 +72,9 @@ export default {
     view: {
       type: String,
       default: 'file'
+    },
+    imageStyle: {
+      type: Object,
     },
     path: {
       type: String,
@@ -87,6 +106,8 @@ export default {
         case '.zip':
         case '.rar':
           return '#icon-yasuobao'
+        case '.mp4':
+          return '#icon-icon-test'
       }
     },
     imgLoad (target) {
@@ -125,6 +146,10 @@ export default {
     this.buildViewList()
   },
   methods: {
+    viewVideo (url) {
+      this.current = url
+      this.model = true
+    },
     removeFile (item) {
       utils.custom.removeObjWithArr(this.viewList, item)
       this.$emit('input', this.viewList)
@@ -159,10 +184,10 @@ export default {
     }
   },
   mounted () {
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = '//at.alicdn.com/t/font_427398_w4nnfsttez.js';
-    document.body.appendChild(s);
+    const s = document.createElement('script')
+    s.type = 'text/javascript'
+    s.src = '//at.alicdn.com/t/font_427398_97pwzwtrchu.js'
+    document.body.appendChild(s)
   }
 }
 </script>
@@ -173,6 +198,32 @@ export default {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+.model {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  .el-icon {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #000;
+    width: 60%;
+    max-width: 60%;
+    max-height: 60%;
+  }
 }
 .fileView {
   width: 100%;
@@ -242,8 +293,8 @@ export default {
           position: absolute;
           top: 0;
           left: 0;
-          width: 98px;
-          height: 98px;
+          width: 100%;
+          height: 100%;
           z-index: 1;
           background-color: rgba(0, 0, 0, 0.4);
         }
@@ -263,10 +314,13 @@ export default {
       margin-bottom: 8px;
 
       img {
-        width: 98px;
-        height: 98px;
+        width: 100%;
+        height: 100%;
       }
-
+      video {
+        width: 100%;
+        height: 100%;
+      }
       i {
         display: none;
       }

@@ -127,7 +127,6 @@ export default {
       unGroups: [],
       stageForm: [],
       dict: {},
-      formData: {}
     }
   },
   computed: {
@@ -141,7 +140,36 @@ export default {
         labelWidth: '80px',
         labelPosition: 'left'
       }, props)
-    }
+    },
+    formData () {
+      const formData = {}
+      this.stageForm.map(item => {
+        if (!item._code) {
+          item._code = utils.custom.randomCode(12)
+        }
+        if (this.type === 'readonly') {
+          this.setRead(item)
+        }
+        let itemInitValue = ''
+        if (Array.isArray(item.key)) {
+          const valArray = []
+          item.key.map(k => {
+            valArray.push(utils.lodash.get(this.value, k))
+          })
+          itemInitValue = valArray
+        } else {
+          itemInitValue = utils.lodash.get(this.value, item.key)
+        }
+
+        if (itemInitValue !== '') {
+          formData[item._code] = itemInitValue
+        }
+        if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key)) {
+          formData[item._code] = []
+        }
+      })
+      return formData
+    },
   },
   props: {
     form: Array,
@@ -159,57 +187,46 @@ export default {
     this.init()
   },
   watch: {
+    form () {
+      this.init()
+    },
     type () {
       this.init()
-    }
+    },
   },
   methods: {
     init () {
+      if (!this.form) return
       this.stageForm = utils.lodash.cloneDeep(this.form)
       this.initGroup()
-      this.initFormData()
-    },
-    initFormData () {
-      const formData = {}
-      this.stageForm.map(item => {
-        if (!item._code) {
-          item._code = utils.custom.randomCode(12)
-        }
-        if (this.type === 'readonly') {
-          this.setRead(item)
-        }
-        if (item.initValue) {
-          formData[item._code] = item.initValue
-        } else {
-          let itemInitValue = ''
-          if (Array.isArray(item.key)) {
-            const valArray = []
-            item.key.map(k => {
-              valArray.push(utils.lodash.get(this.value, k))
-            })
-            itemInitValue = valArray
-          } else {
-            itemInitValue = utils.lodash.get(this.value, item.key)
-          }
-          if (itemInitValue !== '') {
-            formData[item._code] = itemInitValue
-          }
-
-          if (item.type === 'checkbox' && !utils.lodash.get(this.value, item.key) && !item.initValue) {
-            formData[item._code] = []
-          }
-          if (item.key) {
-            console.log("🚀 ~ file: index.vue ~ line 201 ~ initFormData ~ item", item)
-          }
-        }
-        this.setValue(item.key, formData[item._code])
-      })
-      this.formData = formData
+      this.initValue()
     },
     initGroup () {
       const groups = utils.lodash.groupBy(this.stageForm, 'group')
       this.groups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
       this.unGroups = utils.lodash.pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
+    },
+    initValue () {
+      const newValue = utils.lodash.cloneDeep(this.value)
+      this.stageForm.map(item => {
+        if (item.initValue) {
+          const value = item.initValue
+          const key = item.key
+          if (Array.isArray(value) && Array.isArray(key)) {
+            key.map((k, index) => {
+              utils.lodash.set(newValue, k, value[index])
+            })
+          } else if (Array.isArray(key)) {
+            key.map((k) => {
+              utils.lodash.set(newValue, k, value)
+            })
+          } else {
+            utils.lodash.set(newValue, key, value)
+          }
+        }
+      })
+      this.$emit('input', Object.assign({}, this.value, newValue))
+
     },
     setRead (item) {
       let readType = item.type
@@ -276,7 +293,8 @@ export default {
       }
       item.type = readType
     },
-    setValue (key, value) {
+    setValue (code, key, value) {
+      this.$set(this.formData, code, value)
       const newValue = utils.lodash.cloneDeep(this.value)
       if (Array.isArray(value) && Array.isArray(key)) {
         key.map((k, index) => {
@@ -289,7 +307,7 @@ export default {
       } else {
         utils.lodash.set(newValue, key, value)
       }
-      this.$emit('input', newValue)
+      this.$emit('input', Object.assign({}, this.value, newValue))
     },
     showFunction (show) {
       if (show === undefined) {

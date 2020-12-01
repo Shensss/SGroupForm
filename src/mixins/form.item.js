@@ -40,9 +40,9 @@ export default {
       set (val) {
         if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
           const current = utils.lodash.difference(val, this.value)
-          this.$emit('setValue', this.config.key, current)
+          this.$emit('setValue', this.config._code, this.config.key, current)
         } else {
-          this.$emit('setValue', this.config.key, val)
+          this.$emit('setValue', this.config._code, this.config.key, val)
         }
       },
       get () {

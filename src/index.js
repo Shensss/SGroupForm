@@ -86,17 +86,17 @@ sGroupForm.install = function (Vue, opt = {}) {
   Vue.component('sGroupForm', sGroupForm)
   Vue.directive('change', {
     bind: function (el, binding, vnode) {
-      bindEvent('change', binding, vnode.context.$children[0].form)
+      bindEvent('change', binding, vnode.componentInstance.form)
     },
   })
   Vue.directive('blur', {
     bind: function (el, binding, vnode) {
-      bindEvent('blur', binding, vnode.context.$children[0].form)
+      bindEvent('blur', binding, vnode.componentInstance.form)
     },
   })
   Vue.directive('focus', {
     bind: function (el, binding, vnode) {
-      bindEvent('focus', binding, vnode.context.$children[0].form)
+      bindEvent('focus', binding, vnode.componentInstance.form)
     },
   })
   // element组件
@@ -123,7 +123,7 @@ sGroupForm.install = function (Vue, opt = {}) {
   Vue.component(InputNumber.name, InputNumber)
   Vue.component(Tag.name, Tag)
   // 自封装组件
-  Vue.component('Viewer', Viewer)
+  Vue.use(Viewer)
   Vue.component('SUpload', SUpload)
   if (opt.UploadConfig) {
     Vue.prototype.$UploadConfig = opt.UploadConfig
