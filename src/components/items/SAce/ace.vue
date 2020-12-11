@@ -55,7 +55,6 @@ export default {
   },
   watch: {
     value (newVal) {
-      console.log(newVal, 11111111111)
       this.editor.setValue(newVal)
     },
     codeValue (val) {

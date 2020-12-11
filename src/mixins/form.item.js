@@ -12,12 +12,23 @@ export default {
   },
   props: {
     formData: Object,
+    type: String,
     value: String | Number,
     config: Object,
     itemStyle: Object,
     props: Object
   },
   computed: {
+    required () {
+      console.log(this.config)
+      let required = false
+      this.config.rule && this.config.rule.map(item => {
+        if (item.required) {
+          required = true
+        }
+      })
+      return required
+    },
     mapper () {
       return Object.assign(
         this.props.mapper || {

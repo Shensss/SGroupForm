@@ -14,6 +14,7 @@
           <items v-if="showFunction(item.show)"
                  :key="item._code"
                  :config="item"
+                 :type="type"
                  :form-data="formData"
                  :props="propsAll"
                  :value="formData[item._code]"
@@ -51,9 +52,7 @@
               <slot v-if="item.slotName"
                     :name="'content-'+item.slotName"
                     :option="option"></slot>
-              <slot v-else
-                    :name="'content-'+item.key"
-                    :option="option"></slot>
+              <slot v-else :name="'content-'+item.key" :option="option"></slot>
             </template>
           </items>
         </template>
@@ -63,6 +62,7 @@
       <items v-if="showFunction(item.show)"
              :key="item._code"
              :config="item"
+             :type="type"
              :form-data="formData"
              :props="propsAll"
              :value="formData[item._code]"
@@ -95,14 +95,9 @@
                 :name="'inputAdd-'+item.key"
                 :option="option"></slot>
         </template>
-        <template :slot="'content-'+item._code"
-                  slot-scope="{option}">
-          <slot v-if="item.slotName"
-                :name="'content-'+item.slotName"
-                :option="option"></slot>
-          <slot v-else
-                :name="'content-'+item.key"
-                :option="option"></slot>
+        <template :slot="'content-'+item._code" slot-scope="{option,data}">
+          <slot v-if="item.slotName" :name="'content-'+item.slotName" :option="option"></slot>
+          <slot v-else :name="'content-'+item.key" :option="option" :data="data"></slot>
         </template>
       </items>
     </template>
@@ -126,7 +121,7 @@ export default {
       groups: {},
       unGroups: [],
       stageForm: [],
-      dict: {},
+      dict: {}
     }
   },
   computed: {
@@ -169,7 +164,7 @@ export default {
         }
       })
       return formData
-    },
+    }
   },
   props: {
     form: Array,
@@ -192,7 +187,7 @@ export default {
     },
     type () {
       this.init()
-    },
+    }
   },
   methods: {
     init () {
@@ -214,19 +209,24 @@ export default {
           const key = item.key
           if (Array.isArray(value) && Array.isArray(key)) {
             key.map((k, index) => {
-              utils.lodash.set(newValue, k, value[index])
+              if (!utils.lodash.get(newValue, k)) {
+                utils.lodash.set(newValue, k, value[index])
+              }
             })
           } else if (Array.isArray(key)) {
             key.map((k) => {
-              utils.lodash.set(newValue, k, value)
+              if (!utils.lodash.get(newValue, k)) {
+                utils.lodash.set(newValue, k, value)
+              }
             })
           } else {
-            utils.lodash.set(newValue, key, value)
+            if (!utils.lodash.get(newValue, key)) {
+              utils.lodash.set(newValue, key, value)
+            }
           }
         }
       })
       this.$emit('input', Object.assign({}, this.value, newValue))
-
     },
     setRead (item) {
       let readType = item.type
@@ -317,6 +317,7 @@ export default {
       } else if (typeof show === 'string') {
         try {
           const str = '((formData)=>' + show + ')(this.value)'
+          // eslint-disable-next-line no-eval
           return eval(str)
         } catch (e) {
           return false

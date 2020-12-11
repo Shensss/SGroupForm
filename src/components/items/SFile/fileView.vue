@@ -10,7 +10,7 @@
                aria-hidden="true">
             <use :xlink:href="item.name|typeFilter"></use>
           </svg>
-          {{item.name}}
+          {{ item.name }}
         </p>
         <i v-if="remove"
            class="el-icon-delete"
@@ -39,6 +39,9 @@
         </li>
       </ul>
     </viewer>
+    <div class="fileViewSlot" v-if="view==='slot'">
+      <slot :data="viewList"></slot>
+    </div>
     <div class="model"
          v-if="model">
       <i @click="model=false"
@@ -74,7 +77,7 @@ export default {
       default: 'file'
     },
     imageStyle: {
-      type: Object,
+      type: Object
     },
     path: {
       type: String,
@@ -130,7 +133,7 @@ export default {
     images () {
       const images = []
       if (this.view === 'image') {
-        this.viewList.map(item => {
+        this.viewList && this.viewList.map(item => {
           images.push(item.url)
         })
       }
@@ -166,7 +169,7 @@ export default {
     },
     buildViewList () {
       let viewList = []
-      if (typeof this.value === 'string') {
+      if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0) {
           this.value.split(',').map(item => {
             viewList.push({
@@ -199,13 +202,16 @@ export default {
   fill: currentColor;
   overflow: hidden;
 }
+
 .model {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
+  z-index: 9999;
   background-color: rgba(0, 0, 0, 0.45);
+
   .el-icon {
     position: absolute;
     top: 5%;
@@ -214,6 +220,7 @@ export default {
     cursor: pointer;
     font-size: 24px;
   }
+
   video {
     position: absolute;
     top: 50%;
@@ -225,6 +232,7 @@ export default {
     max-height: 60%;
   }
 }
+
 .fileView {
   width: 100%;
 
@@ -238,7 +246,7 @@ export default {
       align-items: center;
       line-height: 30px;
       padding: 6px;
-      border: 1px dashed #f2f2f2;
+      border: 1px dashed #ddd;
       margin-bottom: 5px;
 
       &:last-child {
@@ -317,10 +325,12 @@ export default {
         width: 100%;
         height: 100%;
       }
+
       video {
         width: 100%;
         height: 100%;
       }
+
       i {
         display: none;
       }

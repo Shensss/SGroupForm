@@ -1,19 +1,26 @@
 <template>
-  <div class="upload">
-    <el-button @click="clickHandle">
+  <div class="upload" :class="btnView==='plus'?'start':''">
+    <el-button v-show="fileList.length<length" v-if="!btnView" @click="clickHandle">
       <i class="el-icon-upload"></i>
       点击上传
     </el-button>
+    <div v-show="fileList.length<length" v-if="btnView==='plus'" class="plus" @click="clickHandle">
+      <i class="el-icon-plus"></i>
+    </div>
     <span v-html="tips"></span>
     <input ref="input"
            type="file"
            :accept="fileType"
-           @change="handleChange" />
+           @change="handleChange"/>
     <file-view v-if="fileView&&fileList.length>0"
                :imageStyle="imageStyle"
                :view="view"
                :remove="remove"
-               v-model="fileList"></file-view>
+               v-model="fileList">
+      <div v-if="view==='slot'">
+        <slot :data="fileList"></slot>
+      </div>
+    </file-view>
   </div>
 </template>
 
@@ -21,6 +28,7 @@
 import FileView from '../SFile/fileView'
 import axios from 'axios'
 import utils from '../../../utils'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'sUpload',
@@ -40,9 +48,9 @@ export default {
         '.csv': 'text/csv',
         '.xls': 'application/vnd.ms-excel',
         '.xlsx':
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         '.pptx':
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
@@ -55,9 +63,17 @@ export default {
       type: String,
       default: ''
     },
+    length: {
+      type: Number,
+      default: 99
+    },
+    btnView: {
+      type: String,
+      default: ''
+    },
     // 配置
     accept: {
-      type: String,
+      type: [String, Array],
       default: ''
     },
     fileView: {
@@ -93,8 +109,14 @@ export default {
   computed: {
     fileType () {
       let fileTypeArr = []
-      if (this.accept) {
+      if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
+          if (this.fileTypeToAccept[item]) {
+            fileTypeArr.push(this.fileTypeToAccept[item])
+          }
+        })
+      } else if (Array.isArray(this.accept)) {
+        this.accept.map(item => {
           if (this.fileTypeToAccept[item]) {
             fileTypeArr.push(this.fileTypeToAccept[item])
           }
@@ -142,7 +164,11 @@ export default {
           formData.append(item.key, file)
         }
       })
-      axios.post(this.config.path, formData).then(res => {
+      axios.post(this.config.path, formData, {
+        headers: Object.assign({
+          Authorization: Cookies.get('sessionId')
+        }, this.config.headers || {})
+      }).then(res => {
         const { data } = res
         this.fileList.push({
           name: utils.lodash.get(data, this.config.name),
@@ -154,7 +180,7 @@ export default {
     },
     buildFileList () {
       let viewList = []
-      if (typeof this.value === 'string') {
+      if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0 && this.value.length > 0) {
           this.value.split(',').map(item => {
             viewList.push({
@@ -197,9 +223,28 @@ export default {
 
 <style lang="scss" scoped>
 .upload {
+  &.start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
   .el-button {
     margin-right: 10px;
+    margin-bottom: 10px;
   }
+
+  .plus {
+    width: 98px;
+    height: 98px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed #ddd;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
   input {
     display: none;
   }

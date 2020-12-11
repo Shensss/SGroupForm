@@ -6,8 +6,7 @@
     <template slot="label"
               v-if="config.label"
               class="label">
-      <b class="required"
-         v-if="config.label">*</b>{{config.label}}
+      <b class="required" v-if="config.label&&type!=='readonly'&&required">*</b>{{ config.label }}
       <template v-if="props.suffix">:</template>
       <span v-if="config.slotConfig&&config.slotConfig.labelAdd"
             v-html="config.slotConfig.labelAdd"></span>
@@ -45,7 +44,7 @@
              :key="index"
              v-for="(item,index) in config.options"
              :label="item[mapper.value]">
-          {{item[mapper.label]}}
+          {{ item[mapper.label] }}
         </div>
       </div>
       <div v-if="optionsTag.indexOf(config.type)>=0"
@@ -71,12 +70,14 @@
            :style="config.inputStyle"
            v-bind="config.props"
            v-model="model">
+        <template slot-scope="data">
+          <slot :name="'content-'+config._code" :option="config" :data="data"></slot>
+        </template>
       </div>
     </template>
     <span v-if="config.slotConfig&&config.slotConfig.inputAdd"
           v-html="config.slotConfig.inputAdd"></span>
-    <slot v-else
-          :name="'inputAdd-'+config._code"></slot>
+    <slot v-else :name="'inputAdd-'+config._code"></slot>
   </el-form-item>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <span class="dict">{{showValue}}</span>
+  <span class="dict">{{showValue}}</span>
 </template>
 
 <script>
@@ -41,7 +41,7 @@ export default {
         if (Array.isArray(this.value)) {
           const arr = []
           this.value.map(val => {
-            let is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, val))
+            const is = utils.lodash.find(this.config.options, utils.lodash.matchesProperty(this.mapper.value, val))
             if (is) {
               arr.push(is[this.mapper.label])
             }

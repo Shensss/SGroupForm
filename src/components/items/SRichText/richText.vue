@@ -11,7 +11,7 @@ import './zh_CN.js'
 
 export default {
   props: {
-    //传入一个value，使组件支持v-model绑定
+    // 传入一个value，使组件支持v-model绑定
     value: {
       type: String,
       default: ''
@@ -45,7 +45,7 @@ export default {
   },
   data () {
     return {
-      //初始化配置
+      // 初始化配置
       init: {
         language: 'zh_CN',
         height: this.height,
