@@ -4,8 +4,6 @@ import {
   FormItem,
   Input,
   DatePicker,
-  Collapse,
-  CollapseItem,
   Switch,
   Slider,
   TimePicker,
@@ -22,7 +20,7 @@ import {
   InputNumber,
   Tag
 } from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+
 import sGroupForm from './components/SForm/index.vue'
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
@@ -51,7 +49,6 @@ import 'tinymce/plugins/fullscreen' // 全屏插件
  * 5.3.x版本需要额外引进图标，没有所有按钮就会显示not found
  */
 import 'tinymce/icons/default/icons'
-
 // 本地化
 import SUpload from './components/items/SUpload/upload'
 import SFileView from './components/items/SFile/fileView'
@@ -63,7 +60,17 @@ import STreeDict from './components/items/SDict/treeDict'
 import SCheckTag from './components/items/SCheckTag/checkTag'
 import STime from './components/items/STime/time'
 import SNumber from './components/items/SNumber/number'
-
+// const components=[
+//   SUpload,
+//   SFileView,
+//   SRichText,
+//   SText,
+//   SDict,
+//   STreeDict,
+//   SCheckTag,
+//   STime,
+//   SNumber
+// ]
 function bindEvent (eventName, binding, form) {
   const { value, modifiers, rawName } = binding
   if (modifiers.label) {
@@ -99,29 +106,29 @@ sGroupForm.install = function (Vue, opt = {}) {
       bindEvent('focus', binding, vnode.componentInstance.form)
     }
   })
+  if (!opt.lib) {
+    Vue.component(Switch.name, Switch)
+    Vue.component(Slider.name, Slider)
+    Vue.component(TimePicker.name, TimePicker)
+    Vue.component(Rate.name, Rate)
+    Vue.component(ColorPicker.name, ColorPicker)
+    Vue.component(Form.name, Form)
+    Vue.component(Input.name, Input)
+    Vue.component(DatePicker.name, DatePicker)
+    Vue.component(FormItem.name, FormItem)
+    Vue.component(Button.name, Button)
+    Vue.component(Select.name, Select)
+    Vue.component(Option.name, Option)
+    Vue.component(Radio.name, Radio)
+    Vue.component(RadioButton.name, RadioButton)
+    Vue.component(Checkbox.name, Checkbox)
+    Vue.component(RadioGroup.name, RadioGroup)
+    Vue.component(CheckboxGroup.name, CheckboxGroup)
+    Vue.component(Cascader.name, Cascader)
+    Vue.component(InputNumber.name, InputNumber)
+    Vue.component(Tag.name, Tag)
+  }
   // element组件
-  Vue.component(Switch.name, Switch)
-  Vue.component(Slider.name, Slider)
-  Vue.component(TimePicker.name, TimePicker)
-  Vue.component(Rate.name, Rate)
-  Vue.component(ColorPicker.name, ColorPicker)
-  Vue.component(Form.name, Form)
-  Vue.component(Collapse.name, Collapse)
-  Vue.component(CollapseItem.name, CollapseItem)
-  Vue.component(Input.name, Input)
-  Vue.component(DatePicker.name, DatePicker)
-  Vue.component(FormItem.name, FormItem)
-  Vue.component(Button.name, Button)
-  Vue.component(Select.name, Select)
-  Vue.component(Option.name, Option)
-  Vue.component(Radio.name, Radio)
-  Vue.component(RadioButton.name, RadioButton)
-  Vue.component(Checkbox.name, Checkbox)
-  Vue.component(RadioGroup.name, RadioGroup)
-  Vue.component(CheckboxGroup.name, CheckboxGroup)
-  Vue.component(Cascader.name, Cascader)
-  Vue.component(InputNumber.name, InputNumber)
-  Vue.component(Tag.name, Tag)
   // 自封装组件
   Vue.use(Viewer)
   Vue.component('SUpload', SUpload)

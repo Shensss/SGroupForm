@@ -12,9 +12,10 @@
           </svg>
           {{ item.name }}
         </p>
-        <i v-if="remove"
-           class="el-icon-delete"
-           @click="removeFile(item)"></i>
+        <span>
+          <i class="el-icon-download" @click="download(item)"></i>
+          <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"></i>
+       </span>
       </li>
     </ul>
     <viewer v-if="view==='image'"
@@ -56,6 +57,7 @@ import utils from '../../../utils'
 
 export default {
   name: 'sFileView',
+  inject: ['config', 'mapper'],
   data () {
     return {
       current: '',
@@ -82,6 +84,12 @@ export default {
     path: {
       type: String,
       default: ''
+    },
+    asyncConfig: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   filters: {
@@ -112,21 +120,6 @@ export default {
         case '.mp4':
           return '#icon-icon-test'
       }
-    },
-    imgLoad (target) {
-      if (typeof target === 'string') {
-        return `static/images/${target}`
-      } else if (typeof target === 'object' && target !== null) {
-        Object.keys(target).map(key => {
-          if (key === 'img') {
-            target.backgroundImage = `url('static/images/${target.img}')`
-          }
-          target.backgroundSize = target.backgroundSize || '100% 100%'
-        })
-        return target
-      } else {
-        return {}
-      }
     }
   },
   computed: {
@@ -138,6 +131,9 @@ export default {
         })
       }
       return images
+    },
+    mergeConfig () {
+      return utils.lodash.merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
@@ -156,6 +152,12 @@ export default {
     removeFile (item) {
       utils.custom.removeObjWithArr(this.viewList, item)
       this.$emit('input', this.viewList)
+    },
+    download (item) {
+      const a = document.createElement('a')
+      a.setAttribute('download', '')
+      a.setAttribute('href', item.url)
+      a.click()
     },
     previewHandle (item) {
       const type = item.name.substr(item.name.lastIndexOf('.'))
@@ -178,19 +180,23 @@ export default {
             })
           })
         } else {
-          viewList = JSON.parse(this.value)
+          viewList = JSON.parse(this.value).map(item => {
+            return {
+              name: item[this.mergeConfig.nameKey || 'name'],
+              url: item[this.mergeConfig.urlKey || 'url']
+            }
+          })
         }
       } else {
-        viewList = this.value
+        viewList = this.value && this.value.map(item => {
+          return {
+            name: item[this.mergeConfig.nameKey || 'name'],
+            url: item[this.mergeConfig.urlKey || 'url']
+          }
+        })
       }
       this.viewList = viewList
     }
-  },
-  mounted () {
-    const s = document.createElement('script')
-    s.type = 'text/javascript'
-    s.src = '//at.alicdn.com/t/font_427398_97pwzwtrchu.js'
-    document.body.appendChild(s)
   }
 }
 </script>
@@ -270,6 +276,13 @@ export default {
           width: 24px;
           height: 24px;
           margin-right: 5px;
+        }
+      }
+
+      span {
+        i {
+          font-size: 20px;
+          margin-right: 10px;
         }
       }
     }

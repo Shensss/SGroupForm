@@ -5,59 +5,55 @@
            :inline="true"
            v-bind="propsAll"
            :model="formData">
-    <el-collapse v-if="Object.keys(groups).length>0"
-                 accordion>
-      <el-collapse-item v-for="name in Object.keys(groups)"
-                        :key="name"
-                        :title="name">
-        <template v-for="(item) in groups[name]">
-          <items v-if="showFunction(item.show)"
-                 :key="item._code"
-                 :config="item"
-                 :type="type"
-                 :form-data="formData"
-                 :props="propsAll"
-                 :value="formData[item._code]"
-                 :item-style="itemStyle"
-                 @setValue="setValue">
-            <template :slot="'labelAdd-'+item._code"
-                      slot-scope="{option}">
-              <slot v-if="item.slotName"
-                    :name="'labelAdd-'+item.slotName"
-                    :option="option"></slot>
-              <slot v-else
-                    :name="'labelAdd-'+item.key"
-                    :option="option"></slot>
-            </template>
-            <template :slot="'inputInsert-'+item._code"
-                      slot-scope="{option}">
-              <slot v-if="item.slotName"
-                    :name="'inputInsert-'+item.slotName"
-                    :option="option"></slot>
-              <slot v-else
-                    :name="'inputInsert-'+item.key"
-                    :option="option"></slot>
-            </template>
-            <template :slot="'inputAdd-'+item._code"
-                      slot-scope="{option}">
-              <slot v-if="item.slotName"
-                    :name="'inputAdd-'+item.slotName"
-                    :option="option"></slot>
-              <slot v-else
-                    :name="'inputAdd-'+item.key"
-                    :option="option"></slot>
-            </template>
-            <template :slot="'content-'+item._code"
-                      slot-scope="{option}">
-              <slot v-if="item.slotName"
-                    :name="'content-'+item.slotName"
-                    :option="option"></slot>
-              <slot v-else :name="'content-'+item.key" :option="option"></slot>
-            </template>
-          </items>
-        </template>
-      </el-collapse-item>
-    </el-collapse>
+    <div class="group" :key="name" v-for="name in Object.keys(groups)">
+      <p class="group-title">{{ name }}</p>
+      <template v-for="(item) in groups[name]">
+        <items v-if="showFunction(item.show)"
+               :key="item._code"
+               :config="item"
+               :type="type"
+               :form-data="formData"
+               :props="propsAll"
+               :value="formData[item._code]"
+               :item-style="itemStyle"
+               @setValue="setValue">
+          <template :slot="'labelAdd-'+item._code"
+                    slot-scope="{option}">
+            <slot v-if="item.slotName"
+                  :name="'labelAdd-'+item.slotName"
+                  :option="option"></slot>
+            <slot v-else
+                  :name="'labelAdd-'+item.key"
+                  :option="option"></slot>
+          </template>
+          <template :slot="'inputInsert-'+item._code"
+                    slot-scope="{option}">
+            <slot v-if="item.slotName"
+                  :name="'inputInsert-'+item.slotName"
+                  :option="option"></slot>
+            <slot v-else
+                  :name="'inputInsert-'+item.key"
+                  :option="option"></slot>
+          </template>
+          <template :slot="'inputAdd-'+item._code"
+                    slot-scope="{option}">
+            <slot v-if="item.slotName"
+                  :name="'inputAdd-'+item.slotName"
+                  :option="option"></slot>
+            <slot v-else
+                  :name="'inputAdd-'+item.key"
+                  :option="option"></slot>
+          </template>
+          <template :slot="'content-'+item._code"
+                    slot-scope="{option}">
+            <slot v-if="item.slotName"
+                  :name="'content-'+item.slotName"
+                  :option="option"></slot>
+            <slot v-else :name="'content-'+item.key" :option="option"></slot>
+          </template>
+        </items>
+      </template>
+    </div>
     <template v-for="(item) in unGroups">
       <items v-if="showFunction(item.show)"
              :key="item._code"
@@ -149,11 +145,16 @@ export default {
         if (Array.isArray(item.key)) {
           const valArray = []
           item.key.map(k => {
-            valArray.push(utils.lodash.get(this.value, k))
+            valArray.push(utils.lodash.get(this.value, k) || '')
           })
           itemInitValue = valArray
         } else {
-          itemInitValue = utils.lodash.get(this.value, item.key)
+          if (item.join) {
+            itemInitValue = utils.lodash.get(this.value, item.key).split(item.join)
+            console.log(itemInitValue)
+          } else {
+            itemInitValue = utils.lodash.get(this.value, item.key)
+          }
         }
 
         if (itemInitValue !== '') {
@@ -179,6 +180,10 @@ export default {
     }
   },
   mounted () {
+    const s = document.createElement('script')
+    s.type = 'text/javascript'
+    s.src = '//at.alicdn.com/t/font_427398_o65r3bqlj0b.js'
+    document.body.appendChild(s)
     this.init()
   },
   watch: {
@@ -236,19 +241,13 @@ export default {
           break
         case 'timePicker':
           item.props = Object.assign({
-            format: 'HH:mm:ss'
+            format: item.props ? item.props.format || 'HH:mm:ss' : 'HH:mm:ss'
           }, item.props)
           readType = 'time'
           break
         case 'datePicker':
           item.props = Object.assign({
-            format: 'yyyy-MM-dd'
-          }, item.props)
-          readType = 'time'
-          break
-        case 'DateTimePicker':
-          item.props = Object.assign({
-            format: 'yyyy-MM-dd HH:mm:ss'
+            format: item.props ? item.props.format || 'HH:mm:ss' : 'yyyy-MM-dd'
           }, item.props)
           readType = 'time'
           break
@@ -387,7 +386,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//@import "../../style/icon.css";
 .s-form {
+  .group {
+    width: 100%;
+
+    .group-title {
+      color: #333;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+
   /deep/ .el-textarea__inner {
     font-family: 微软雅黑, Microsoft YaHei UI, serif;
   }

@@ -4,6 +4,7 @@
       <i class="el-icon-upload"></i>
       点击上传
     </el-button>
+    <span :class="fileList.length<length"></span>
     <div v-show="fileList.length<length" v-if="btnView==='plus'" class="plus" @click="clickHandle">
       <i class="el-icon-plus"></i>
     </div>
@@ -14,12 +15,10 @@
            @change="handleChange"/>
     <file-view v-if="fileView&&fileList.length>0"
                :imageStyle="imageStyle"
+               :asyncConfig="asyncConfig"
                :view="view"
                :remove="remove"
                v-model="fileList">
-      <div v-if="view==='slot'">
-        <slot :data="fileList"></slot>
-      </div>
     </file-view>
   </div>
 </template>
@@ -126,7 +125,7 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    config () {
+    mergeConfig () {
       return utils.lodash.merge(this.$UploadConfig, this.asyncConfig)
     }
   },
@@ -159,21 +158,19 @@ export default {
         return this.$message.error(`文件${file.name}过大!`)
       }
       const formData = new FormData()
-      this.config.data.map(item => {
+      this.mergeConfig.data.map(item => {
         if (item.value === 'file') {
           formData.append(item.key, file)
         }
       })
-      axios.post(this.config.path, formData, {
+      axios.post(this.mergeConfig.path, formData, {
         headers: Object.assign({
-          Authorization: Cookies.get('sessionId')
-        }, this.config.headers || {})
+          Authorization: Cookies.get('sessionId') || 'fe85af362fa34093bc2b2b38db6df569'
+        }, this.mergeConfig.headers || {})
       }).then(res => {
         const { data } = res
-        this.fileList.push({
-          name: utils.lodash.get(data, this.config.name),
-          url: this.config.domain + utils.lodash.get(data, this.config.url)
-        })
+        console.log(this.mergeConfig, utils.lodash.get(data, this.mergeConfig.listPath))
+        this.fileList = utils.lodash.get(data, this.mergeConfig.listPath)
         this.$refs.input.value = ''
         this.$emit('change')
       })
@@ -205,16 +202,21 @@ export default {
       }
     },
     fileList (val) {
-      const str = []
-      if (this.config.getType === 'JSON') {
-        this.$emit('input', JSON.stringify(val))
-        this.$emit('change', JSON.stringify(val))
+      if (val.length > 0) {
+        const str = []
+        if (this.mergeConfig.getType === 'JSON') {
+          this.$emit('input', JSON.stringify(val))
+          this.$emit('change', JSON.stringify(val))
+        } else {
+          val.map(item => {
+            str.push(item.url + '&&' + item.name)
+          })
+          this.$emit('input', str.join(','))
+          this.$emit('change', str.join(','))
+        }
       } else {
-        val.map(item => {
-          str.push(item.url + '&&' + item.name)
-        })
-        this.$emit('input', str.join(','))
-        this.$emit('change', str.join(','))
+        this.$emit('input', '')
+        this.$emit('change', '')
       }
     }
   }

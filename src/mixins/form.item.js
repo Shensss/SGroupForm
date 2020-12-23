@@ -20,7 +20,6 @@ export default {
   },
   computed: {
     required () {
-      console.log(this.config)
       let required = false
       this.config.rule && this.config.rule.map(item => {
         if (item.required) {
@@ -51,9 +50,17 @@ export default {
       set (val) {
         if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
           const current = utils.lodash.difference(val, this.value)
-          this.$emit('setValue', this.config._code, this.config.key, current)
+          if(this.config.join){
+            this.$emit('setValue', this.config._code, this.config.key, current)
+          }else{
+            this.$emit('setValue', this.config._code, this.config.key, current)
+          }
         } else {
-          this.$emit('setValue', this.config._code, this.config.key, val)
+          if(this.config.join){
+            this.$emit('setValue', this.config._code, this.config.key, val.join(this.config.join))
+          }else{
+            this.$emit('setValue', this.config._code, this.config.key, val)
+          }
         }
       },
       get () {

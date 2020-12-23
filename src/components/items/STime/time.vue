@@ -1,5 +1,7 @@
 <template>
-  <span class="time">{{showTime}}</span>
+  <span class="time">
+    {{ showTime }}
+  </span>
 </template>
 
 <script>
@@ -13,13 +15,21 @@ export default {
   },
   props: {
     value: {
-      type: [String, Number, Date],
+      type: [String, Number, Date, Array],
       default: ''
     }
   },
   computed: {
     showTime () {
-      return utils.custom.dateFormat(this.config.props.format, this.value)
+      if (Array.isArray(this.value)&&this.value.length>0) {
+        const start = utils.custom.dateFormat(this.config.props.format, this.value[0] || '')
+        const end = utils.custom.dateFormat(this.config.props.format, this.value[1] || '')
+        return start + (this.config.props.rangeSeparator || '至') + end
+      } else if(!Array.isArray(this.value)){
+        return utils.custom.dateFormat(this.config.props.format, this.value)
+      }else{
+        return ''
+      }
     }
   }
 }
