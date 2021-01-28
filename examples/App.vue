@@ -1,12 +1,15 @@
 <template>
   <div id="app">
+    <s-group-form-use></s-group-form-use>
   </div>
 </template>
 
 <script>
 
+import SGroupFormUse from "./components/SGroupFormUse"
 export default {
   name: 'App',
+  components: { SGroupFormUse },
 }
 </script>
 

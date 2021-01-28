@@ -1,22 +1,32 @@
 <template>
-  <quill-editor
-    ref="myQuillEditor"
-    v-model="content"
-    :options="editorOption"
-    :style="inputStyle"
-    @blur="onEditorBlur($event)"
-    @focus="onEditorFocus($event)"
-    @ready="onEditorReady"
-  ></quill-editor>
+  <div>
+    <quill-editor
+        ref="myQuillEditor"
+        v-model="content"
+        :options="editorOption"
+        :style="inputStyle"
+        @blur="onEditorBlur($event)"
+        @focus="onEditorFocus($event)"
+        @ready="onEditorReady"
+    ></quill-editor>
+    <input ref="input"
+           class="button"
+           type="file"
+           :accept="accept"
+           @change="handleChange">
+  </div>
 </template>
 
 <script>
-import merge from 'lodash-es/merge'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { addQuillTitle } from './zh_cn'
 import quillEditor from './editor'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import get from 'lodash-es/get'
+import merge from 'lodash-es/merge'
 
 export default {
   name: 'rich-text',
@@ -32,7 +42,11 @@ export default {
     },
     inputStyle: Object,
     placeholder: String,
-    readonly: Boolean
+    readonly: Boolean,
+    accept: {
+      type: [String, Array],
+      default: '.png,.jpg,.jpeg,.gif'
+    },
   },
   components: {
     quillEditor
@@ -62,11 +76,49 @@ export default {
           ]
         },
         theme: 'snow',
-        placeholder: '请输入正文'
+        placeholder: '请输入正文',
+      },
+      file: '',
+      fileTypeToAccept: {
+        '.pdf': 'application/pdf',
+        '.gif': 'image/gif',
+        '.jpeg': 'image/jpeg',
+        '.jpg': 'image/jpeg',
+        '.png': 'image/png',
+        '.txt': 'text/plain',
+        '.zip': 'application/zip',
+        '.csv': 'text/csv',
+        '.xls': 'application/vnd.ms-excel',
+        '.xlsx':
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        '.pptx':
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        '.doc': 'application/msword',
+        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        '.mp4': 'audio/mp4, video/mp4'
       }
     }
   },
   computed: {
+    fileType () {
+      let fileTypeArr = []
+      if (this.accept && typeof this.accept === 'string') {
+        this.accept.split(',').map(item => {
+          if (this.fileTypeToAccept[item]) {
+            fileTypeArr.push(this.fileTypeToAccept[item])
+          }
+        })
+      } else if (Array.isArray(this.accept)) {
+        this.accept.map(item => {
+          if (this.fileTypeToAccept[item]) {
+            fileTypeArr.push(this.fileTypeToAccept[item])
+          }
+        })
+      } else {
+        fileTypeArr = []
+      }
+      return fileTypeArr.join(',')
+    },
     editor () {
       return this.$refs.myQuillEditor.quill
     },
@@ -92,13 +144,56 @@ export default {
     this.initUploadImage()
   },
   methods: {
+    checkType (fileName) {
+      if (!this.accept) return true
+      const index = fileName.lastIndexOf('.')
+      const extension = fileName.substring(index).toLowerCase()
+      const allowedType = this.accept.split(',')
+      if (allowedType.indexOf(extension) >= 0) {
+        return true
+      } else {
+        this.$message.error('不支持' + extension + '格式')
+        return false
+      }
+    },
+    handleChange () {
+      const file = this.$refs.input.files[0]
+      const access = this.checkType(file.name)
+      if (!access) {
+        this.$refs.input.value = ''
+        return
+      }
+
+      if (file.size > this.size * 1024 * 1024) {
+        this.$refs.input.value = ''
+        return this.$message.error(`文件${ file.name }过大!`)
+      }
+      const formData = new FormData()
+      this.mergeConfig.data.map(item => {
+        if (item.value === 'file') {
+          formData.append(item.key, file)
+        }
+      })
+      axios.post(this.mergeConfig.path, formData, {
+        headers: Object.assign({
+          Authorization: Cookies.get('sessionId')
+        }, this.mergeConfig.headers || {})
+      }).then(res => {
+        const { data } = res
+        const item = get(data, this.mergeConfig.listPath)
+        item.name = item[this.mergeConfig.nameKey]
+        item.url = item[this.mergeConfig.urlKey]
+        let Range = this.editor.getSelection()
+        console.log(item)
+        this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', item.url)
+        this.$refs.input.value = ''
+      })
+    },
     initUploadImage () {
       this.editor.getModule('toolbar').addHandler('image', this.imgHandler)
     },
     imgHandler () {
-      let url = ''
-      let Range = this.editor.getSelection()
-      this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', url)
+      this.$refs.input.click()
     },
     // 失去焦点事件
     onEditorBlur () {
@@ -187,9 +282,14 @@ export default {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+  height: 100%;
 
   .ql-container {
     flex-grow: 1;
   }
+}
+
+.button {
+  display: none;
 }
 </style>

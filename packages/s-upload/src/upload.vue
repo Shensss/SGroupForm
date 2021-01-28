@@ -162,8 +162,7 @@ export default {
       }
     }
   },
-  methods: {
-    clickHandle () {
+  methods: {clickHandle () {
       this.$refs.input.click()
     },
     checkType (fileName) {

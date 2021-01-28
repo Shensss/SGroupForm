@@ -1,9 +1,9 @@
 <template>
   <s-group-form
-    v-model="formData"
-    :form="form"
-    :item-style="itemStyle"
-    :props="props"
+      v-model="formData"
+      :form="form"
+      :item-style="itemStyle"
+      :props="props"
   />
 </template>
 
@@ -32,6 +32,14 @@ export default {
               value: '2'
             }
           ]
+        },
+        {
+          label: '富文本',
+          type: 'richText',
+          key: 'richText',
+          inputStyle: {
+            height: '400px'
+          }
         }
       ],
       formData: {},
