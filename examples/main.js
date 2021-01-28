@@ -16,7 +16,7 @@ Vue.use(SGroupForm,{
                 value: 'file'
             }
         ],
-        domain: '',
+        domain: 'http://121.40.133.115:9090',
         listPath: 'data.resultList[0]',
         urlKey: 'fileUrl',
         nameKey: 'originalFilename'

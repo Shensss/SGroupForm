@@ -8,7 +8,9 @@
 <script>
 import _Quill from 'quill'
 import defaultOptions from './options'
-// pollfill
+import ImageResize from 'quill-image-resize-module'
+
+_Quill.register('modules/imageResize', ImageResize)
 if (typeof Object.assign !== 'function') {
   Object.defineProperty(Object, 'assign', {
     value (target, varArgs) {

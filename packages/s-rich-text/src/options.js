@@ -17,7 +17,20 @@ export default {
       [{ 'align': [] }],
       ['clean'],
       ['link', 'image', 'video']
-    ]
+    ],
+    history: {
+      delay: 1000,
+      maxStack: 50,
+      userOnly: false
+    },
+    imageResize: {
+      displayStyles: {
+        backgroundColor: 'black',
+        border: 'none',
+        color: 'white'
+      },
+      modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
+    },
   },
   placeholder: 'Insert text here ...',
   readOnly: false

@@ -53,31 +53,7 @@ export default {
   },
   data () {
     return {
-      option: {
-        module: {
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-            ['blockquote', 'code-block'],
-
-            [{ 'header': 1 }, { 'header': 2 }], // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
-            [{ 'direction': 'rtl' }], // text direction
-
-            [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-
-            ['clean'] // remove formatting button
-          ]
-        },
-        theme: 'snow',
-        placeholder: '请输入正文',
-      },
+      option: {},
       file: '',
       fileTypeToAccept: {
         '.pdf': 'application/pdf',
@@ -174,6 +150,7 @@ export default {
           formData.append(item.key, file)
         }
       })
+      this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', 'http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1581398243&t=ccf50d7b4dd50dac437d46e368b66b20%E4%BD%9C%E8%80%85%EF%BC%9A%E6%A2%A7%E6%A1%90%E8%8A%8A%E9%9B%A8%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps://www.jianshu.com/p/42bc2db19fab%E6%9D%A5%E6%BA%90%EF%BC%9A%E7%AE%80%E4%B9%A6%E8%91%97%E4%BD%9C%E6%9D%83%E5%BD%92%E4%BD%9C%E8%80%85%E6%89%80%E6%9C%89%E3%80%82%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E8%81%94%E7%B3%BB%E4%BD%9C%E8%80%85%E8%8E%B7%E5%BE%97%E6%8E%88%E6%9D%83%EF%BC%8C%E9%9D%9E%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E6%B3%A8%E6%98%8E%E5%87%BA%E5%A4%84%E3%80%82')
       axios.post(this.mergeConfig.path, formData, {
         headers: Object.assign({
           Authorization: Cookies.get('sessionId')
@@ -184,8 +161,7 @@ export default {
         item.name = item[this.mergeConfig.nameKey]
         item.url = item[this.mergeConfig.urlKey]
         let Range = this.editor.getSelection()
-        console.log(item)
-        this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', item.url)
+        this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', this.mergeConfig.domain + item.url)
         this.$refs.input.value = ''
       })
     },

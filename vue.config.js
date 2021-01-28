@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const join = path.join
+const webpack = require('webpack')
 
 function getEntries (path) {
     let files = fs.readdirSync(resolve(path))
@@ -26,7 +27,7 @@ const devConfig = {
     devServer: {
         port: 8091,//固定端口
         hot: true,//开启热更新
-        open: 'Google Chrome'//固定打开浏览器
+        open: 'Google Chrome'
     },
     pages: {
         index: {
@@ -44,6 +45,12 @@ const devConfig = {
                 'views': resolve('examples/views'),
             }
         },
+        plugins: [
+            new webpack.ProvidePlugin({
+                'window.Quill': 'quill/dist/quill.js',
+                'Quill': 'quill/dist/quill.js'
+            })
+        ],
     },
     chainWebpack: config => {
         config.module
@@ -74,7 +81,13 @@ const buildConfig = {
         output: {
             filename: '[name].js',
             libraryTarget: 'commonjs2',
-        }
+        },
+        plugins: [
+            new webpack.ProvidePlugin({
+                'window.Quill': 'quill/dist/quill.js',
+                'Quill': 'quill/dist/quill.js'
+            })
+        ],
     },
     chainWebpack: config => {
         config.optimization.delete('splitChunks')
