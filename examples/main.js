@@ -5,8 +5,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
 import SGroupForm from '../packages'
+import SGroupLayout from '../packages'
 
-Vue.use(SGroupForm,{
+Vue.use(SGroupLayout)
+Vue.use(SGroupForm, {
     UploadConfig: {
         getType: 'JSON',
         path: 'http://121.40.133.115:9090/fib/coapi/upload/file',

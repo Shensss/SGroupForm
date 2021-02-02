@@ -88,7 +88,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       fileList: [],
       file: '',
@@ -103,9 +103,9 @@ export default {
         '.csv': 'text/csv',
         '.xls': 'application/vnd.ms-excel',
         '.xlsx':
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         '.pptx':
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
@@ -113,7 +113,7 @@ export default {
     }
   },
   computed: {
-    fileType () {
+    fileType() {
       let fileTypeArr = []
       if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
@@ -132,18 +132,18 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    mergeConfig () {
+    mergeConfig() {
       return merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
     value: {
       immediate: true,
-      handler () {
+      handler() {
         this.buildFileList()
       }
     },
-    fileList (val) {
+    fileList(val) {
       if (val.length > 0) {
         const str = []
         if (this.mergeConfig.getType === 'JSON') {
@@ -162,10 +162,11 @@ export default {
       }
     }
   },
-  methods: {clickHandle () {
+  methods: {
+    clickHandle() {
       this.$refs.input.click()
     },
-    checkType (fileName) {
+    checkType(fileName) {
       if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
@@ -177,7 +178,7 @@ export default {
         return false
       }
     },
-    handleChange () {
+    handleChange() {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
       if (!access) {
@@ -187,7 +188,7 @@ export default {
 
       if (file.size > this.size * 1024 * 1024) {
         this.$refs.input.value = ''
-        return this.$message.error(`文件${file.name}过大!`)
+        return this.$message.error(`文件${ file.name }过大!`)
       }
       const formData = new FormData()
       this.mergeConfig.data.map(item => {
@@ -209,7 +210,7 @@ export default {
         this.$emit('change')
       })
     },
-    buildFileList () {
+    buildFileList() {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0 && this.value.length > 0) {

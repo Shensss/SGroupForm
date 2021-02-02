@@ -48,14 +48,12 @@
 </template>
 <script>
 import merge from 'lodash-es/merge'
-import Viewer from 'v-viewer'
-import 'viewerjs/dist/viewer.css'
 import { removeObjWithArr } from '../../utils'
 
 export default {
   name: 'SFileView',
   filters: {
-    typeFilter (name) {
+    typeFilter(name) {
       const type = name && name.substr(name.lastIndexOf('.')).slice('.')
       switch (type) {
         case '.pdf':
@@ -87,7 +85,7 @@ export default {
   props: {
     value: {
       type: [Array, String],
-      default () {
+      default() {
         return []
       }
     },
@@ -101,7 +99,7 @@ export default {
     },
     imageStyle: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -111,15 +109,12 @@ export default {
     },
     asyncConfig: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     }
   },
-  components: {
-    Viewer
-  },
-  data () {
+  data() {
     return {
       current: '',
       model: false,
@@ -127,7 +122,7 @@ export default {
     }
   },
   computed: {
-    images () {
+    images() {
       const images = []
       if (this.view === 'image') {
         this.viewList && this.viewList.map(item => {
@@ -136,16 +131,16 @@ export default {
       }
       return images
     },
-    mergeConfig () {
+    mergeConfig() {
       return merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
-    value () {
+    value() {
       this.buildViewList()
     }
   },
-  created () {
+  created() {
     this.buildViewList()
     const s = document.createElement('script')
     s.type = 'text/javascript'
@@ -153,21 +148,21 @@ export default {
     document.body.appendChild(s)
   },
   methods: {
-    viewVideo (url) {
+    viewVideo(url) {
       this.current = url
       this.model = true
     },
-    removeFile (item) {
+    removeFile(item) {
       removeObjWithArr(this.viewList, item)
       this.$emit('input', this.viewList)
     },
-    download (item) {
+    download(item) {
       const a = document.createElement('a')
       a.setAttribute('download', '')
       a.setAttribute('href', this.mergeConfig.domain + item.url)
       a.click()
     },
-    previewHandle (item) {
+    previewHandle(item) {
       const type = item.name.substr(item.name.lastIndexOf('.'))
       switch (type) {
         case '.pdf':
@@ -177,7 +172,7 @@ export default {
           window.open(this.mergeConfig.domain + item.url)
       }
     },
-    buildViewList () {
+    buildViewList() {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0) {

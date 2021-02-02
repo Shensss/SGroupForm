@@ -3,6 +3,7 @@
       v-model="formData"
       :form="form"
       :item-style="itemStyle"
+      v-change.number.1="onchange"
       :props="props"
   />
 </template>
@@ -10,13 +11,16 @@
 <script>
 export default {
   name: 'SGroupFormUse',
-  data () {
+  data() {
     return {
       form: [
         {
           label: '快速表单',
-          type: 'input',
-          key: 'name'
+          type: 'fileView',
+          key: 'name',
+          props: {
+            view: 'image'
+          }
         },
         {
           label: '下拉菜单',
@@ -42,7 +46,9 @@ export default {
           }
         }
       ],
-      formData: {},
+      formData: {
+        name: 'aaa.png&&aa.png'
+      },
       itemStyle: {
         marginBottom: '10px'
       },
@@ -51,6 +57,11 @@ export default {
         labelPosition: 'right',
         size: 'small'
       }
+    }
+  },
+  methods: {
+    onchange() {
+      console.log(this.formData)
     }
   }
 }

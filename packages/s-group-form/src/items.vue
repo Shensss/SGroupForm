@@ -23,61 +23,44 @@
     <template v-else>
       <div v-if="config.slotConfig&&config.slotConfig.inputInsert"
            v-html="config.slotConfig.inputInsert"></div>
-      <slot v-else
-            :name="'inputInsert-'+config._code"></slot>
-      <div v-if="singleTag.indexOf(config.type)>=0"
-           :is="'el-'+config.type"
-           :style="config.inputStyle"
-           @input="change"
-           @focus="focus"
-           @blur="blur"
-           :options="config.options"
-           v-bind="config.props"
-           v-model="model"></div>
-      <div v-if="groupTag.indexOf(config.type)>=0"
-           :is="'el-'+config.type.replace('Button','')+'-group'"
-           @change="change"
-           @focus="focus"
-           @blur="blur"
-           :style="config.inputStyle"
-           v-model="model">
-        <div :is="'el-'+config.type"
-             v-bind="config.props"
-             :key="index"
-             v-for="(item,index) in config.options"
-             :label="item[mapper.value]">
-          {{ item[mapper.label] }}
-        </div>
-      </div>
-      <div v-if="optionsTag.indexOf(config.type)>=0"
-           :is="'el-'+config.type"
-           @change="change"
-           @focus="focus"
-           @blur="blur"
-           v-bind="config.props"
-           :style="config.inputStyle"
-           v-model="model">
-        <el-option v-bind="config.props"
-                   :key="index"
-                   v-for="(item,index) in config.options"
-                   :label="item[mapper.label]"
-                   :value="item[mapper.value]">
-        </el-option>
-      </div>
-      <div v-if="selfTag.indexOf(config.type)>=0"
-           :is="'s-'+config.type"
-           @input="change"
-           @focus="focus"
-           @blur="blur"
-           :style="config.inputStyle"
-           :options="config.options"
-           :mapper="mapper"
-           v-bind="config.props"
-           v-model="model">
-        <template slot-scope="data">
+      <slot v-else :name="'inputInsert-'+config._code"></slot>
+      <single-tag v-if="singleTag.indexOf(config.type)>=0"
+                  :mapper="mapper"
+                  v-model="model"
+                  :config="config"
+                  @change="change"
+                  @blur="blur"
+                  @focus="focus">
+      </single-tag>
+      <group-tag v-if="groupTag.indexOf(config.type)>=0"
+                 :mapper="mapper"
+                 v-model="model"
+                 :config="config"
+                 @change="change"
+                 @blur="blur"
+                 @focus="focus">
+
+      </group-tag>
+      <options-tag v-if="optionsTag.indexOf(config.type)>=0"
+                   :mapper="mapper"
+                   v-model="model"
+                   :config="config"
+                   @change="change"
+                   @blur="blur"
+                   @focus="focus">
+
+      </options-tag>
+      <self-tag v-if="selfTag.indexOf(config.type)>=0"
+                :mapper="mapper"
+                v-model="model"
+                :config="config"
+                @change="change"
+                @blur="blur"
+                @focus="focus">
+        <template :name="'content-'+config._code" :option="config" :data="data" slot-scope="data">
           <slot :name="'content-'+config._code" :option="config" :data="data"></slot>
         </template>
-      </div>
+      </self-tag>
     </template>
     <span v-if="config.slotConfig&&config.slotConfig.inputAdd"
           v-html="config.slotConfig.inputAdd"></span>
@@ -87,10 +70,15 @@
 
 <script>
 import formItem from './mixins/form.item'
+import SingleTag from "@/s-group-form/src/types/singleTag"
+import GroupTag from "@/s-group-form/src/types/groupTag"
+import OptionsTag from "@/s-group-form/src/types/optionsTag"
+import SelfTag from "@/s-group-form/src/types/selfTag"
 
 export default {
   name: 'items',
-  data () {
+  components: { SelfTag, OptionsTag, GroupTag, SingleTag },
+  data() {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
       groupTag: ['radioButton', 'radio', 'checkbox'],

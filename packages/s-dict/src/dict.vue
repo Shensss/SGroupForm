@@ -1,5 +1,5 @@
 <template>
-  <span class="dict">{{ showValue }}</span>
+  <span class="dict" :style="currentStyle">{{ showValue }}</span>
 </template>
 
 <script>
@@ -8,9 +8,10 @@ import matchesProperty from 'lodash-es/matchesProperty'
 
 export default {
   name: 'sDict',
-  data () {
+  data() {
     return {
-      showValue: ''
+      showValue: '',
+      currentStyle: {}
     }
   },
   props: {
@@ -20,13 +21,13 @@ export default {
     },
     options: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
     mapper: {
       type: Object,
-      default () {
+      default() {
         return {
           label: 'label',
           value: 'value',
@@ -39,20 +40,20 @@ export default {
     value: {
       deep: true,
       immediate: true,
-      handler () {
+      handler() {
         this.buildShowValue()
       }
     },
     options: {
       deep: true,
       immediate: true,
-      handler () {
+      handler() {
         this.buildShowValue()
       }
     }
   },
   methods: {
-    buildShowValue () {
+    buildShowValue() {
       if (this.value) {
         if (Array.isArray(this.value)) {
           const arr = []
@@ -60,6 +61,9 @@ export default {
             const is = find(this.options, matchesProperty(this.mapper.value, val))
             if (is) {
               arr.push(is[this.mapper.label])
+              if (is.style) {
+                this.currentStyle = is.style
+              }
             }
           })
           this.showValue = arr.join(',')

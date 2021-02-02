@@ -1,12 +1,6 @@
 import { cloneDeep, merge, difference } from 'lodash-es'
 
 export default {
-  provide () {
-    return {
-      mapper: this.mapper,
-      config: this.config
-    }
-  },
   data () {
     return {}
   },

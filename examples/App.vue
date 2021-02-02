@@ -7,6 +7,8 @@
 <script>
 
 import SGroupFormUse from "./components/SGroupFormUse"
+import SLayout from "./components/SLayout"
+
 export default {
   name: 'App',
   components: { SGroupFormUse },
