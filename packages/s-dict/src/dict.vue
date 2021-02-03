@@ -76,3 +76,8 @@ export default {
   }
 }
 </script>
+<style>
+.dict {
+
+}
+</style>
