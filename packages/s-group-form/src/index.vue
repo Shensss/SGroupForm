@@ -186,10 +186,13 @@ export default {
     }
   },
   mounted () {
-    const s = document.createElement('script')
-    s.type = 'text/javascript'
-    s.src = '//at.alicdn.com/t/font_427398_o65r3bqlj0b.js'
-    document.body.appendChild(s)
+    if (!sessionStorage.getItem('icon')) {
+      const s = document.createElement('script')
+      s.type = 'text/javascript'
+      s.src = '//at.alicdn.com/t/font_427398_7ehmbnq6i8.js'
+      document.body.appendChild(s)
+      sessionStorage.setItem('icon', true)
+    }
     this.init()
   },
   watch: {

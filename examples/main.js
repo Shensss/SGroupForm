@@ -6,8 +6,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 import SGroupForm from '../packages'
 import SGroupLayout from '../packages'
+import SGroupTable from '../packages'
 
 Vue.use(SGroupLayout)
+Vue.use(SGroupTable)
 Vue.use(SGroupForm, {
     UploadConfig: {
         getType: 'JSON',

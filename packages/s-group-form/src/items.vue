@@ -70,10 +70,10 @@
 
 <script>
 import formItem from './mixins/form.item'
-import SingleTag from "@/s-group-form/src/types/singleTag"
-import GroupTag from "@/s-group-form/src/types/groupTag"
-import OptionsTag from "@/s-group-form/src/types/optionsTag"
-import SelfTag from "@/s-group-form/src/types/selfTag"
+import SingleTag from "./types/singleTag"
+import GroupTag from "./types/groupTag"
+import OptionsTag from "./types/optionsTag"
+import SelfTag from "./types/selfTag"
 
 export default {
   name: 'items',

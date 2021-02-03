@@ -12,8 +12,12 @@
           {{ item.name }}
         </p>
         <span>
-          <i class="el-icon-download" @click="download(item)"/>
-          <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"/>
+          <svg class="icon" aria-hidden="true" @click="download(item)">
+             <use xlink:href="#icon-excel"/>
+          </svg>
+             <svg class="icon" aria-hidden="true" @click="removeFile(item)">
+            <use xlink:href="#icon-remove"/>
+          </svg>
         </span>
       </li>
     </ul>
@@ -32,7 +36,9 @@
             <img v-if="item.url"
                  :src="mergeConfig.domain+item.url"
                  :title="item.name">
-            <i v-if="remove" class="el-icon-delete" @click="removeFile(item)"/>
+            <svg class="icon" aria-hidden="true" @click="removeFile(item)">
+              <use xlink:href="#icon-remove"/>
+            </svg>
           </template>
         </li>
       </ul>
@@ -142,10 +148,13 @@ export default {
   },
   created() {
     this.buildViewList()
-    const s = document.createElement('script')
-    s.type = 'text/javascript'
-    s.src = '//at.alicdn.com/t/font_427398_o65r3bqlj0b.js'
-    document.body.appendChild(s)
+    if (!sessionStorage.getItem('icon')) {
+      const s = document.createElement('script')
+      s.type = 'text/javascript'
+      s.src = '//at.alicdn.com/t/font_427398_7ehmbnq6i8.js'
+      document.body.appendChild(s)
+      sessionStorage.setItem('icon', true)
+    }
   },
   methods: {
     viewVideo(url) {
@@ -298,9 +307,15 @@ export default {
     padding: 0;
     margin: 0;
 
+    .icon {
+      display: none;
+    }
+
     &.remove {
+
       li:hover {
-        i {
+        .icon {
+          display: block;
           position: absolute;
           top: 50%;
           left: 50%;

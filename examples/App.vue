@@ -1,17 +1,18 @@
 <template>
   <div id="app">
     <s-group-form-use></s-group-form-use>
+    <s-table-use></s-table-use>
   </div>
 </template>
 
 <script>
 
 import SGroupFormUse from "./components/SGroupFormUse"
-import SLayout from "./components/SLayout"
+import STableUse from "./components/STableUse"
 
 export default {
   name: 'App',
-  components: { SGroupFormUse },
+  components: { STableUse, SGroupFormUse },
 }
 </script>
 

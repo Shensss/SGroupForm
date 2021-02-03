@@ -1,6 +1,6 @@
-import layout from './src/SGroupLayout/index.js'
-layout.install = function (Vue) {
-  Vue.component('layout', layout)
+import SGroupTable from './src/index'
+SGroupTable.install = function (Vue) {
+  Vue.component('SGroupTable', SGroupTable)
 }
 
-export default layout
+export default SGroupTable

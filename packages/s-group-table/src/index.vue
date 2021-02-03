@@ -23,43 +23,38 @@
                        fixed="left"
                        v-if="index">
       </el-table-column>
-      <el-table-column v-for="(item,cindex) in columns"
+      <el-table-column :key="cindex"
+                       v-for="(item,cindex) in columns"
                        v-bind="item">
         <template slot-scope="scope">
-          <template
-              v-if="scope.row[item.key]===''||scope.row[item.key]==='null'||scope.row[item.key]===null||scope.row[item.key]===undefined">
-            -
-          </template>
-          <template v-else>
             <span :style="item.style" v-if="!item.type">
-              {{ get(scope.row, item.key) }}
+               {{ get(scope.row, item.key) || '-' }}
             </span>
-            <template v-if="item.type">
-              <slot v-if="item.type==='slot'" :name="item.key"></slot>
-              <single-tag v-if="singleTag.indexOf(item.type)>=0"
-                          :mapper="item|mergeMapper"
-                          v-model="model"
-                          :config="item">
-              </single-tag>
-              <group-tag v-if="groupTag.indexOf(item.type)>=0"
-                         :mapper="item|mergeMapper"
-                         v-model="model"
-                         :config="item">
-              </group-tag>
-              <options-tag v-if="optionsTag.indexOf(item.type)>=0"
-                           :mapper="item|mergeMapper"
-                           v-model="model"
-                           :config="item">
-              </options-tag>
-              <self-tag v-if="selfTag.indexOf(item.type)>=0"
-                        :mapper="item|mergeMapper"
-                        v-model="model"
+          <template v-if="item.type">
+            <slot v-if="item.type==='slot'" :name="item.key"></slot>
+            <single-tag v-if="singleTag.indexOf(item.type)>=0"
+                        :mapper="mergeMapper(item)"
+                        v-model="scope.row[item.key]"
                         :config="item">
-                <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
-                  <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
-                </template>
-              </self-tag>
-            </template>
+            </single-tag>
+            <group-tag v-if="groupTag.indexOf(item.type)>=0"
+                       :mapper="mergeMapper(item)"
+                       v-model="scope.row[item.key]"
+                       :config="item">
+            </group-tag>
+            <options-tag v-if="optionsTag.indexOf(item.type)>=0"
+                         :mapper="mergeMapper(item)"
+                         v-model="scope.row[item.key]"
+                         :config="item">
+            </options-tag>
+            <self-tag v-if="selfTag.indexOf(item.type)>=0"
+                      :mapper="mergeMapper(item)"
+                      v-model="scope.row[item.key]"
+                      :config="item">
+              <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
+                <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
+              </template>
+            </self-tag>
           </template>
         </template>
       </el-table-column>
@@ -104,7 +99,7 @@ import OptionsTag from "../../s-group-form/src/types/optionsTag"
 import SelfTag from "../../s-group-form/src/types/selfTag"
 
 export default {
-  name: 'sTable',
+  name: 'SGroupTable',
   components: { SelfTag, OptionsTag, GroupTag, SingleTag },
   data() {
     return {
@@ -162,19 +157,10 @@ export default {
     total: Number,
     pageSize: Number
   },
-  filters: {
-    mergeMapper(config) {
-      if (config.props && config.props.mapper) {
-        return Object.assign(this.mapper, config.props.mapper)
-      } else {
-        return this.mapper
-      }
-    }
-  },
   computed: {
     usePage: {
       get() {
-        return this.page
+        return this.page || 0
       },
       set(pageNumber) {
         this.$emit('changePageNumber', pageNumber)
@@ -205,6 +191,13 @@ export default {
     get(data, key) {
       return get(data, key)
     },
+    mergeMapper(config) {
+      if (config.props && config.props.mapper) {
+        return Object.assign(this.mapper, config.props.mapper)
+      } else {
+        return this.mapper
+      }
+    },
     showFunction(row, show) {
       if (show === undefined) {
         return true
@@ -221,7 +214,7 @@ export default {
       }
     },
     calcIndex(val) {
-      return (((this.page || 1) - 1) * 10) + val + 1
+      return (((this.usePage || 1) - 1) * (this.usePageSize || 10)) + val + 1
     },
     handleSizeChange(pageSize) {
       this.usePageSize = pageSize
