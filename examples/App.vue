@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <s-group-form-use></s-group-form-use>
-    <s-layout></s-layout>
   </div>
 </template>
 
@@ -9,11 +8,10 @@
 
 import SGroupFormUse from "./components/SGroupFormUse"
 import STableUse from "./components/STableUse"
-import SLayout from "./components/SLayout"
 
 export default {
   name: 'App',
-  components: { SLayout, STableUse, SGroupFormUse },
+  components: { STableUse, SGroupFormUse },
 }
 </script>
 

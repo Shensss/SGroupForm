@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     buildShowValue() {
-      if (this.value) {
+      if (this.value || this.value === 0 || this.value === '0' || this.value === '') {
         if (Array.isArray(this.value)) {
           const arr = []
           this.value.map(val => {

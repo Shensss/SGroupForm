@@ -123,7 +123,7 @@ export default {
   methods: {
     changeModel(val) {
       if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
-        const current = difference(val, this.value)
+        const current = val
         if (this.config.join) {
           this.$emit('setValue', this.config._code, this.config.key, current)
         } else {

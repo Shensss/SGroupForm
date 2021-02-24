@@ -18,12 +18,14 @@ export default {
       form: [
         {
           label: '下拉菜单',
-          type: 'datePicker',
-          key: ['select', 'select2'],
-          props: {
-            type:'daterange',
-            valueFormat: 'yyyyMM'
-          }
+          type: 'dict',
+          key: 'select',
+          options: [
+            {
+              label: "aaa",
+              value: 0
+            }
+          ]
         },
         {
           label: '下拉菜单',
@@ -36,15 +38,14 @@ export default {
       ],
       formData: {
         name: 'aaa.png&&aa.png',
-        select: '',
-        select2: ''
+        select: 0
       },
       itemStyle: {
         width: '25%',
         marginBottom: '10px',
       },
       props: {
-        // labelWidth: '120px',
+        labelWidth: '120px',
         // labelPosition: 'right',
         // size: 'small'
       }

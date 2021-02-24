@@ -20,7 +20,7 @@ export default {
   computed: {
     model: {
       set(val) {
-        this.$emit('changeValue', val)
+        this.$emit('changeValue', val || '')
       },
       get() {
         return this.value
