@@ -4,7 +4,6 @@
        @focus="focus"
        @blur="blur"
        v-bind="config.props"
-       :style="config.inputStyle"
        v-model="model">
     <el-option v-bind="config.props"
                :key="index"
@@ -16,10 +15,40 @@
 </template>
 
 <script>
-import types from "../mixins/types"
-
 export default {
   name: "optionsTag",
-  mixins: [types]
+  props: {
+    value: String | Number,
+    config: Object,
+    mapper: Object,
+    inputStyle: Object
+  },
+  computed: {
+    model: {
+      set(val) {
+        this.$emit('changeValue', val)
+      },
+      get() {
+        return this.value
+      }
+    }
+  },
+  methods: {
+    change(value) {
+      if (this.config.change) {
+        this.$emit('change', value)
+      }
+    },
+    focus() {
+      if (this.config.focus) {
+        this.$emit('change', this.value)
+      }
+    },
+    blur() {
+      if (this.config.blur) {
+        this.$emit('change', this.value)
+      }
+    }
+  }
 }
 </script>

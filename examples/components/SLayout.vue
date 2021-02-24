@@ -2,6 +2,7 @@
   <layout class="box" :col="5" :row="5" :option="option">
     <row></row>
     <bottom></bottom>
+    <bottom></bottom>
   </layout>
 </template>
 

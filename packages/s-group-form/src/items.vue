@@ -3,8 +3,7 @@
                 :prop="config._code"
                 :rules="config.rule"
                 :label-width="config.labelWidth"
-                :size="config.size"
-                :style="style">
+                :size="config.size">
     <template slot="label"
               v-if="config.label"
               class="label">
@@ -26,7 +25,9 @@
       <slot v-else :name="'inputInsert-'+config._code"></slot>
       <single-tag v-if="singleTag.indexOf(config.type)>=0"
                   :mapper="mapper"
-                  v-model="model"
+                  :value="value"
+                  @changeValue="changeModel"
+                  :input-style="config.inputStyle"
                   :config="config"
                   @change="change"
                   @blur="blur"
@@ -34,26 +35,30 @@
       </single-tag>
       <group-tag v-if="groupTag.indexOf(config.type)>=0"
                  :mapper="mapper"
-                 v-model="model"
+                 :input-style="config.inputStyle"
+                 :value="value"
+                 @changeValue="changeModel"
                  :config="config"
                  @change="change"
                  @blur="blur"
                  @focus="focus">
-
       </group-tag>
       <options-tag v-if="optionsTag.indexOf(config.type)>=0"
                    :mapper="mapper"
-                   v-model="model"
+                   :value="value"
+                   @changeValue="changeModel"
                    :config="config"
+                   :input-style="config.inputStyle"
                    @change="change"
                    @blur="blur"
                    @focus="focus">
-
       </options-tag>
       <self-tag v-if="selfTag.indexOf(config.type)>=0"
                 :mapper="mapper"
-                v-model="model"
+                :input-style="config.inputStyle"
+                :value="value"
                 :config="config"
+                @changeValue="changeModel"
                 @change="change"
                 @blur="blur"
                 @focus="focus">
@@ -69,11 +74,12 @@
 </template>
 
 <script>
-import formItem from './mixins/form.item'
-import SingleTag from "./types/singleTag"
-import GroupTag from "./types/groupTag"
-import OptionsTag from "./types/optionsTag"
-import SelfTag from "./types/selfTag"
+import SingleTag from "./styled/singleTag"
+import GroupTag from "./styled/groupTag"
+import OptionsTag from "./styled/optionsTag"
+import SelfTag from "./styled/selfTag"
+import difference from 'lodash-es/difference'
+import cloneDeep from 'lodash-es/cloneDeep'
 
 export default {
   name: 'items',
@@ -86,16 +92,71 @@ export default {
       selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict', 'checkTag', 'time', 'selectRange']
     }
   },
-  mixins: [formItem]
+  props: {
+    formData: Object,
+    type: String,
+    value: String | Number,
+    config: Object,
+    mergeStyle: Object,
+    props: Object
+  },
+  computed: {
+    required() {
+      let required = false
+      this.config.rule && this.config.rule.map(item => {
+        if (item.required) {
+          required = true
+        }
+      })
+      return required
+    },
+    mapper() {
+      const allMapper = cloneDeep(this.props.mapper) || {
+        label: 'label',
+        value: 'value',
+        children: 'children'
+      }
+      const selfMapper = this.config.mapper || {}
+      return Object.assign({}, allMapper, selfMapper)
+    }
+  },
+  methods: {
+    changeModel(val) {
+      if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
+        const current = difference(val, this.value)
+        if (this.config.join) {
+          this.$emit('setValue', this.config._code, this.config.key, current)
+        } else {
+          this.$emit('setValue', this.config._code, this.config.key, current)
+        }
+      } else {
+        if (this.config.join) {
+          this.$emit('setValue', this.config._code, this.config.key, val.join(this.config.join))
+        } else {
+          this.$emit('setValue', this.config._code, this.config.key, val)
+        }
+      }
+    },
+    change(value) {
+      if (this.config.change) {
+        this.config.change(this.config, value, this.formData)
+      }
+    },
+    focus() {
+      if (this.config.focus) {
+        this.config.focus(this.config, this.value, this.formData)
+      }
+    },
+    blur() {
+      if (this.config.blur) {
+        this.config.blur(this.config, this.value, this.formData)
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
 .full-content {
   flex-wrap: wrap !important;
-}
-</style>
-<style>
-.full-content .el-form-item__content {
-  width: 100%;
 }
 </style>

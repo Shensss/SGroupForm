@@ -3,9 +3,11 @@
       v-model="formData"
       :form="form"
       :item-style="itemStyle"
-      v-change.number.1="onchange"
-      :props="props"
-  />
+      :props="props">
+    <template slot="content-aaa">
+      <div class="red"></div>
+    </template>
+  </s-group-form>
 </template>
 
 <script>
@@ -15,47 +17,36 @@ export default {
     return {
       form: [
         {
-          label: '快速表单',
-          type: 'fileView',
-          key: 'name',
+          label: '下拉菜单',
+          type: 'datePicker',
+          key: ['select', 'select2'],
           props: {
-            view: 'image'
+            type:'daterange',
+            valueFormat: 'yyyyMM'
           }
         },
         {
           label: '下拉菜单',
-          type: 'select',
-          key: 'select',
-          options: [
-            {
-              label: '北京烤鸭',
-              value: '1'
-            },
-            {
-              label: '南京板鸭',
-              value: '2'
-            }
-          ]
-        },
-        {
-          label: '富文本',
-          type: 'richText',
-          key: 'richText',
-          inputStyle: {
-            height: '400px'
+          type: 'slot',
+          key: 'aaa',
+          style: {
+            width: '100%'
           }
         }
       ],
       formData: {
-        name: 'aaa.png&&aa.png'
+        name: 'aaa.png&&aa.png',
+        select: '',
+        select2: ''
       },
       itemStyle: {
-        marginBottom: '10px'
+        width: '25%',
+        marginBottom: '10px',
       },
       props: {
-        labelWidth: '120px',
-        labelPosition: 'right',
-        size: 'small'
+        // labelWidth: '120px',
+        // labelPosition: 'right',
+        // size: 'small'
       }
     }
   },
@@ -66,3 +57,10 @@ export default {
   }
 }
 </script>
+<style>
+.red {
+  width: 100%;
+  background-color: red;
+  height: 100px;
+}
+</style>

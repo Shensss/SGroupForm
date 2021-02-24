@@ -1,6 +1,6 @@
 {
   "name": "s-group-form",
-  "version": "0.2.44",
+  "version": "0.2.61",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
@@ -34,6 +34,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "babel-plugin-component": "^1.1.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "node-sass": "^4.12.0",
     "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^8.0.2",

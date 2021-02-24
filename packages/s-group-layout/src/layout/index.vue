@@ -37,6 +37,14 @@ export default {
       default: 5,
       type: [String, Number, String]
     },
+    colScale: {
+      default: '1fr',
+      type: [String, Number, String]
+    },
+    rowScale: {
+      default: '1fr',
+      type: [String, Number, String]
+    },
     rows: {
       default: 5,
       type: [String, Number, String]

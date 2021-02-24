@@ -3,7 +3,6 @@
        @input="change"
        @focus="focus"
        @blur="blur"
-       :style="config.inputStyle"
        :options="config.options"
        :mapper="mapper"
        v-bind="config.props"
@@ -15,10 +14,40 @@
 </template>
 
 <script>
-import types from "../mixins/types"
-
 export default {
   name: "selfTag",
-  mixins: [types]
+  props: {
+    value: String | Number,
+    config: Object,
+    mapper: Object,
+    inputStyle: Object
+  },
+  computed: {
+    model: {
+      set(val) {
+        this.$emit('changeValue', val)
+      },
+      get() {
+        return this.value
+      }
+    }
+  },
+  methods: {
+    change(value) {
+      if (this.config.change) {
+        this.$emit('change', value)
+      }
+    },
+    focus() {
+      if (this.config.focus) {
+        this.$emit('change', this.value)
+      }
+    },
+    blur() {
+      if (this.config.blur) {
+        this.$emit('change', this.value)
+      }
+    }
+  }
 }
 </script>

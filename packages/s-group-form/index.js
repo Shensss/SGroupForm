@@ -22,7 +22,7 @@ SGroupForm.install = function (Vue, opt) {
     Vue.component('SGroupForm', SGroupForm)
 }
 
-function bindEvent (eventName, binding, form) {
+function bindEvent(eventName, binding, form) {
     const { value, modifiers, rawName } = binding
     if (modifiers.label) {
         form.map((item) => {

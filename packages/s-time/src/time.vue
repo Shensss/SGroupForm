@@ -9,24 +9,28 @@ import { dateFormat } from '../../utils'
 
 export default {
   name: 'sTime',
-  inject: ['config', 'mapper'],
-  data () {
+  data() {
     return {}
   },
   props: {
     value: {
       type: [String, Number, Date, Array],
       default: ''
+    },
+    format: String,
+    rangeSeparator: {
+      type: String,
+      default: '至'
     }
   },
   computed: {
-    showTime () {
+    showTime() {
       if (Array.isArray(this.value) && this.value.length > 0) {
-        const start = dateFormat(this.config.props.format, this.value[0] || '')
-        const end = dateFormat(this.config.props.format, this.value[1] || '')
-        return start + (this.config.props.rangeSeparator || '至') + end
+        const start = dateFormat(this.format, this.value[0] || '')
+        const end = dateFormat(this.format, this.value[1] || '')
+        return start + (this.rangeSeparator) + end
       } else if (!Array.isArray(this.value)) {
-        return dateFormat(this.config.props.format, this.value)
+        return dateFormat(this.format, this.value)
       } else {
         return ''
       }

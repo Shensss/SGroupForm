@@ -3,7 +3,7 @@ const fs = require('fs')
 const join = path.join
 const webpack = require('webpack')
 
-function getEntries (path) {
+function getEntries(path) {
     let files = fs.readdirSync(resolve(path))
     const entries = files.reduce((ret, item) => {
         const itemPath = join(path, item)
@@ -19,7 +19,7 @@ function getEntries (path) {
     return entries
 }
 
-function resolve (dir) {
+function resolve(dir) {
     return path.resolve(__dirname, dir)
 }
 
@@ -109,5 +109,4 @@ const buildConfig = {
             })
     },
 }
-console.log(process.env.NODE_ENV)
 module.exports = process.env.NODE_ENV === 'development' ? devConfig : buildConfig
