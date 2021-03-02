@@ -74,17 +74,16 @@
 </template>
 
 <script>
-import SingleTag from "./styled/singleTag"
-import GroupTag from "./styled/groupTag"
-import OptionsTag from "./styled/optionsTag"
-import SelfTag from "./styled/selfTag"
-import difference from 'lodash-es/difference'
+import SingleTag from './styled/singleTag'
+import GroupTag from './styled/groupTag'
+import OptionsTag from './styled/optionsTag'
+import SelfTag from './styled/selfTag'
 import cloneDeep from 'lodash-es/cloneDeep'
 
 export default {
   name: 'items',
   components: { SelfTag, OptionsTag, GroupTag, SingleTag },
-  data() {
+  data () {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
       groupTag: ['radioButton', 'radio', 'checkbox'],
@@ -101,7 +100,7 @@ export default {
     props: Object
   },
   computed: {
-    required() {
+    required () {
       let required = false
       this.config.rule && this.config.rule.map(item => {
         if (item.required) {
@@ -110,18 +109,18 @@ export default {
       })
       return required
     },
-    mapper() {
-      const allMapper = cloneDeep(this.props.mapper) || {
+    mapper () {
+      const allMapper = cloneDeep(this.props.mapper) || {}
+      const selfMapper = this.config.mapper || {}
+      return Object.assign({
         label: 'label',
         value: 'value',
         children: 'children'
-      }
-      const selfMapper = this.config.mapper || {}
-      return Object.assign({}, allMapper, selfMapper)
+      }, allMapper, selfMapper)
     }
   },
   methods: {
-    changeModel(val) {
+    changeModel (val) {
       if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
         const current = val
         if (this.config.join) {
@@ -137,17 +136,17 @@ export default {
         }
       }
     },
-    change(value) {
+    change (value) {
       if (this.config.change) {
         this.config.change(this.config, value, this.formData)
       }
     },
-    focus() {
+    focus () {
       if (this.config.focus) {
         this.config.focus(this.config, this.value, this.formData)
       }
     },
-    blur() {
+    blur () {
       if (this.config.blur) {
         this.config.blur(this.config, this.value, this.formData)
       }

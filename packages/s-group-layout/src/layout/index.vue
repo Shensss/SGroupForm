@@ -27,7 +27,7 @@
 
 export default {
   name: 'Group',
-  provide() {
+  provide () {
     return {
       changeHeight: this.changeHeight
     }
@@ -55,13 +55,13 @@ export default {
     },
     option: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
     edit: Boolean
   },
-  data() {
+  data () {
     return {
       border: false,
       rowStartArr: [],
@@ -77,7 +77,7 @@ export default {
       current: 0
     }
   },
-  mounted() {
+  mounted () {
     if (this.edit) {
       document.addEventListener('keydown', (e) => {
         if (e.code === 'Space') {
@@ -94,13 +94,13 @@ export default {
     }
   },
   methods: {
-    changeHeight(el, height) {
+    changeHeight (el, height) {
       const currentOption = this.option[Array.prototype.indexOf.call(this.$refs.box.children, el)]
       const style = currentOption.split('/')
       style[2] = height
       el.style = 'grid-area:' + style.join('/')
     },
-    setting(e) {
+    setting (e) {
       if (!this.edit) return
       this.current = Array.prototype.indexOf.call(this.$refs.box.children, e.target)
       if (this.current >= 0) this.border = !this.border
@@ -116,13 +116,13 @@ export default {
         this.colEndArr = []
       }
     },
-    pickItem(index) {
+    pickItem (index) {
       if (this.type) {
         this.pickRange(index)
         this.calcActive(this.rowStart, this.rowEnd, this.colStart, this.colEnd)
       }
     },
-    indexToRowCol(index) {
+    indexToRowCol (index) {
       const rowNum = index % this.cols === 0 ? index / this.cols : (Math.floor(index / this.cols) + 1)
       const colNum = index % this.rows === 0 ? this.cols : (index % this.cols === 0 ? this.cols : index % this.cols)
       return {
@@ -130,7 +130,7 @@ export default {
         colNum: Number(colNum)
       }
     },
-    indexRange(index) {
+    indexRange (index) {
       const { rowNum, colNum } = this.indexToRowCol(index)
       return {
         rowStart: rowNum,
@@ -139,7 +139,7 @@ export default {
         colEnd: colNum + 1
       }
     },
-    pickRange(index) {
+    pickRange (index) {
       const { rowStart, colStart, rowEnd, colEnd } = this.indexRange(index)
       this.rowStartArr.push(rowStart)
       this.rowEndArr.push(rowEnd)
@@ -150,7 +150,7 @@ export default {
       this.colStart = Math.min.apply(null, this.colStartArr)
       this.colEnd = Math.max.apply(null, this.colEndArr)
     },
-    calcActive(rowStart, rowEnd, colStart, colEnd) {
+    calcActive (rowStart, rowEnd, colStart, colEnd) {
       const active = []
       for (let i = rowStart; i < rowEnd; i++) {
         for (let j = colStart; j < colEnd; j++) {
@@ -159,7 +159,7 @@ export default {
       }
       this.active = active
     },
-    buildResult() {
+    buildResult () {
       this.border = false
       this.$emit('change', this.current, [this.rowStart, this.colStart, this.rowEnd, this.colEnd].join('/'))
     }

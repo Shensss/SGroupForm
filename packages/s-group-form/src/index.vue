@@ -214,7 +214,7 @@ export default {
     },
     init() {
       if (!this.form) return
-      this.stageForm = cloneDeep(this.form)
+      this.stageForm = cloneDeep(merge(this.stageForm, this.form))
       this.initGroup()
       this.initValue()
     },
@@ -368,21 +368,18 @@ export default {
     },
     getItem(target) {
       const result = []
-      Object.keys(this.groups).map(key => {
-        this.groups[key].map(item => {
-          if (item.key === target || item.label === target) {
-            result.push(item)
-          }
-        })
+      this.stageForm.map(item => {
+        if (item.key === target || item.label === target) {
+          result.push(item)
+        }
       })
-      if (this.unGroups) {
-        this.unGroups.map(item => {
-          if (item.key === target || item.label === target) {
-            result.push(item)
-          }
-        })
-      }
       return result
+    },
+    setOptions(target, options) {
+      let targets = this.getItem(target)
+      targets && targets.map(item => {
+        item.options = options
+      })
     },
     validate(callback) {
       return this.$refs.instance.validate(callback)

@@ -9,10 +9,10 @@ const SGroupLayout = styled(group)`
   grid-row-gap: ${ props => Array.isArray(props.gap) ? props.gap[0] : props.gap };
 
   ${ props => {
-      return props.option.map((item, index) => {
-        return ` &:not(.border) > :nth-child(${ index + 1 }) {grid-area: ${ item };}`
-      })
-    }
+    return props.option.map((item, index) => {
+      return ` &:not(.border) > :nth-child(${ index + 1 }) {grid-area: ${ item };}`
+    })
+  }
   }
 `
 export default SGroupLayout

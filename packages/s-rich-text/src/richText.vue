@@ -46,7 +46,7 @@ export default {
     accept: {
       type: [String, Array],
       default: '.png,.jpg,.jpeg,.gif'
-    },
+    }
   },
   components: {
     quillEditor

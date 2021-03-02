@@ -9,7 +9,7 @@ import { dateFormat } from '../../utils'
 
 export default {
   name: 'sTime',
-  data() {
+  data () {
     return {}
   },
   props: {
@@ -24,7 +24,7 @@ export default {
     }
   },
   computed: {
-    showTime() {
+    showTime () {
       if (Array.isArray(this.value) && this.value.length > 0) {
         const start = dateFormat(this.format, this.value[0] || '')
         const end = dateFormat(this.format, this.value[1] || '')

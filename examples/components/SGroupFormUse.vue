@@ -1,36 +1,75 @@
 <template>
-  <s-group-form
-      v-model="formData"
-      :form="form"
-      :item-style="itemStyle"
-      :props="props">
-    <template slot="content-aaa">
-      <div class="red"></div>
-    </template>
-  </s-group-form>
+  <div>
+    <s-group-form
+        ref="form"
+        v-model="formData"
+        :type="type?'readonly':''"
+        :form="form"
+        :item-style="itemStyle"
+        :props="props">
+    </s-group-form>
+    <el-button @click="submit">change</el-button>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'SGroupFormUse',
-  data() {
+  data () {
     return {
+      type: false,
       form: [
         {
           label: '下拉菜单',
-          type: 'dict',
+          type: 'fileView',
           key: 'select',
+          props: {
+            remove: true
+          },
+          mapper: {
+            label: 'Class'
+          },
           options: [
             {
-              label: "aaa",
-              value: 0
+              Class: '1',
+              value: 1
+            },
+            {
+              Class: '2',
+              value: 2
+            },
+            {
+              Class: '3',
+              value: 3
             }
           ]
         },
         {
           label: '下拉菜单',
-          type: 'slot',
+          type: 'select',
+          key: 'select',
+          options: [
+            {
+              aaa: '11',
+              value: 1
+            },
+            {
+              aaa: '22',
+              value: 2
+            },
+            {
+              aaa: '33',
+              value: 3
+            }
+          ]
+        },
+        {
+          label: '下拉菜单2',
+          type: 'code',
           key: 'aaa',
+          props: {
+            mode: 'javascript'
+          },
           style: {
             width: '100%'
           }
@@ -38,23 +77,31 @@ export default {
       ],
       formData: {
         name: 'aaa.png&&aa.png',
-        select: 0
+        select: 'asd.png&&aa.png'
       },
       itemStyle: {
         width: '25%',
-        marginBottom: '10px',
+        marginBottom: '10px'
       },
       props: {
         labelWidth: '120px',
         // labelPosition: 'right',
-        // size: 'small'
+        // size: 'small',
+        mapper: {
+          label: 'aaa'
+        }
       }
     }
   },
   methods: {
-    onchange() {
+    onchange () {
+      console.log(this.formData)
+    },
+    submit () {
       console.log(this.formData)
     }
+  },
+  mounted () {
   }
 }
 </script>

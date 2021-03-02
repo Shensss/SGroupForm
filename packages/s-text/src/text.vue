@@ -5,7 +5,7 @@
 <script>
 export default {
   name: 'sText',
-  data() {
+  data () {
     return {}
   },
   props: {

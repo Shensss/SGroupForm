@@ -10,7 +10,7 @@
               :border="border"
               :height="height"
               @selection-change="handleSelectionChange"
-              :header-cell-style="{background:'#F6F6F7',color:'#8689a3',fontSize:'14px'}"
+              :header-cell-style="headerCellStyle"
               :data="tableData">
       <el-table-column type="selection"
                        width="55"
@@ -23,8 +23,8 @@
                        fixed="left"
                        v-if="index">
       </el-table-column>
-      <el-table-column :key="cindex"
-                       v-for="(item,cindex) in columns"
+      <el-table-column v-for="(item,cindex) in columns"
+                       :key="cindex"
                        v-bind="item">
         <template slot-scope="scope">
             <span :style="item.style" v-if="!item.type">
@@ -62,10 +62,9 @@
                        align="center"
                        fixed="right"
                        :width="option.width"
-                       label="操作">
+                       :label="option.name||'操作'">
         <template slot-scope="scope">
-          <span :key="index"
-                v-for="(item,index) in option.btns">
+          <span :key="index" v-for="(item,index) in option.btns">
             <el-button :key="index"
                        v-if="showFunction(scope.row,item.show)"
                        :icon="item.icon"
@@ -93,15 +92,15 @@
 
 <script>
 import get from 'lodash/get'
-import SingleTag from "../../s-group-form/src/types/singleTag"
-import GroupTag from "../../s-group-form/src/types/groupTag"
-import OptionsTag from "../../s-group-form/src/types/optionsTag"
-import SelfTag from "../../s-group-form/src/types/selfTag"
+import SingleTag from '../../s-group-form/src/types/singleTag'
+import GroupTag from '../../s-group-form/src/types/groupTag'
+import OptionsTag from '../../s-group-form/src/types/optionsTag'
+import SelfTag from '../../s-group-form/src/types/selfTag'
 
 export default {
   name: 'SGroupTable',
   components: { SelfTag, OptionsTag, GroupTag, SingleTag },
-  data() {
+  data () {
     return {
       singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
       groupTag: ['radioButton', 'radio', 'checkbox'],
@@ -119,9 +118,19 @@ export default {
       type: Boolean,
       default: true
     },
+    headerCellStyle: {
+      type: Object,
+      default () {
+        return {
+          background: '#F6F6F7',
+          color: '#8689a3',
+          fontSize: '14px'
+        }
+      }
+    },
     mapper: {
       type: Object,
-      default() {
+      default () {
         return {
           label: 'label',
           value: 'value',
@@ -159,46 +168,46 @@ export default {
   },
   computed: {
     usePage: {
-      get() {
+      get () {
         return this.page || 0
       },
-      set(pageNumber) {
+      set (pageNumber) {
         this.$emit('changePageNumber', pageNumber)
       }
     },
     usePageSize: {
-      get() {
+      get () {
         return this.pageSize
       },
-      set(pageSize) {
+      set (pageSize) {
         this.$emit('changePageSize', pageSize)
       }
     }
   },
   watch: {
-    columns() {
+    columns () {
       this.$nextTick(() => {
         this.$refs.table && this.$refs.table.doLayout()
       })
     },
-    tableData() {
+    tableData () {
       this.$nextTick(() => {
         this.$refs.table && this.$refs.table.doLayout()
       })
     }
   },
   methods: {
-    get(data, key) {
+    get (data, key) {
       return get(data, key)
     },
-    mergeMapper(config) {
+    mergeMapper (config) {
       if (config.props && config.props.mapper) {
         return Object.assign(this.mapper, config.props.mapper)
       } else {
         return this.mapper
       }
     },
-    showFunction(row, show) {
+    showFunction (row, show) {
       if (show === undefined) {
         return true
       } else if (typeof show === 'function') {
@@ -206,23 +215,22 @@ export default {
       } else if (typeof show === 'string') {
         try {
           const str = `((row)=>${ show })(row)`
-          // eslint-disable-next-line no-eval
           return eval(str)
         } catch (e) {
           return false
         }
       }
     },
-    calcIndex(val) {
+    calcIndex (val) {
       return (((this.usePage || 1) - 1) * (this.usePageSize || 10)) + val + 1
     },
-    handleSizeChange(pageSize) {
+    handleSizeChange (pageSize) {
       this.usePageSize = pageSize
     },
-    handleCurrentChange(pageNumber) {
+    handleCurrentChange (pageNumber) {
       this.usePage = pageNumber
     },
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.$emit('selectChange', selection)
     }
   }

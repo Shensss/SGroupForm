@@ -88,7 +88,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       fileList: [],
       file: '',
@@ -113,7 +113,7 @@ export default {
     }
   },
   computed: {
-    fileType() {
+    fileType () {
       let fileTypeArr = []
       if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
@@ -132,18 +132,18 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    mergeConfig() {
+    mergeConfig () {
       return merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
     value: {
       immediate: true,
-      handler() {
+      handler () {
         this.buildFileList()
       }
     },
-    fileList(val) {
+    fileList (val) {
       if (val.length > 0) {
         const str = []
         if (this.mergeConfig.getType === 'JSON') {
@@ -163,10 +163,10 @@ export default {
     }
   },
   methods: {
-    clickHandle() {
+    clickHandle () {
       this.$refs.input.click()
     },
-    checkType(fileName) {
+    checkType (fileName) {
       if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
@@ -178,7 +178,7 @@ export default {
         return false
       }
     },
-    handleChange() {
+    handleChange () {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
       if (!access) {
@@ -210,7 +210,7 @@ export default {
         this.$emit('change')
       })
     },
-    buildFileList() {
+    buildFileList () {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0 && this.value.length > 0) {

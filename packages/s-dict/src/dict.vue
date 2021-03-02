@@ -8,7 +8,7 @@ import matchesProperty from 'lodash-es/matchesProperty'
 
 export default {
   name: 'sDict',
-  data() {
+  data () {
     return {
       showValue: '',
       currentStyle: {}
@@ -21,13 +21,13 @@ export default {
     },
     options: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
     mapper: {
       type: Object,
-      default() {
+      default () {
         return {
           label: 'label',
           value: 'value',
@@ -40,20 +40,20 @@ export default {
     value: {
       deep: true,
       immediate: true,
-      handler() {
+      handler () {
         this.buildShowValue()
       }
     },
     options: {
       deep: true,
       immediate: true,
-      handler() {
+      handler () {
         this.buildShowValue()
       }
     }
   },
   methods: {
-    buildShowValue() {
+    buildShowValue () {
       if (this.value || this.value === 0 || this.value === '0' || this.value === '') {
         if (Array.isArray(this.value)) {
           const arr = []

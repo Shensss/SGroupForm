@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "selfTag",
+  name: 'selfTag',
   props: {
     value: String | Number,
     config: Object,
@@ -24,26 +24,26 @@ export default {
   },
   computed: {
     model: {
-      set(val) {
+      set (val) {
         this.$emit('changeValue', val)
       },
-      get() {
+      get () {
         return this.value
       }
     }
   },
   methods: {
-    change(value) {
+    change (value) {
       if (this.config.change) {
         this.$emit('change', value)
       }
     },
-    focus() {
+    focus () {
       if (this.config.focus) {
         this.$emit('change', this.value)
       }
     },
-    blur() {
+    blur () {
       if (this.config.blur) {
         this.$emit('change', this.value)
       }

@@ -7,9 +7,11 @@ import SRichText from './s-rich-text/index'
 import SDict from './s-dict/index'
 import STreeDict from './s-tree-dict/index'
 import SText from './s-text/index'
+import SCheckTag from './s-check-tag/index'
+import SCode from './s-code/index'
 import { version } from '../package.json'
 
-const components = [SGroupLayout, SGroupForm, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable]
+const components = [SGroupLayout, SGroupForm, SCode, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
 const install = function (Vue, opt) {
     // 判断是否安装
     if (install.installed) {
@@ -39,5 +41,7 @@ export default {
     SDict,
     STreeDict,
     SText,
-    SGroupTable
+    SGroupTable,
+    SCheckTag,
+    SCode
 }
