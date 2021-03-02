@@ -11,6 +11,9 @@
 <script>
 export default {
   name: 'singleTag',
+  data () {
+    return {}
+  },
   props: {
     value: String | Number,
     config: Object,
@@ -20,7 +23,11 @@ export default {
   computed: {
     model: {
       set (val) {
-        this.$emit('changeValue', val || '')
+        if (this.config.props && this.config.props.valueFormat === 'timestamp' && !val) {
+          this.$emit('changeValue', val)
+        } else {
+          this.$emit('changeValue', val || '')
+        }
       },
       get () {
         return this.value

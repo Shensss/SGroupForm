@@ -9,6 +9,7 @@
         :props="props">
     </s-group-form>
     <el-button @click="submit">change</el-button>
+    <el-button @click="formData={}">clear</el-button>
   </div>
 </template>
 
@@ -19,6 +20,19 @@ export default {
     return {
       type: false,
       form: [
+        {
+          label: '申报时间',
+          key: ['applyTimeRange.min', 'applyTimeRange.max'],
+          type: 'datePicker',
+          inputStyle: { width: '100%' },
+          props: {
+            valueFormat: 'timestamp',
+            type: 'daterange',
+            rangeSeparator: '-',
+            startPlaceholder: '开始日期',
+            endPlaceholder: '结束日期'
+          }
+        },
         {
           label: '下拉菜单',
           type: 'fileView',
