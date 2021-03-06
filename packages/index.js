@@ -9,9 +9,10 @@ import STreeDict from './s-tree-dict/index'
 import SText from './s-text/index'
 import SCheckTag from './s-check-tag/index'
 import SCode from './s-code/index'
+import SImage from './s-image/index'
 import { version } from '../package.json'
 
-const components = [SGroupLayout, SGroupForm, SCode, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
+const components = [SGroupLayout, SGroupForm, SCode, SImage, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
 const install = function (Vue, opt) {
     // 判断是否安装
     if (install.installed) {
@@ -43,5 +44,6 @@ export default {
     SText,
     SGroupTable,
     SCheckTag,
-    SCode
+    SCode,
+    SImage
 }

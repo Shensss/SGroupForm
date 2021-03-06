@@ -22,6 +22,7 @@
     <file-view v-if="fileView&&fileList.length>0"
                v-model="fileList"
                :imageStyle="imageStyle"
+               :fileGetPath="fileGetPath"
                :asyncConfig="asyncConfig"
                :view="view"
                :remove="remove">
@@ -40,10 +41,12 @@ export default {
   name: 'SUpload',
   components: { FileView },
   props: {
-    // 值
     value: {
       type: String,
       default: ''
+    },
+    fileGetPath: {
+      type: String
     },
     length: {
       type: Number,
@@ -185,41 +188,86 @@ export default {
         this.$refs.input.value = ''
         return
       }
-
       if (file.size > this.size * 1024 * 1024) {
         this.$refs.input.value = ''
         return this.$message.error(`文件${ file.name }过大!`)
       }
-      const formData = new FormData()
-      this.mergeConfig.data.map(item => {
-        if (item.value === 'file') {
-          formData.append(item.key, file)
+      if (this.mergeConfig.fileType === 'path') {
+        const formData = new FormData()
+        this.mergeConfig.data.map(item => {
+          if (item.value === 'file') {
+            formData.append(item.key, file)
+          }
+        })
+        axios.post(this.mergeConfig.path, formData, {
+          headers: Object.assign({
+            Authorization: Cookies.get('sessionId')
+          }, this.mergeConfig.headers || {})
+        }).then(res => {
+          const { data } = res
+          const item = get(data, this.mergeConfig.listPath || 'data')
+          item.name = this.mergeConfig.nameKey ? item[this.mergeConfig.nameKey] : file.name
+          item.url = item[this.mergeConfig.urlKey]
+          this.fileList.push(item)
+          this.$refs.input.value = ''
+          this.$emit('change')
+        })
+      } else {
+        this.changeToBase64(file).then(base64 => {
+          const formData = {}
+          this.mergeConfig.data.map(item => {
+            if (item.value === 'file') {
+              formData[item.key] = base64
+            }
+            if (item.value === 'name') {
+              formData[item.key] = file.name
+            }
+          })
+          axios.post(this.mergeConfig.path, formData, {
+            headers: Object.assign({
+              Authorization: Cookies.get('sessionId')
+            }, this.mergeConfig.headers || {})
+          }).then(res => {
+            const { data } = res
+            const item = get(data, this.mergeConfig.listPath || 'data')
+            const newItem = {
+              name: this.mergeConfig.nameKey ? item[this.mergeConfig.nameKey] : file.name,
+              type: 'base64',
+              url: item[this.mergeConfig.urlKey]
+            }
+            this.fileList.push(newItem)
+            this.$refs.input.value = ''
+            this.$emit('change')
+          })
+        })
+      }
+    },
+    changeToBase64 (file) {
+      var reader = new FileReader() //实例化文件读取对象
+      reader.readAsDataURL(file) //将文件读取为 DataURL,也就是base64编码
+      return new Promise(resolve => {
+        reader.onload = function (ev) { //文件读取成功完成时触发
+          resolve(ev.target.result)
         }
-      })
-      axios.post(this.mergeConfig.path, formData, {
-        headers: Object.assign({
-          Authorization: Cookies.get('sessionId')
-        }, this.mergeConfig.headers || {})
-      }).then(res => {
-        const { data } = res
-        const item = get(data, this.mergeConfig.listPath)
-        item.name = item[this.mergeConfig.nameKey]
-        item.url = item[this.mergeConfig.urlKey]
-        this.fileList.push(item)
-        this.$refs.input.value = ''
-        this.$emit('change')
       })
     },
     buildFileList () {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0 && this.value.length > 0) {
-          this.value.split(',').map(item => {
-            viewList.push({
-              name: item.split('&&')[1],
-              url: item.split('&&')[0]
+          if (this.value.indexOf('base64') < 0) {
+            this.value.split(',').map(item => {
+              viewList.push({
+                name: item.split('&&')[1],
+                url: item.split('&&')[0]
+              })
             })
-          })
+          } else {
+            viewList.push({
+              name: this.value.split('&&')[1],
+              url: this.value.split('&&')[0]
+            })
+          }
         } else {
           viewList = JSON.parse(this.value)
         }

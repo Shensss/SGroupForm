@@ -1,7 +1,13 @@
 <template>
   <div class="sTable">
     <div class="head">
-      <slot></slot>
+      <template v-if="$slots.default">
+        <slot></slot>
+      </template>
+      <template v-if="query">
+        <s-group-form v-model="formData" :form="groupForm" :props="queryProps"
+                      :item-style="queryItemStyle"></s-group-form>
+      </template>
     </div>
     <el-table ref="table"
               :show-header="showHeader"
@@ -23,7 +29,7 @@
                        fixed="left"
                        v-if="index">
       </el-table-column>
-      <el-table-column v-for="(item,cindex) in columns"
+      <el-table-column v-for="(item,cindex) in columnsUse"
                        :key="cindex"
                        v-bind="item">
         <template slot-scope="scope">
@@ -31,7 +37,7 @@
                {{ get(scope.row, item.key) || '-' }}
             </span>
           <template v-if="item.type">
-            <slot v-if="item.type==='slot'" :name="item.key"></slot>
+            <slot v-if="item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
             <single-tag v-if="singleTag.indexOf(item.type)>=0"
                         :mapper="mergeMapper(item)"
                         v-model="scope.row[item.key]"
@@ -92,6 +98,7 @@
 
 <script>
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 import SingleTag from '../../s-group-form/src/types/singleTag'
 import GroupTag from '../../s-group-form/src/types/groupTag'
 import OptionsTag from '../../s-group-form/src/types/optionsTag'
@@ -109,7 +116,8 @@ export default {
       selectList: [],
       content: '',
       dialogVisible: false,
-      currentRow: {}
+      currentRow: {},
+      formData: {}
     }
   },
   props: {
@@ -138,9 +146,25 @@ export default {
         }
       }
     },
+    queryProps: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
+    queryItemStyle: {
+      type: Object,
+      default () {
+        return {}
+      }
+    },
     columns: Array,
     tableData: Array,
     border: {
+      type: Boolean,
+      default: true
+    },
+    query: {
       type: Boolean,
       default: true
     },
@@ -167,6 +191,18 @@ export default {
     pageSize: Number
   },
   computed: {
+    groupForm () {
+      return this.columns.filter(item => item.isQuery)
+    },
+    columnsUse () {
+      const columns =cloneDeep(this.columns)
+      if (this.type === 'readonly') {
+        columns.map(item => {
+          this.setRead(item)
+        })
+      }
+      return columns
+    },
     usePage: {
       get () {
         return this.page || 0
@@ -197,6 +233,63 @@ export default {
     }
   },
   methods: {
+    setRead (item) {
+      let readType = item.type
+      switch (item.type) {
+        case 'input':
+        case 'inputNumber':
+        case 'number':
+          readType = 'text'
+          break
+        case 'timePicker':
+          item.props = Object.assign({
+            format: item.props ? item.props.format || 'HH:mm:ss' : 'HH:mm:ss'
+          }, item.props)
+          readType = 'time'
+          break
+        case 'datePicker':
+          item.props = Object.assign({
+            format: item.props ? item.props.format || 'HH:mm:ss' : 'yyyy-MM-dd'
+          }, item.props)
+          readType = 'time'
+          break
+        case 'checkTag':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'radio':
+        case 'select':
+        case 'checkbox':
+        case 'switch':
+          readType = 'dict'
+          break
+        case 'cascader':
+          readType = 'treeDict'
+          break
+        case 'upload':
+          readType = 'fileView'
+          item.props = Object.assign({}, item.props)
+          item.props.remove = false
+          break
+        case 'code':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'richText':
+          item.props = Object.assign({}, item.props)
+          item.props.readonly = true
+          break
+        case 'slider':
+          item.props = Object.assign({}, item.props)
+          item.props.disabled = true
+          break
+        case 'colorPicker':
+          item.props = Object.assign({}, item.props)
+          item.props.disabled = true
+          break
+      }
+      item.type = readType
+    },
     get (data, key) {
       return get(data, key)
     },
@@ -269,13 +362,6 @@ export default {
     color: #1f70e4 !important;
     font-size: 12px;
     cursor: pointer;
-  }
-
-  .text {
-    cursor: pointer;
-    font-size: 12px;
-    color: #1f70e4 !important;
-    text-decoration: underline;
   }
 
   .optionBtn {

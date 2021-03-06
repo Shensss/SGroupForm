@@ -1,6 +1,6 @@
 {
   "name": "s-group-form",
-  "version": "0.2.74",
+  "version": "0.2.77",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",

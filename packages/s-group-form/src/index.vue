@@ -123,7 +123,6 @@ export default {
     return {
       groups: {},
       unGroups: [],
-      stageForm: [],
       dict: {}
     }
   },
@@ -141,7 +140,7 @@ export default {
     },
     formData () {
       const formData = {}
-      this.stageForm.map(item => {
+      this.form.map(item => {
         if (!item._code) {
           item._code = randomCode(12)
         }
@@ -216,18 +215,17 @@ export default {
     },
     init () {
       if (!this.form) return
-      this.stageForm = cloneDeep(merge(this.stageForm, this.form))
       this.initGroup()
       this.initValue()
     },
     initGroup () {
-      const groups = groupBy(this.stageForm, 'group')
+      const groups = groupBy(this.form, 'group')
       this.groups = pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
       this.unGroups = pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
     },
     initValue () {
       const newValue = cloneDeep(this.value)
-      this.stageForm.map(item => {
+      this.form.map(item => {
         if (item.initValue) {
           const value = item.initValue
           const key = item.key
@@ -343,25 +341,9 @@ export default {
     change (config, val) {
       this.$emit('change', config, val)
     },
-    addItem (item, number) {
-      const form = cloneDeep(this.stageForm)
-      if (number || number === 0) {
-        form.splice(number, 0, item)
-      } else {
-        form.push(item)
-      }
-      this.stageForm = form
-      this.initGroup()
-    },
-    removeItem (target) {
-      remove(this.stageForm, (item) => {
-        return target === item.key
-      })
-      this.initGroup()
-    },
     getIndex (key) {
       let index = null
-      this.stageForm.map((item, i) => {
+      this.form.map((item, i) => {
         if (item.key === key) {
           index = i
         }
@@ -370,8 +352,8 @@ export default {
     },
     getItem (target) {
       const result = []
-      this.stageForm.map(item => {
-        if (item.key === target || item.label === target) {
+      this.form.map((item, index) => {
+        if (target === index || item.key === target || item.label === target) {
           result.push(item)
         }
       })

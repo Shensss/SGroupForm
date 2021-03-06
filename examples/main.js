@@ -5,29 +5,45 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
 import SGroupForm from '../packages'
-import SGroupLayout from '../packages'
-import SGroupTable from '../packages'
 
-Vue.use(SGroupLayout)
-Vue.use(SGroupTable)
 Vue.use(SGroupForm, {
+    // UploadConfig: {
+    //     getType: 'JSON',
+    //     fileType: 'path',
+    //     path: '/node-szzt/file/upload',
+    //     data: [
+    //         {
+    //             key: 'files',
+    //             value: 'file'
+    //         }
+    //     ],
+    //     domain: 'http://192.168.3.15:4001/api/',
+    //     listPath: 'data[0]',
+    //     urlKey: 'path',
+    //     nameKey: 'name'
+    // }
     UploadConfig: {
         getType: 'JSON',
-        path: 'http://121.40.133.115:9090/fib/coapi/upload/file',
+        fileType: 'base64',
+        path: '/node-szzt/file/base64',
         data: [
             {
-                key: 'fileArray',
+                key: 'base64',
                 value: 'file'
+            },
+            {
+                key: 'name',
+                value: 'name'
             }
         ],
-        domain: 'http://121.40.133.115:9090',
-        listPath: 'data.resultList[0]',
-        urlKey: 'fileUrl',
-        nameKey: 'originalFilename'
-    },
+        domain: '',
+        listPath: 'data',
+        urlKey: 'id',
+        nameKey: 'name'
+    }
 })
 Vue.config.productionTip = false
 
 new Vue({
-    render: h => h(App),
+    render: h => h(App)
 }).$mount('#app')

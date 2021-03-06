@@ -6,12 +6,11 @@
 
 <script>
 
-import SGroupFormUse from "./components/SGroupFormUse"
-import STableUse from "./components/STableUse"
+import SGroupFormUse from './components/SGroupFormUse'
 
 export default {
   name: 'App',
-  components: { STableUse, SGroupFormUse },
+  components: { SGroupFormUse }
 }
 </script>
 

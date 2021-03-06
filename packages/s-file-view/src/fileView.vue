@@ -22,6 +22,7 @@
       </li>
     </ul>
     <viewer v-if="view==='image'"
+            ref="viewer"
             :images="images">
       <ul class="imageList"
           :class="{remove:remove}">
@@ -33,9 +34,7 @@
                    @click="viewVideo(mergeConfig.domain+item.url)"/>
           </template>
           <template v-else>
-            <img v-if="item.url"
-                 :src="mergeConfig.domain+item.url"
-                 :title="item.name">
+            <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="preview"></s-image>
             <svg class="icon" aria-hidden="true" @click="removeFile(item)">
               <use xlink:href="#icon-remove"/>
             </svg>
@@ -55,6 +54,7 @@
 <script>
 import merge from 'lodash-es/merge'
 import { removeObjWithArr } from '../../utils'
+import SImage from '../../s-image/src/sImage'
 
 export default {
   name: 'SFileView',
@@ -109,7 +109,7 @@ export default {
         return {}
       }
     },
-    path: {
+    fileGetPath: {
       type: String,
       default: ''
     },
@@ -127,15 +127,12 @@ export default {
       viewList: []
     }
   },
+  components: {
+    SImage
+  },
   computed: {
     images () {
-      const images = []
-      if (this.view === 'image') {
-        this.viewList && this.viewList.map(item => {
-          images.push(item.url)
-        })
-      }
-      return images
+      return this.viewList
     },
     mergeConfig () {
       return merge(this.$UploadConfig, this.asyncConfig)
@@ -157,6 +154,10 @@ export default {
     }
   },
   methods: {
+    preview () {
+      this.$refs.viewer.rebuildViewer()
+      this.$refs.viewer.$viewer.show()
+    },
     viewVideo (url) {
       this.current = url
       this.model = true
@@ -185,15 +186,23 @@ export default {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0) {
-          this.value.split(',').map(item => {
-            viewList.push({
-              name: item.split('&&')[1],
-              url: item.split('&&')[0]
+          if (this.value.indexOf('base64') < 0) {
+            this.value.split(',').map(item => {
+              viewList.push({
+                name: item.split('&&')[1],
+                url: item.split('&&')[0]
+              })
             })
-          })
+          } else {
+            viewList.push({
+              name: this.value.split('&&')[1],
+              url: this.value.split('&&')[0]
+            })
+          }
         } else {
           viewList = JSON.parse(this.value).map(item => {
             return {
+              ...item,
               name: item[this.mergeConfig.nameKey] || item.name,
               url: item[this.mergeConfig.urlKey] || item.url
             }
@@ -202,6 +211,7 @@ export default {
       } else {
         viewList = this.value && this.value.map(item => {
           return {
+            ...item,
             name: item[this.mergeConfig.nameKey] || item.name,
             url: item[this.mergeConfig.urlKey] || item.url
           }

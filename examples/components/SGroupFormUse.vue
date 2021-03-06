@@ -8,8 +8,11 @@
         :item-style="itemStyle"
         :props="props">
     </s-group-form>
-    <el-button @click="submit">change</el-button>
+    <el-button @click="onchange">change</el-button>
+    <el-button @click="submit">submit</el-button>
     <el-button @click="formData={}">clear</el-button>
+    <el-button @click="add">add</el-button>
+    <el-button @click="remove">remove</el-button>
   </div>
 </template>
 
@@ -35,63 +38,17 @@ export default {
         },
         {
           label: '下拉菜单',
-          type: 'fileView',
+          type: 'image',
           key: 'select',
           props: {
-            remove: true
+            view: 'image',
+            fileGetPath: '/node-szzt/file'
           },
-          mapper: {
-            label: 'Class'
-          },
-          options: [
-            {
-              Class: '1',
-              value: 1
-            },
-            {
-              Class: '2',
-              value: 2
-            },
-            {
-              Class: '3',
-              value: 3
-            }
-          ]
-        },
-        {
-          label: '下拉菜单',
-          type: 'select',
-          key: 'select',
-          options: [
-            {
-              aaa: '11',
-              value: 1
-            },
-            {
-              aaa: '22',
-              value: 2
-            },
-            {
-              aaa: '33',
-              value: 3
-            }
-          ]
-        },
-        {
-          label: '下拉菜单2',
-          type: 'code',
-          key: 'aaa',
-          props: {
-            mode: 'javascript'
-          },
-          style: {
-            width: '100%'
-          }
+          options: []
         }
       ],
       formData: {
-        name: 'aaa.png&&aa.png',
-        select: 'asd.png&&aa.png'
+        select: '[{"name":"cli-icon-text.png","type":"base64","url":32}]'
       },
       itemStyle: {
         width: '25%',
@@ -109,10 +66,36 @@ export default {
   },
   methods: {
     onchange () {
-      console.log(this.formData)
+      this.$refs.form.setOptions('select', [
+        {
+          Class: '1',
+          value: 1
+        },
+        {
+          Class: '2',
+          value: 2
+        },
+        {
+          Class: '3',
+          value: 3
+        }
+      ])
     },
     submit () {
       console.log(this.formData)
+      this.$refs.form.validate(vali => {
+        console.log(vali)
+      })
+    },
+    remove () {
+      const index = this.$refs.form.getIndex('abc')
+      this.form.splice(index, 1)
+    },
+    add () {
+      this.form = this.form.concat([{
+        key: 'abc',
+        type: 'input'
+      }])
     }
   },
   mounted () {

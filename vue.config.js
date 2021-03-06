@@ -3,7 +3,7 @@ const fs = require('fs')
 const join = path.join
 const webpack = require('webpack')
 
-function getEntries(path) {
+function getEntries (path) {
     let files = fs.readdirSync(resolve(path))
     const entries = files.reduce((ret, item) => {
         const itemPath = join(path, item)
@@ -19,7 +19,7 @@ function getEntries(path) {
     return entries
 }
 
-function resolve(dir) {
+function resolve (dir) {
     return path.resolve(__dirname, dir)
 }
 
@@ -27,14 +27,23 @@ const devConfig = {
     devServer: {
         port: 8091,//固定端口
         hot: true,//开启热更新
-        open: 'Google Chrome'
+        proxy: {
+            '/node-szzt': {
+                target: 'http://192.168.3.15:4001/',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/node-szzt': '/api'
+                }
+            }
+        },
+        open: true
     },
     pages: {
         index: {
             entry: 'examples/main.js',
             template: 'public/index.html',
-            filename: 'index.html',
-        },
+            filename: 'index.html'
+        }
     },
     configureWebpack: {
         resolve: {
@@ -42,7 +51,7 @@ const devConfig = {
             alias: {
                 '@': resolve('packages'),
                 'assets': resolve('examples/assets'),
-                'views': resolve('examples/views'),
+                'views': resolve('examples/views')
             }
         },
         plugins: [
@@ -50,7 +59,7 @@ const devConfig = {
                 'window.Quill': 'quill/dist/quill.js',
                 'Quill': 'quill/dist/quill.js'
             })
-        ],
+        ]
     },
     chainWebpack: config => {
         config.module
@@ -63,7 +72,7 @@ const devConfig = {
             .tap(options => {
                 return options
             })
-    },
+    }
 }
 const buildConfig = {
     outputDir: 'lib',
@@ -76,18 +85,18 @@ const buildConfig = {
     },
     configureWebpack: {
         entry: {
-            ...getEntries('packages'),
+            ...getEntries('packages')
         },
         output: {
             filename: '[name].js',
-            libraryTarget: 'commonjs2',
+            libraryTarget: 'commonjs2'
         },
         plugins: [
             new webpack.ProvidePlugin({
                 'window.Quill': 'quill/dist/quill.js',
                 'Quill': 'quill/dist/quill.js'
             })
-        ],
+        ]
     },
     chainWebpack: config => {
         config.optimization.delete('splitChunks')
@@ -107,6 +116,6 @@ const buildConfig = {
             .tap(options => {
                 return options
             })
-    },
+    }
 }
 module.exports = process.env.NODE_ENV === 'development' ? devConfig : buildConfig

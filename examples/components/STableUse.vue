@@ -1,14 +1,14 @@
 <template>
   <div class="table">
-    <s-group-table :columns="columns" :table-data="tableData" :option="option"></s-group-table>
+    <s-group-table type="edit" :columns="columns" :table-data="tableData" :option="option"></s-group-table>
     <el-button @click="result">输出结果</el-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "STableUse",
-  data() {
+  name: 'STableUse',
+  data () {
     return {
       option: {
         width: '100px',
@@ -21,18 +21,130 @@ export default {
       },
       columns: [
         {
-          label: '姓名',
-          key: 'a',
-          type: 'upload',
-          props: {
-            view: 'image',
-            remove: true
-          }
+          label: '项目名称',
+          key: 'projectName',
+          width: 100,
+          fixed: 'left',
+          type: 'text'
         },
         {
           label: '性别',
           key: 'b',
           type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
+          props: {
+            placeholder: '请输入名称'
+          },
+          options: [
+            {
+              label: '张三',
+              value: '123'
+            }
+          ]
+        },
+        {
+          label: '性别',
+          key: 'b',
+          type: 'input',
+          width: '200',
+          isQuery: true,
           props: {
             placeholder: '请输入名称'
           },
@@ -46,27 +158,28 @@ export default {
       ],
       tableData: [
         {
+          projectName: '爱啥啥空间打开大家阿斯利康大家埃里克就看见撒旦绿卡建档立卡时间的拉升阶段垃圾的卢卡斯的链接',
           a: '123',
           b: '456'
         },
         {
+          projectName: 123123,
           a: '123',
           b: '456'
         },
         {
+          projectName: 123123,
           a: '123',
           b: '456'
-        },
-        {},
-        {}
+        }
       ]
     }
   },
   methods: {
-    addRow() {
+    addRow () {
       this.tableData.push({})
     },
-    result() {
+    result () {
       console.log(this.tableData)
     }
   }
