@@ -21,34 +21,22 @@ export default {
   name: 'SGroupFormUse',
   data () {
     return {
-      type: false,
+      type: true,
       form: [
         {
-          label: '申报时间',
-          key: ['applyTimeRange.min', 'applyTimeRange.max'],
-          type: 'datePicker',
-          inputStyle: { width: '100%' },
-          props: {
-            valueFormat: 'timestamp',
-            type: 'daterange',
-            rangeSeparator: '-',
-            startPlaceholder: '开始日期',
-            endPlaceholder: '结束日期'
-          }
-        },
-        {
           label: '下拉菜单',
-          type: 'image',
+          type: 'cascader',
           key: 'select',
           props: {
-            view: 'image',
+            width: '200px',
+            height: '200px',
             fileGetPath: '/node-szzt/file'
           },
           options: []
         }
       ],
       formData: {
-        select: '[{"name":"cli-icon-text.png","type":"base64","url":32}]'
+        select: [1, 2]
       },
       itemStyle: {
         width: '25%',
@@ -56,33 +44,18 @@ export default {
       },
       props: {
         labelWidth: '120px',
-        // labelPosition: 'right',
-        // size: 'small',
         mapper: {
-          label: 'aaa'
+          label: 'Class',
+          value: 'code'
         }
       }
     }
   },
   methods: {
     onchange () {
-      this.$refs.form.setOptions('select', [
-        {
-          Class: '1',
-          value: 1
-        },
-        {
-          Class: '2',
-          value: 2
-        },
-        {
-          Class: '3',
-          value: 3
-        }
-      ])
+      this.type = true
     },
     submit () {
-      console.log(this.formData)
       this.$refs.form.validate(vali => {
         console.log(vali)
       })
@@ -99,6 +72,18 @@ export default {
     }
   },
   mounted () {
+    this.$refs.form.setOptions('select', [
+      {
+        Class: '张三',
+        code: 1,
+        children: [
+          {
+            Class: '张三2',
+            code: 2
+          }
+        ]
+      }
+    ])
   }
 }
 </script>

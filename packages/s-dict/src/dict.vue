@@ -4,7 +4,6 @@
 
 <script>
 import find from 'lodash-es/find'
-import matchesProperty from 'lodash-es/matchesProperty'
 
 export default {
   name: 'sDict',
@@ -24,6 +23,10 @@ export default {
       default () {
         return []
       }
+    },
+    separator: {
+      type: String,
+      default: ','
     },
     mapper: {
       type: Object,
@@ -58,7 +61,7 @@ export default {
         if (Array.isArray(this.value)) {
           const arr = []
           this.value.map(val => {
-            const is = find(this.options, matchesProperty(this.mapper.value, val))
+            const is = find(this.options, (item) => item[this.mapper.value] === val)
             if (is) {
               arr.push(is[this.mapper.label])
               if (is.style) {
@@ -66,9 +69,9 @@ export default {
               }
             }
           })
-          this.showValue = arr.join(',')
+          this.showValue = arr.join(this.separator)
         } else {
-          const is = find(this.options, matchesProperty(this.mapper.value, this.value))
+          const is = find(this.options, (item) => item[this.mapper.value] === this.value)
           this.showValue = is ? is[this.mapper.label] : this.value
         }
       }

@@ -192,7 +192,7 @@ export default {
         this.$refs.input.value = ''
         return this.$message.error(`文件${ file.name }过大!`)
       }
-      if (this.mergeConfig.fileType === 'path') {
+      if (this.mergeConfig.fileType !== 'base64') {
         const formData = new FormData()
         this.mergeConfig.data.map(item => {
           if (item.value === 'file') {

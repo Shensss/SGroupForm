@@ -37,35 +37,38 @@ export default {
     }
   },
   methods: {
-    getImage () {
+    getImage (value) {
       return new Promise(resolve => {
+        const data = value || this.value
         if (this.error) {
           resolve({
             url: this.errorImage,
             name: '暂无图片'
           })
         } else {
-          if (typeof this.value === 'object' && this.value) {
+          if (typeof data === 'object' && data) {
             if (this.value.type === 'base64') {
-              this.getBase64(resolve, this.value)
+              this.getBase64(resolve, data)
             } else {
               resolve({
-                url: this.value[this.urlKey],
-                name: this.value[this.nameKey]
+                url: data[this.urlKey],
+                name: data[this.nameKey]
               })
             }
           } else if (this.value.indexOf('{') >= 0) {
-            const value = JSON.parse(this.value)[0]
-            if (value.type === 'base64') {
-              this.getBase64(resolve, value)
+            const parseData = JSON.parse(data)[0]
+            if (parseData.type === 'base64') {
+              this.getBase64(resolve, parseData)
             } else {
               resolve({
-                url: value[this.urlKey],
-                name: value[this.nameKey]
+                url: parseData[this.urlKey],
+                name: parseData[this.nameKey]
               })
             }
-          } else if (this.value) {
-            resolve({ url: this.value, name: '' })
+          } else if (data) {
+            resolve({ url: data, name: '' })
+          } else {
+            resolve({ url: '', name: '' })
           }
         }
       })
@@ -81,7 +84,7 @@ export default {
     }
   },
   mounted () {
-    this.getImage(this.urlKey).then(res => {
+    this.getImage().then(res => {
       this.useUrl = res.url
       this.name = res.name
     })

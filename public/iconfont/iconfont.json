@@ -1,0 +1,205 @@
+{
+  "id": "427398",
+  "name": "通用",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10760547",
+      "name": "扫码",
+      "font_class": "saoma",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "8827152",
+      "name": "download",
+      "font_class": "download",
+      "unicode": "e93a",
+      "unicode_decimal": 59706
+    },
+    {
+      "icon_id": "1133212",
+      "name": "remove",
+      "font_class": "remove",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "6403455",
+      "name": "plus",
+      "font_class": "plus",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "11132270",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "12666047",
+      "name": "remove",
+      "font_class": "remove1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "731807",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "13478577",
+      "name": "视频",
+      "font_class": "icon-test",
+      "unicode": "e6de",
+      "unicode_decimal": 59102
+    },
+    {
+      "icon_id": "7226336",
+      "name": "压缩包",
+      "font_class": "yasuobao",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "14559713",
+      "name": "ppt",
+      "font_class": "ppt1",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "15521877",
+      "name": "Image_File",
+      "font_class": "Image_File",
+      "unicode": "eb72",
+      "unicode_decimal": 60274
+    },
+    {
+      "icon_id": "16388856",
+      "name": "Zip",
+      "font_class": "Zip",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "11520426",
+      "name": "筛选",
+      "font_class": "shaixuan",
+      "unicode": "e75e",
+      "unicode_decimal": 59230
+    },
+    {
+      "icon_id": "8963933",
+      "name": "qr-code 二维码",
+      "font_class": "qr-code",
+      "unicode": "e6e5",
+      "unicode_decimal": 59109
+    },
+    {
+      "icon_id": "2295972",
+      "name": "ppt",
+      "font_class": "ppt",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "2295980",
+      "name": "word",
+      "font_class": "word",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "2295991",
+      "name": "pdf",
+      "font_class": "pdf",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "2296006",
+      "name": "excel",
+      "font_class": "excel",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "10566298",
+      "name": "txt",
+      "font_class": "txt",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "1248",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "467380",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "2208826",
+      "name": "返回",
+      "font_class": "ziyuan",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "2404170",
+      "name": "列表 (2)",
+      "font_class": "liebiao",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "745998",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "627995",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "357881",
+      "name": "jiantou  you",
+      "font_class": "jiantouyou",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
+      "icon_id": "1089831",
+      "name": "勾 (1)",
+      "font_class": "gou1",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "2978286",
+      "name": "勾 (1)",
+      "font_class": "gou1-copy",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    }
+  ]
+}

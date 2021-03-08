@@ -145,13 +145,6 @@ export default {
   },
   created () {
     this.buildViewList()
-    if (!sessionStorage.getItem('icon')) {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = '//at.alicdn.com/t/font_427398_7ehmbnq6i8.js'
-      document.body.appendChild(s)
-      sessionStorage.setItem('icon', true)
-    }
   },
   methods: {
     preview () {
@@ -282,7 +275,6 @@ export default {
       }
 
       &:hover {
-        color: #5ea9f8;
         background-color: #eee;
       }
 
@@ -297,14 +289,16 @@ export default {
         .icon {
           width: 24px;
           height: 24px;
-          margin-right: 5px;
+          margin-right: 10px;
         }
       }
 
       span {
-        i {
+        .icon {
+          cursor: pointer;
           margin-right: 10px;
-          font-size: 20px;
+          fill: #565D64;
+          color: #565D64;
         }
       }
     }

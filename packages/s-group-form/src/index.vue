@@ -123,7 +123,8 @@ export default {
     return {
       groups: {},
       unGroups: [],
-      dict: {}
+      dict: {},
+      stageForm: []
     }
   },
   computed: {
@@ -143,9 +144,6 @@ export default {
       this.form.map(item => {
         if (!item._code) {
           item._code = randomCode(12)
-        }
-        if (this.type === 'readonly') {
-          this.setRead(item)
         }
         let itemInitValue = ''
         if (Array.isArray(item.key)) {
@@ -187,13 +185,6 @@ export default {
     }
   },
   mounted () {
-    if (!sessionStorage.getItem('icon')) {
-      const s = document.createElement('script')
-      s.type = 'text/javascript'
-      s.src = '//at.alicdn.com/t/font_427398_7ehmbnq6i8.js'
-      document.body.appendChild(s)
-      sessionStorage.setItem('icon', true)
-    }
     this.init()
   },
   watch: {
@@ -215,6 +206,15 @@ export default {
     },
     init () {
       if (!this.form) return
+      if (this.type === 'readonly') {
+        this.form.map(item => {
+          this.setRead(item)
+        })
+      } else {
+        this.form.map(item => {
+          this.setOrigin(item)
+        })
+      }
       this.initGroup()
       this.initValue()
     },
@@ -250,8 +250,30 @@ export default {
       })
       this.$emit('input', Object.assign({}, this.value, newValue))
     },
+    setOrigin (item) {
+      item.type = item.originType || item.type
+      item.props = Object.assign({}, item.props)
+      switch (item.type){
+        case 'upload':
+          item.props.remove = true
+          break
+        case 'code':
+          item.props.readonly = false
+          break
+        case 'richText':
+          item.props.readonly = false
+          break
+        case 'slider':
+          item.props.disabled = false
+          break
+        case 'colorPicker':
+          item.props.disabled = false
+          break
+      }
+    },
     setRead (item) {
       let readType = item.type
+      item.originType = item.type
       switch (item.type) {
         case 'input':
         case 'inputNumber':
@@ -305,7 +327,9 @@ export default {
           item.props.disabled = true
           break
       }
-      item.type = readType
+      item.readType = readType
+      item.type = item.readType
+      console.log(item)
     },
     setValue (code, key, value) {
       this.$set(this.formData, code, value)
