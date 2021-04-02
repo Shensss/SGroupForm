@@ -12,7 +12,7 @@
     <el-table ref="table"
               :show-header="showHeader"
               :id="id"
-              :size="size||'mini'"
+              :size="size"
               :border="border"
               :height="height"
               @selection-change="handleSelectionChange"
@@ -103,16 +103,14 @@ import SingleTag from '../../s-group-form/src/types/singleTag'
 import GroupTag from '../../s-group-form/src/types/groupTag'
 import OptionsTag from '../../s-group-form/src/types/optionsTag'
 import SelfTag from '../../s-group-form/src/types/selfTag'
+import config from '../../config'
 
 export default {
   name: 'SGroupTable',
   components: { SelfTag, OptionsTag, GroupTag, SingleTag },
   data () {
     return {
-      singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
-      groupTag: ['radioButton', 'radio', 'checkbox'],
-      optionsTag: ['select'],
-      selfTag: ['text', 'button', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict', 'checkTag', 'time', 'selectRange'],
+      ...config,
       selectList: [],
       content: '',
       dialogVisible: false,
@@ -195,7 +193,7 @@ export default {
       return this.columns.filter(item => item.isQuery)
     },
     columnsUse () {
-      const columns =cloneDeep(this.columns)
+      const columns = cloneDeep(this.columns)
       if (this.type === 'readonly') {
         columns.map(item => {
           this.setRead(item)

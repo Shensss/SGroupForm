@@ -1,5 +1,17 @@
 <template>
-  <div class="text">{{ label.join(separator) }}</div>
+  <div class="text">
+    <template v-if="props.multiple">
+      <span v-for="(item,index) in labels">
+        {{ item.join('/') }}
+        <template v-if="index!==labels.length-1">
+          {{ separator }}
+        </template>
+      </span>
+    </template>
+    <template v-else>
+      {{ labels.join(separator) }}
+    </template>
+  </div>
 </template>
 
 <script>
@@ -7,10 +19,9 @@ import find from 'lodash-es/find'
 
 export default {
   name: 'sTreeDict',
-  data () {
+  data() {
     return {
-      label: [],
-      index: 0
+      labels: []
     }
   },
   props: {
@@ -20,7 +31,7 @@ export default {
     },
     options: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
@@ -30,39 +41,60 @@ export default {
     },
     mapper: {
       type: Object,
-      default () {
+      default() {
         return {
           label: 'label',
           value: 'value',
           children: 'children'
         }
       }
-    }
+    },
+    props: Object
   },
   watch: {
-    value () {
-      this.getLabel(this.options)
+    value() {
+      this.init()
     },
-    options () {
-      this.getLabel(this.options)
+    options() {
+      this.init()
     }
   },
   methods: {
-    getLabel (option) {
+    init() {
+      if (this.props && this.props.multiple) {
+        this.value.map(value => {
+          this.getLabel(this.options, value, 0)
+        })
+        // const labels = this.labels
+        let index = 0
+        const labels = []
+        this.value.map(item => {
+          const length = item.length
+          const itemData = this.labels.slice(index, index += length)
+          if (item.length > 0) {
+            labels.push(itemData)
+          }
+        })
+        this.labels = labels
+      } else {
+        this.getLabel(this.options, this.value, 0)
+      }
+    },
+    getLabel(option, data, index) {
       if (option) {
-        if (this.value[this.index] !== undefined || this.value[this.index] === 0) {
-          const is = find(option, (item) => item[this.mapper.value] === this.value[this.index])
+        if (data[index] !== undefined || data[index] === 0) {
+          const is = find(option, (item) => item[this.mapper.value] === data[index])
           if (is) {
-            this.label.push(is[this.mapper.label])
-            this.index++
-            this.getLabel(is[this.mapper.children])
+            this.labels.push(is[this.mapper.label])
+            index = index + 1
+            this.getLabel(is[this.mapper.children], data, index)
           }
         }
       }
     }
   },
-  created () {
-    this.getLabel(this.options)
+  created() {
+    this.init()
   }
 }
 </script>

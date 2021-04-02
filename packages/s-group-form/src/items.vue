@@ -79,16 +79,14 @@ import GroupTag from './styled/groupTag'
 import OptionsTag from './styled/optionsTag'
 import SelfTag from './styled/selfTag'
 import cloneDeep from 'lodash-es/cloneDeep'
+import config from '../../config'
 
 export default {
   name: 'items',
   components: { SelfTag, OptionsTag, GroupTag, SingleTag },
   data () {
     return {
-      singleTag: ['input', 'switch', 'slider', 'timePicker', 'datePicker', 'rate', 'colorPicker', 'inputNumber', 'cascader'],
-      groupTag: ['radioButton', 'radio', 'checkbox'],
-      optionsTag: ['select'],
-      selfTag: ['text', 'button', 'image', 'fileView', 'upload', 'number', 'code', 'richText', 'dict', 'treeDict', 'checkTag', 'time', 'selectRange']
+      ...config
     }
   },
   props: {

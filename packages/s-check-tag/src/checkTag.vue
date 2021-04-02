@@ -80,7 +80,7 @@ export default {
       this.list = this.options
       this.list.map(item => {
         if (this.value.indexOf(item[this.mapper.value]) >= 0) {
-          item.check = true
+          this.$set(item, 'check', true)
         }
       })
     },

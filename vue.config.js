@@ -29,7 +29,7 @@ const devConfig = {
         hot: true,//开启热更新
         proxy: {
             '/node-szzt': {
-                target: 'http://192.168.3.15:4001/',
+                target: 'http://121.40.133.115:4001/',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/node-szzt': '/api'

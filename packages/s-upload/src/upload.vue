@@ -3,9 +3,11 @@
        :class="btnView==='plus'?'start':''">
     <el-button v-show="fileList.length<length"
                v-if="!btnView"
+               :loading="loading"
                @click="clickHandle">
       <i class="el-icon-upload"/>
-      点击上传
+      <template v-if="loading">正在上传（{{ progressRatio }}%）</template>
+      <template v-else>点击上传</template>
     </el-button>
     <span :class="fileList.length<length"/>
     <div v-show="fileList.length<length"
@@ -39,7 +41,7 @@ import merge from 'lodash-es/merge'
 
 export default {
   name: 'SUpload',
-  components: { FileView },
+  components: {FileView},
   props: {
     value: {
       type: String,
@@ -91,10 +93,12 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       fileList: [],
       file: '',
+      loading: false,
+      progressRatio: 0,
       fileTypeToAccept: {
         '.pdf': 'application/pdf',
         '.gif': 'image/gif',
@@ -116,7 +120,7 @@ export default {
     }
   },
   computed: {
-    fileType () {
+    fileType() {
       let fileTypeArr = []
       if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
@@ -135,18 +139,18 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    mergeConfig () {
+    mergeConfig() {
       return merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
     value: {
       immediate: true,
-      handler () {
+      handler() {
         this.buildFileList()
       }
     },
-    fileList (val) {
+    fileList(val) {
       if (val.length > 0) {
         const str = []
         if (this.mergeConfig.getType === 'JSON') {
@@ -166,10 +170,10 @@ export default {
     }
   },
   methods: {
-    clickHandle () {
+    clickHandle() {
       this.$refs.input.click()
     },
-    checkType (fileName) {
+    checkType(fileName) {
       if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
@@ -181,16 +185,17 @@ export default {
         return false
       }
     },
-    handleChange () {
+    handleChange() {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
+      this.loading = true
       if (!access) {
         this.$refs.input.value = ''
         return
       }
       if (file.size > this.size * 1024 * 1024) {
         this.$refs.input.value = ''
-        return this.$message.error(`文件${ file.name }过大!`)
+        return this.$message.error(`文件${file.name}过大!`)
       }
       if (this.mergeConfig.fileType !== 'base64') {
         const formData = new FormData()
@@ -202,15 +207,19 @@ export default {
         axios.post(this.mergeConfig.path, formData, {
           headers: Object.assign({
             Authorization: Cookies.get('sessionId')
-          }, this.mergeConfig.headers || {})
+          }, this.mergeConfig.headers || {}),
+          onUploadProgress: this.UploadProgress,
         }).then(res => {
-          const { data } = res
+          const {data} = res
           const item = get(data, this.mergeConfig.listPath || 'data')
+          this.loading = false
           item.name = this.mergeConfig.nameKey ? item[this.mergeConfig.nameKey] : file.name
           item.url = item[this.mergeConfig.urlKey]
           this.fileList.push(item)
           this.$refs.input.value = ''
           this.$emit('change')
+        }).catch(() => {
+          this.loading = false
         })
       } else {
         this.changeToBase64(file).then(base64 => {
@@ -226,10 +235,12 @@ export default {
           axios.post(this.mergeConfig.path, formData, {
             headers: Object.assign({
               Authorization: Cookies.get('sessionId')
-            }, this.mergeConfig.headers || {})
+            }, this.mergeConfig.headers || {}),
+            onUploadProgress: this.UploadProgress,
           }).then(res => {
-            const { data } = res
+            const {data} = res
             const item = get(data, this.mergeConfig.listPath || 'data')
+            this.loading = false
             const newItem = {
               name: this.mergeConfig.nameKey ? item[this.mergeConfig.nameKey] : file.name,
               type: 'base64',
@@ -238,11 +249,16 @@ export default {
             this.fileList.push(newItem)
             this.$refs.input.value = ''
             this.$emit('change')
+          }).catch(() => {
+            this.loading = false
           })
         })
       }
     },
-    changeToBase64 (file) {
+    UploadProgress(progressEvent) {
+      this.progressRatio = parseInt(progressEvent.loaded / progressEvent.total * 100)
+    },
+    changeToBase64(file) {
       var reader = new FileReader() //实例化文件读取对象
       reader.readAsDataURL(file) //将文件读取为 DataURL,也就是base64编码
       return new Promise(resolve => {
@@ -251,7 +267,7 @@ export default {
         }
       })
     },
-    buildFileList () {
+    buildFileList() {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0 && this.value.length > 0) {

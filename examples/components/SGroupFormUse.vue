@@ -19,71 +19,92 @@
 <script>
 export default {
   name: 'SGroupFormUse',
-  data () {
+  data() {
     return {
-      type: true,
+      type: '',
       form: [
         {
-          label: '下拉菜单',
+          label: '上传',
           type: 'cascader',
-          key: 'select',
+          key: 'month',
           props: {
-            width: '200px',
-            height: '200px',
-            fileGetPath: '/node-szzt/file'
+            props: {
+              multiple: true
+            }
           },
-          options: []
+          options: [
+            {
+              label: '中',
+              value: 1,
+              children: [
+                {
+                  label: '中1',
+                  value: 11,
+                },
+                {
+                  label: '中2',
+                  value: 12,
+                }
+              ]
+            },
+            {
+              label: 'da',
+              value: 2,
+              children: [
+                {
+                  label: 'da1',
+                  value: 21,
+                  children: [
+                    {
+                      label: 'da11',
+                      value: 111
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              label: 'xx',
+              value: 3,
+              children: [
+                {
+                  label: 'xx1',
+                  value: 31,
+                }
+              ]
+            }
+          ]
         }
       ],
-      formData: {
-        select: [1, 2]
-      },
+      formData: {},
       itemStyle: {
         width: '25%',
         marginBottom: '10px'
       },
       props: {
-        labelWidth: '120px',
-        mapper: {
-          label: 'Class',
-          value: 'code'
-        }
+        labelWidth: '120px'
       }
     }
   },
   methods: {
-    onchange () {
-      this.type = true
+    onchange() {
+      this.type = !this.type
     },
-    submit () {
+    submit() {
       this.$refs.form.validate(vali => {
         console.log(vali)
       })
     },
-    remove () {
+    remove() {
       const index = this.$refs.form.getIndex('abc')
       this.form.splice(index, 1)
     },
-    add () {
-      this.form = this.form.concat([{
-        key: 'abc',
-        type: 'input'
-      }])
+    add() {
+      this.formData.month = 12121
+      console.log(this.formData);
     }
   },
-  mounted () {
-    this.$refs.form.setOptions('select', [
-      {
-        Class: '张三',
-        code: 1,
-        children: [
-          {
-            Class: '张三2',
-            code: 2
-          }
-        ]
-      }
-    ])
+  mounted() {
   }
 }
 </script>
