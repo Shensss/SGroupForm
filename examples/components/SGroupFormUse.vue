@@ -34,49 +34,82 @@ export default {
           },
           options: [
             {
-              label: '中',
+              label: '中1',
               value: 1,
               children: [
                 {
-                  label: '中1',
-                  value: 11,
+                  label: '中11',
+                  value: 123,
                 },
                 {
-                  label: '中2',
-                  value: 12,
+                  label: '中22',
+                  value: 412,
                 }
               ]
             },
             {
-              label: 'da',
-              value: 2,
+              label: '中11',
+              value: 12,
               children: [
                 {
-                  label: 'da1',
-                  value: 21,
-                  children: [
-                    {
-                      label: 'da11',
-                      value: 111
-                    }
-                  ]
+                  label: '中111',
+                  value: 123,
+                },
+                {
+                  label: '中222',
+                  value: 231,
                 }
               ]
             },
             {
-              label: 'xx',
-              value: 3,
+              label: '中33',
+              value: 13,
               children: [
                 {
-                  label: 'xx1',
-                  value: 31,
+                  label: '中333',
+                  value: 4444,
+                },
+                {
+                  label: '中3333',
+                  value: 666,
                 }
               ]
-            }
+            },
           ]
+        },
+        {
+          label: '上传',
+          type: 'upload'
         }
       ],
-      formData: {},
+      formData: {
+        month: [
+          [
+            1,
+            123
+          ],
+          [
+            1,
+            412
+          ],
+          [
+            12,
+            123
+          ],
+          [
+            12,
+            231
+          ],
+          [
+            13,
+            4444
+          ],
+          [
+            13,
+            666
+          ]
+        ]
+      },
       itemStyle: {
         width: '25%',
         marginBottom: '10px'
@@ -92,7 +125,7 @@ export default {
     },
     submit() {
       this.$refs.form.validate(vali => {
-        console.log(vali)
+        console.log(vali, this.formData)
       })
     },
     remove() {

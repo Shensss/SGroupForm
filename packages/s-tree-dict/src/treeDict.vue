@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     init() {
+      this.labels = []
       if (this.props && this.props.multiple) {
         this.value.map(value => {
           this.getLabel(this.options, value, 0)
@@ -71,7 +72,7 @@ export default {
         this.value.map(item => {
           const length = item.length
           const itemData = this.labels.slice(index, index += length)
-          if (item.length > 0) {
+          if (itemData.length > 0) {
             labels.push(itemData)
           }
         })
@@ -83,7 +84,7 @@ export default {
     getLabel(option, data, index) {
       if (option) {
         if (data[index] !== undefined || data[index] === 0) {
-          const is = find(option, (item) => item[this.mapper.value] === data[index])
+          const is = find(option, (item) => item[this.mapper.value] == data[index])
           if (is) {
             this.labels.push(is[this.mapper.label])
             index = index + 1
