@@ -21,7 +21,7 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import { addQuillTitle } from './zh_cn'
+import {addQuillTitle} from './zh_cn'
 import quillEditor from './editor'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -34,7 +34,7 @@ export default {
     value: String,
     asyncConfig: {
       type: Object,
-      default () {
+      default() {
         return {
           data: []
         }
@@ -51,7 +51,7 @@ export default {
   components: {
     quillEditor
   },
-  data () {
+  data() {
     return {
       option: {},
       file: '',
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    fileType () {
+    fileType() {
       let fileTypeArr = []
       if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
@@ -95,32 +95,32 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    editor () {
+    editor() {
       return this.$refs.myQuillEditor.quill
     },
-    mergeConfig () {
+    mergeConfig() {
       return merge(this.$UploadConfig || {}, this.asyncConfig)
     },
-    editorOption () {
+    editorOption() {
       return merge(this.option, {
         placeholder: this.placeholder
       })
     },
     content: {
-      get () {
+      get() {
         return this.value
       },
-      set (val) {
+      set(val) {
         this.$emit('input', val)
       }
     }
   },
-  mounted () {
+  mounted() {
     this.content = this.value
     this.initUploadImage()
   },
   methods: {
-    checkType (fileName) {
+    checkType(fileName) {
       if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
@@ -132,7 +132,7 @@ export default {
         return false
       }
     },
-    handleChange () {
+    handleChange() {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
       if (!access) {
@@ -142,7 +142,7 @@ export default {
 
       if (file.size > this.size * 1024 * 1024) {
         this.$refs.input.value = ''
-        return this.$message.error(`文件${ file.name }过大!`)
+        return this.$message.error(`文件${file.name}过大!`)
       }
       const formData = new FormData()
       this.mergeConfig.data.map(item => {
@@ -150,13 +150,12 @@ export default {
           formData.append(item.key, file)
         }
       })
-      this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', 'http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1581398243&t=ccf50d7b4dd50dac437d46e368b66b20%E4%BD%9C%E8%80%85%EF%BC%9A%E6%A2%A7%E6%A1%90%E8%8A%8A%E9%9B%A8%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps://www.jianshu.com/p/42bc2db19fab%E6%9D%A5%E6%BA%90%EF%BC%9A%E7%AE%80%E4%B9%A6%E8%91%97%E4%BD%9C%E6%9D%83%E5%BD%92%E4%BD%9C%E8%80%85%E6%89%80%E6%9C%89%E3%80%82%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E8%81%94%E7%B3%BB%E4%BD%9C%E8%80%85%E8%8E%B7%E5%BE%97%E6%8E%88%E6%9D%83%EF%BC%8C%E9%9D%9E%E5%95%86%E4%B8%9A%E8%BD%AC%E8%BD%BD%E8%AF%B7%E6%B3%A8%E6%98%8E%E5%87%BA%E5%A4%84%E3%80%82')
       axios.post(this.mergeConfig.path, formData, {
         headers: Object.assign({
           Authorization: Cookies.get('sessionId')
         }, this.mergeConfig.headers || {})
       }).then(res => {
-        const { data } = res
+        const {data} = res
         const item = get(data, this.mergeConfig.listPath)
         item.name = item[this.mergeConfig.nameKey]
         item.url = item[this.mergeConfig.urlKey]
@@ -165,18 +164,18 @@ export default {
         this.$refs.input.value = ''
       })
     },
-    initUploadImage () {
+    initUploadImage() {
       this.editor.getModule('toolbar').addHandler('image', this.imgHandler)
     },
-    imgHandler () {
+    imgHandler() {
       this.$refs.input.click()
     },
     // 失去焦点事件
-    onEditorBlur () {
+    onEditorBlur() {
       this.$emit('blur')
     },
     // 获得焦点事件
-    onEditorFocus (quill) {
+    onEditorFocus(quill) {
       if (this.readonly) {
         quill.enable(false)
       } else {
@@ -185,11 +184,11 @@ export default {
       }
     },
     // 准备富文本编辑器
-    onEditorReady () {
+    onEditorReady() {
       addQuillTitle()
     },
     // 内容改变事件
-    onEditorChange ({ quill, html, text }) {
+    onEditorChange({quill, html, text}) {
       this.$emit('change', html)
     }
   }

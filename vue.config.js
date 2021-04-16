@@ -34,6 +34,14 @@ const devConfig = {
                 pathRewrite: {
                     '^/node-szzt': '/api'
                 }
+            },
+            '/szzt': {
+                target: 'http://121.40.133.115:8180',
+                // target: 'http://192.168.3.2:8180',
+                changeOrigin: true, // 允许websockets跨域
+                pathRewrite: {
+                    '^/szzt': '/xh_uc_front_api'
+                }
             }
         },
         open: true

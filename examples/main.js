@@ -10,17 +10,17 @@ Vue.use(SGroupForm, {
     UploadConfig: {
         getType: 'JSON',
         fileType: 'path',
-        path: '/node-szzt/file/upload',
+        path: '/szzt/pc/upload/file',
         data: [
             {
-                key: 'files',
+                key: 'fileArray',
                 value: 'file'
             }
         ],
-        domain: 'http://121.40.133.115:4001/api/',
-        listPath: 'data[0]',
-        urlKey: 'path',
-        nameKey: 'name'
+        domain: 'http://121.40.133.115:8180/api/',
+        listPath: 'data.resultList[0]',
+        urlKey: 'fileUrl',
+        nameKey: 'originalFilename'
     }
     // UploadConfig: {
     //     getType: 'JSON',

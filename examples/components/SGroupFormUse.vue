@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import area from './area.json'
+
 export default {
   name: 'SGroupFormUse',
   data() {
@@ -25,90 +27,41 @@ export default {
       form: [
         {
           label: '上传',
-          type: 'cascader',
+          type: 'richText',
           key: 'month',
-          props: {
-            props: {
-              multiple: true
-            }
-          },
-          options: [
-            {
-              label: '中1',
-              value: 1,
-              children: [
-                {
-                  label: '中11',
-                  value: 123,
-                },
-                {
-                  label: '中22',
-                  value: 412,
-                }
-              ]
-            },
-            {
-              label: '中11',
-              value: 12,
-              children: [
-                {
-                  label: '中111',
-                  value: 123,
-                },
-                {
-                  label: '中222',
-                  value: 231,
-                }
-              ]
-            },
-            {
-              label: '中33',
-              value: 13,
-              children: [
-                {
-                  label: '中333',
-                  value: 4444,
-                },
-                {
-                  label: '中3333',
-                  value: 666,
-                }
-              ]
-            },
-          ]
+          inputStyle: {
+            height: '500px'
+          }
         },
         {
           label: '上传',
-          type: 'upload'
-        }
+          type: 'upload',
+          key: 'a',
+          props: {
+            view: 'image'
+          }
+        },
+        {
+          props: {
+            placeholder: '政策区域',
+            props: {
+              label: 'name',
+              value: 'code',
+              children: 'childs',
+              checkStrictly: true,
+            }
+          },
+          type: 'cascader',
+          key: 'chooseType56Id',
+          mapper: {
+            label: 'name',
+            value: 'code'
+          },
+          options: area
+        },
       ],
       formData: {
-        month: [
-          [
-            1,
-            123
-          ],
-          [
-            1,
-            412
-          ],
-          [
-            12,
-            123
-          ],
-          [
-            12,
-            231
-          ],
-          [
-            13,
-            4444
-          ],
-          [
-            13,
-            666
-          ]
-        ]
+        month: ''
       },
       itemStyle: {
         width: '25%',
