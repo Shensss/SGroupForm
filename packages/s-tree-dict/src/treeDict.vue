@@ -1,16 +1,18 @@
 <template>
   <div class="text">
-    <template v-if="props.multiple">
+    <div class="text">
+      <template v-if="props.multiple">
       <span v-for="(item,index) in labels">
         {{ item.join('/') }}
         <template v-if="index!==labels.length-1">
           {{ separator }}
         </template>
       </span>
-    </template>
-    <template v-else>
-      {{ labels.join(separator) }}
-    </template>
+      </template>
+      <template v-else>
+        {{ labels.join(separator) }}
+      </template>
+    </div>
   </div>
 </template>
 
@@ -34,6 +36,10 @@ export default {
       default() {
         return []
       }
+    },
+    showAllLevels: {
+      type: Boolean,
+      default: true
     },
     separator: {
       type: String,
@@ -59,6 +65,11 @@ export default {
       this.init()
     }
   },
+  filters: {
+    lastFilter(labels) {
+
+    }
+  },
   methods: {
     init() {
       this.labels = []
@@ -77,8 +88,16 @@ export default {
           }
         })
         this.labels = labels
+        if (!this.showAllLevels) {
+          this.labels = this.labels.map(item => {
+            return item.slice(-1)
+          })
+        }
       } else {
         this.getLabel(this.options, this.value, 0)
+        if (!this.showAllLevels) {
+          this.labels = this.labels.slice(-1)
+        }
       }
     },
     getLabel(option, data, index) {

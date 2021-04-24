@@ -8,6 +8,7 @@
         :item-style="itemStyle"
         :props="props">
     </s-group-form>
+    <input type="text" @change="changeMarginBottom" v-model="marginBottom">
     <el-button @click="onchange">change</el-button>
     <el-button @click="submit">submit</el-button>
     <el-button @click="formData={}">clear</el-button>
@@ -29,8 +30,13 @@ export default {
           label: '上传',
           type: 'richText',
           key: 'month',
+          style: {
+            width: '25%',
+            marginBottom: '20px'
+          },
           inputStyle: {
-            height: '500px'
+            height: '500px',
+            width: '100%'
           }
         },
         {
@@ -44,25 +50,27 @@ export default {
         {
           props: {
             placeholder: '政策区域',
+            showAllLevels: false,
             props: {
+              multiple: true,
               label: 'name',
               value: 'code',
               children: 'childs',
               checkStrictly: true,
             }
           },
-          type: 'cascader',
+          type: 'treeDict',
           key: 'chooseType56Id',
           mapper: {
             label: 'name',
-            value: 'code'
+            value: 'code',
+            children: 'childs',
           },
           options: area
         },
       ],
-      formData: {
-        month: ''
-      },
+      marginBottom: 10,
+      formData: {},
       itemStyle: {
         width: '25%',
         marginBottom: '10px'
@@ -73,6 +81,9 @@ export default {
     }
   },
   methods: {
+    changeMarginBottom() {
+      this.itemStyle.marginBottom = this.marginBottom + 'px'
+    },
     onchange() {
       this.type = !this.type
     },

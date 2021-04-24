@@ -261,6 +261,7 @@ export default {
 
   .ql-container {
     flex-grow: 1;
+    max-height: calc(100% - 98px);
   }
 }
 
