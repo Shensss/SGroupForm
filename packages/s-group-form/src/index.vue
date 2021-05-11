@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { randomCode } from '../../utils'
+import {randomCode} from '../../utils'
 import Items from './styled/items'
 import get from 'lodash-es/get'
 import set from 'lodash-es/set'
@@ -113,13 +113,13 @@ import groupBy from 'lodash-es/groupBy'
 
 export default {
   name: 'SGroupForm',
-  components: { Items },
-  provide () {
+  components: {Items},
+  provide() {
     return {
       dict: this.dict
     }
   },
-  data () {
+  data() {
     return {
       groups: {},
       unGroups: [],
@@ -128,7 +128,7 @@ export default {
     }
   },
   computed: {
-    propsAll () {
+    propsAll() {
       const props = cloneDeep(this.props)
       if (props.labelPosition === 'top') {
         props.labelWidth = '100%'
@@ -139,7 +139,7 @@ export default {
         labelPosition: 'left'
       }, props)
     },
-    formData () {
+    formData() {
       const formData = {}
       this.form.map(item => {
         if (!item._code) {
@@ -149,7 +149,8 @@ export default {
         if (Array.isArray(item.key)) {
           const valArray = []
           item.key.map(k => {
-            if (get(this.value, k)) {
+            const keyValue = get(this.value, k)
+            if (keyValue || keyValue === 0) {
               valArray.push(get(this.value, k))
             }
           })
@@ -184,19 +185,19 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.init()
   },
   watch: {
-    form () {
+    form() {
       this.init()
     },
-    type () {
+    type() {
       this.init()
     }
   },
   methods: {
-    mergeStyle (selfStyle) {
+    mergeStyle(selfStyle) {
       const itemStyle = cloneDeep(this.itemStyle)
       if (selfStyle) {
         return merge(itemStyle, selfStyle)
@@ -204,7 +205,7 @@ export default {
         return itemStyle
       }
     },
-    init () {
+    init() {
       if (!this.form) return
       if (this.type === 'readonly') {
         this.form.map(item => {
@@ -218,12 +219,12 @@ export default {
       this.initGroup()
       this.initValue()
     },
-    initGroup () {
+    initGroup() {
       const groups = groupBy(this.form, 'group')
       this.groups = pick(groups, Object.keys(groups).filter(key => key !== 'undefined'))
       this.unGroups = pick(groups, Object.keys(groups).filter(key => key === 'undefined')).undefined
     },
-    initValue () {
+    initValue() {
       const newValue = cloneDeep(this.value)
       this.form.map(item => {
         if (item.initValue) {
@@ -250,10 +251,10 @@ export default {
       })
       this.$emit('input', Object.assign({}, this.value, newValue))
     },
-    setOrigin (item) {
+    setOrigin(item) {
       item.type = item.originType || item.type
       item.props = Object.assign({}, item.props)
-      switch (item.type){
+      switch (item.type) {
         case 'upload':
           item.props.remove = true
           break
@@ -271,7 +272,7 @@ export default {
           break
       }
     },
-    setRead (item) {
+    setRead(item) {
       let readType = item.type
       item.originType = item.type
       switch (item.type) {
@@ -329,9 +330,8 @@ export default {
       }
       item.readType = readType
       item.type = item.readType
-      console.log(item)
     },
-    setValue (code, key, value) {
+    setValue(code, key, value) {
       this.$set(this.formData, code, value)
       const newValue = cloneDeep(this.value)
       if (Array.isArray(value) && Array.isArray(key)) {
@@ -347,7 +347,7 @@ export default {
       }
       this.$emit('input', Object.assign({}, this.value, newValue))
     },
-    showFunction (show) {
+    showFunction(show) {
       if (show === undefined) {
         return true
       } else if (typeof show === 'function') {
@@ -362,10 +362,10 @@ export default {
         }
       }
     },
-    change (config, val) {
+    change(config, val) {
       this.$emit('change', config, val)
     },
-    getIndex (key) {
+    getIndex(key) {
       let index = null
       this.form.map((item, i) => {
         if (item.key === key) {
@@ -374,7 +374,7 @@ export default {
       })
       return index
     },
-    getItem (target) {
+    getItem(target) {
       const result = []
       this.form.map((item, index) => {
         if (target === index || item.key === target || item.label === target) {
@@ -383,22 +383,22 @@ export default {
       })
       return result
     },
-    setOptions (target, options) {
+    setOptions(target, options) {
       let targets = this.getItem(target)
       targets && targets.map(item => {
         item.options = options
       })
     },
-    validate (callback) {
+    validate(callback) {
       return this.$refs.instance.validate(callback)
     },
-    validateField (props, callback) {
+    validateField(props, callback) {
       return this.$refs.instance.validateField(props, callback)
     },
-    resetFields () {
+    resetFields() {
       return this.$refs.instance.resetFields()
     },
-    clearValidate (props) {
+    clearValidate(props) {
       return this.$refs.instance.clearValidate(props)
     }
   }

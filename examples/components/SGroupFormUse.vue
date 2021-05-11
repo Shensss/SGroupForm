@@ -3,7 +3,6 @@
     <s-group-form
         ref="form"
         v-model="formData"
-        :type="type?'readonly':''"
         :form="form"
         :item-style="itemStyle"
         :props="props">
@@ -28,8 +27,8 @@ export default {
       form: [
         {
           label: '上传',
-          type: 'richText',
-          key: 'month',
+          type: 'selectRange',
+          key: ['month.min','month.max'],
           style: {
             width: '25%',
             marginBottom: '20px'
@@ -37,36 +36,17 @@ export default {
           inputStyle: {
             height: '500px',
             width: '100%'
-          }
-        },
-        {
-          label: '上传',
-          type: 'upload',
-          key: 'a',
-          props: {
-            view: 'image'
-          }
-        },
-        {
-          props: {
-            placeholder: '政策区域',
-            showAllLevels: false,
-            props: {
-              multiple: true,
-              label: 'name',
-              value: 'code',
-              children: 'childs',
-              checkStrictly: true,
+          },
+          options: [
+            {
+              label: '咋',
+              value: '[0,1000]',
+            },
+            {
+              label: 'asa',
+              value: '[100,1000]',
             }
-          },
-          type: 'treeDict',
-          key: 'chooseType56Id',
-          mapper: {
-            label: 'name',
-            value: 'code',
-            children: 'childs',
-          },
-          options: area
+          ]
         },
       ],
       marginBottom: 10,
