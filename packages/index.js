@@ -11,9 +11,10 @@ import SCheckTag from './s-check-tag/index'
 import SCode from './s-code/index'
 import STime from './s-time/index'
 import SImage from './s-image/index'
-import { version } from '../package.json'
+import SSelectRange from './s-select-range'
+import {version} from '../package.json'
 
-const components = [SGroupLayout, SGroupForm, STime, SCode, SImage, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
+const components = [SGroupLayout, SGroupForm, STime, SSelectRange, SCode, SImage, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
 const install = function (Vue, opt) {
     // 判断是否安装
     if (install.installed) {
@@ -46,6 +47,7 @@ export default {
     SText,
     SGroupTable,
     SCheckTag,
+    SSelectRange,
     SCode,
     SImage
 }
