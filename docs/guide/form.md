@@ -1,4 +1,7 @@
 <DemoTable title="form参数说明" :tableBody="tableBody" :tableHead="tableHead"/>
+<highlight-code lang="js">
+<<< ./form.js
+</highlight-code>
 
 <script>
   export default {

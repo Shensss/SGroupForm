@@ -40,12 +40,12 @@ export default {
     },
     focus () {
       if (this.config.focus) {
-        this.$emit('change', this.value)
+        this.$emit('focus', this.value)
       }
     },
     blur () {
       if (this.config.blur) {
-        this.$emit('change', this.value)
+        this.$emit('blur', this.value)
       }
     }
   }

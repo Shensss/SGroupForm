@@ -35,7 +35,7 @@
           </template>
           <template v-else>
             <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="preview"></s-image>
-            <svg class="icon" aria-hidden="true" @click="removeFile(item)">
+            <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
               <use xlink:href="#icon-remove"/>
             </svg>
           </template>

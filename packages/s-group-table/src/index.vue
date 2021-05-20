@@ -107,8 +107,8 @@ import config from '../../config'
 
 export default {
   name: 'SGroupTable',
-  components: { SelfTag, OptionsTag, GroupTag, SingleTag },
-  data () {
+  components: {SelfTag, OptionsTag, GroupTag, SingleTag},
+  data() {
     return {
       ...config,
       selectList: [],
@@ -126,7 +126,7 @@ export default {
     },
     headerCellStyle: {
       type: Object,
-      default () {
+      default() {
         return {
           background: '#F6F6F7',
           color: '#8689a3',
@@ -136,7 +136,7 @@ export default {
     },
     mapper: {
       type: Object,
-      default () {
+      default() {
         return {
           label: 'label',
           value: 'value',
@@ -146,13 +146,13 @@ export default {
     },
     queryProps: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
     queryItemStyle: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     },
@@ -189,11 +189,12 @@ export default {
     pageSize: Number
   },
   computed: {
-    groupForm () {
-      return this.columns.filter(item => item.isQuery)
+    groupForm() {
+      return this.columns && this.columns.filter(item => item.isQuery)
     },
-    columnsUse () {
-      const columns = cloneDeep(this.columns)
+    columnsUse() {
+      console.log(this.columns, 111);
+      const columns = cloneDeep(this.columns) || []
       if (this.type === 'readonly') {
         columns.map(item => {
           this.setRead(item)
@@ -202,36 +203,36 @@ export default {
       return columns
     },
     usePage: {
-      get () {
+      get() {
         return this.page || 0
       },
-      set (pageNumber) {
+      set(pageNumber) {
         this.$emit('changePageNumber', pageNumber)
       }
     },
     usePageSize: {
-      get () {
+      get() {
         return this.pageSize
       },
-      set (pageSize) {
+      set(pageSize) {
         this.$emit('changePageSize', pageSize)
       }
     }
   },
   watch: {
-    columns () {
+    columns() {
       this.$nextTick(() => {
         this.$refs.table && this.$refs.table.doLayout()
       })
     },
-    tableData () {
+    tableData() {
       this.$nextTick(() => {
         this.$refs.table && this.$refs.table.doLayout()
       })
     }
   },
   methods: {
-    setRead (item) {
+    setRead(item) {
       let readType = item.type
       switch (item.type) {
         case 'input':
@@ -288,40 +289,40 @@ export default {
       }
       item.type = readType
     },
-    get (data, key) {
+    get(data, key) {
       return get(data, key)
     },
-    mergeMapper (config) {
+    mergeMapper(config) {
       if (config.props && config.props.mapper) {
         return Object.assign(this.mapper, config.props.mapper)
       } else {
         return this.mapper
       }
     },
-    showFunction (row, show) {
+    showFunction(row, show) {
       if (show === undefined) {
         return true
       } else if (typeof show === 'function') {
         return show(row)
       } else if (typeof show === 'string') {
         try {
-          const str = `((row)=>${ show })(row)`
+          const str = `((row)=>${show})(row)`
           return eval(str)
         } catch (e) {
           return false
         }
       }
     },
-    calcIndex (val) {
+    calcIndex(val) {
       return (((this.usePage || 1) - 1) * (this.usePageSize || 10)) + val + 1
     },
-    handleSizeChange (pageSize) {
+    handleSizeChange(pageSize) {
       this.usePageSize = pageSize
     },
-    handleCurrentChange (pageNumber) {
+    handleCurrentChange(pageNumber) {
       this.usePage = pageNumber
     },
-    handleSelectionChange (selection) {
+    handleSelectionChange(selection) {
       this.$emit('selectChange', selection)
     }
   }

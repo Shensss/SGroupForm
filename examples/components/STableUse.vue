@@ -1,14 +1,23 @@
 <template>
   <div class="table">
-    <s-group-table type="edit" :columns="columns" :table-data="tableData" :option="option"></s-group-table>
+    <s-group-table type="edit"
+                   :columns="columns"
+                   :table-data="tableData"
+                   :option="option">
+    </s-group-table>
     <el-button @click="result">输出结果</el-button>
   </div>
 </template>
 
 <script>
+import SGroupTable from '../../packages/s-group-table/src/index'
+
 export default {
   name: 'STableUse',
-  data () {
+  components: {
+    SGroupTable
+  },
+  data() {
     return {
       option: {
         width: '100px',
@@ -176,10 +185,10 @@ export default {
     }
   },
   methods: {
-    addRow () {
+    addRow() {
       this.tableData.push({})
     },
-    result () {
+    result() {
       console.log(this.tableData)
     }
   }
