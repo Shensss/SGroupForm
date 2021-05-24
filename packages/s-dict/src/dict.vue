@@ -57,27 +57,35 @@ export default {
   },
   methods: {
     buildShowValue() {
-      if (this.value || this.value === 0 || this.value === '0' || this.value === '') {
+      if (this.value || this.value === 0 || this.value === '0' || this.value === '' || this.value.length > 0) {
         if (Array.isArray(this.value)) {
           const arr = []
-          this.value.map(val => {
-            const is = find(this.options, (item) => item[this.mapper.value] === val)
-            if (is) {
-              arr.push(is[this.mapper.label])
-              if (is && is.style) {
-                this.currentStyle = is.style
+          if (/\[.*\]/.test(this.options[0])) {
+            this.normalDict(JSON.stringify(this.value), this.options)
+          } else {
+            this.value.map(val => {
+              const is = find(this.options, (item) => item[this.mapper.value] === val)
+              if (is) {
+                arr.push(is[this.mapper.label])
+                if (is && is.style) {
+                  this.currentStyle = is.style
+                }
               }
-            }
-          })
-          this.showValue = arr.join(this.separator)
-        } else {
-          const is = find(this.options, (item) => item[this.mapper.value] === this.value)
-          if (is && is.style) {
-            this.currentStyle = is.style
+            })
+            this.showValue = arr.join(this.separator)
           }
-          this.showValue = is ? is[this.mapper.label] : this.value
+        } else {
+          this.normalDict(this.value, this.options)
         }
       }
+    },
+    normalDict(value, options) {
+      console.log(value, options);
+      const is = find(options, (item) => item[this.mapper.value] === value)
+      if (is && is.style) {
+        this.currentStyle = is.style
+      }
+      this.showValue = is ? is[this.mapper.label] : value
     }
   }
 }

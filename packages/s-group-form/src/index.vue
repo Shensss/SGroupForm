@@ -300,7 +300,7 @@ export default {
         case 'radio':
         case 'select':
         case 'checkbox':
-        // case 'selectRange':
+        case 'selectRange':
         case 'switch':
           readType = 'dict'
           break

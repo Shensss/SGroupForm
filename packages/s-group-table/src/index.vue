@@ -220,10 +220,14 @@ export default {
     }
   },
   watch: {
-    columns() {
-      this.$nextTick(() => {
-        this.$refs.table && this.$refs.table.doLayout()
-      })
+    columns: {
+      deep: true,
+      handler() {
+        console.log(this.columns);
+        this.$nextTick(() => {
+          this.$refs.table && this.$refs.table.doLayout()
+        })
+      }
     },
     tableData() {
       this.$nextTick(() => {
