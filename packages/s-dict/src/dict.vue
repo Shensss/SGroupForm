@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     buildShowValue() {
-      if (this.value || this.value === 0 || this.value === '0' || this.value === '' || this.value.length > 0) {
+      if (this.value || this.value === 0 || this.value === '0' || this.value === '' || Array.isArray(this.value) && this.value.length > 0) {
         if (Array.isArray(this.value)) {
           const arr = []
           if (/\[.*\]/.test(this.options[0])) {
@@ -80,7 +80,6 @@ export default {
       }
     },
     normalDict(value, options) {
-      console.log(value, options);
       const is = find(options, (item) => item[this.mapper.value] === value)
       if (is && is.style) {
         this.currentStyle = is.style

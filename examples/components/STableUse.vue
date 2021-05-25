@@ -1,11 +1,20 @@
 <template>
   <div class="table">
     <s-group-table type="edit"
+                   :page-config="{
+                      page:1,
+                      pageSize:10,
+                      total:100,
+                      background:true
+                   }"
+                   :props="{
+                      treeProps:{children: 'children', hasChildren: 'hasChildren'}
+                   }"
                    :columns="columns"
                    :table-data="tableData"
                    :option="option">
     </s-group-table>
-    <el-button @click="result">输出结果</el-button>
+    <el-button @click="change">输出结果</el-button>
   </div>
 </template>
 
@@ -31,155 +40,25 @@ export default {
       columns: [
         {
           label: '项目名称',
-          key: 'projectName',
-          width: 100,
-          fixed: 'left',
-          type: 'text'
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
+          key: 'aaa',
+          type: 'fileView',
           props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
+            view: 'image',
+            asyncConfig: {
+              getType: 'string',
+              domain: ''
             }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
-        },
-        {
-          label: '性别',
-          key: 'b',
-          type: 'input',
-          width: '200',
-          isQuery: true,
-          props: {
-            placeholder: '请输入名称'
-          },
-          options: [
-            {
-              label: '张三',
-              value: '123'
-            }
-          ]
+          }
         }
       ],
       tableData: [
         {
-          projectName: '爱啥啥空间打开大家阿斯利康大家埃里克就看见撒旦绿卡建档立卡时间的拉升阶段垃圾的卢卡斯的链接',
-          a: '123',
-          b: '456'
-        },
-        {
-          projectName: 123123,
-          a: '123',
-          b: '456'
-        },
-        {
-          projectName: 123123,
-          a: '123',
-          b: '456'
+          aaa: 'http://121.40.133.115/digov/data/img/2021/05/图片 4_1620454100190.png',
+          children: [
+            {
+              aaa: 'http://121.40.133.115/digov/data/img/2021/05/图片 4_1620454100190.png',
+            }
+          ]
         }
       ]
     }
@@ -188,8 +67,12 @@ export default {
     addRow() {
       this.tableData.push({})
     },
-    result() {
-      console.log(this.tableData)
+    change() {
+      this.tableData = [
+        {
+          aaa: 'http://121.40.133.115/digov/data/img/2021/05/物源云协_1620616243884.png',
+        }
+      ]
     }
   }
 }

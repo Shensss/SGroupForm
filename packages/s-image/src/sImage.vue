@@ -29,7 +29,7 @@ export default {
     },
     errorImage: String
   },
-  data () {
+  data() {
     return {
       error: false,
       name: '',
@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    getImage (value) {
+    getImage(value) {
       return new Promise(resolve => {
         const data = value || this.value
         if (this.error) {
@@ -66,16 +66,16 @@ export default {
               })
             }
           } else if (data) {
-            resolve({ url: data, name: '' })
+            resolve({url: data, name: ''})
           } else {
-            resolve({ url: '', name: '' })
+            resolve({url: '', name: ''})
           }
         }
       })
     },
-    getBase64 (resolve, value) {
+    getBase64(resolve, value) {
       axios.get(this.fileGetPath + '/' + value.url).then(res => {
-        const { data } = res
+        const {data} = res
         resolve({
           url: get(data, 'data.base64'),
           name: get(data, this.nameKey)
@@ -83,11 +83,16 @@ export default {
       })
     }
   },
-  mounted () {
-    this.getImage().then(res => {
-      this.useUrl = res.url
-      this.name = res.name
-    })
+  watch: {
+    value: {
+      immediate: true,
+      handler() {
+        this.getImage().then(res => {
+          this.useUrl = res.url
+          this.name = res.name
+        })
+      }
+    }
   }
 }
 </script>

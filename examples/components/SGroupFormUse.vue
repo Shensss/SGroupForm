@@ -192,7 +192,6 @@ export default {
   },
   methods: {
     changeRange(val) {
-      console.log(val);
     },
     changeRadio() {
       if (this.formData.radio === 2) {

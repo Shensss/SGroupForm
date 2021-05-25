@@ -15,6 +15,7 @@
               :size="size"
               :border="border"
               :height="height"
+              v-bind="props"
               @selection-change="handleSelectionChange"
               :header-cell-style="headerCellStyle"
               :data="tableData">
@@ -86,11 +87,12 @@
     <div class="page" v-if="usePage">
       <el-pagination @size-change="handleSizeChange"
                      @current-change="handleCurrentChange"
+                     :background="pageConfig.background"
                      :current-page.sync="usePage"
-                     :page-sizes="[10, 20, 50, 100]"
+                     :page-sizes="pageConfig.pageSizes"
                      :page-size="usePageSize"
-                     layout="total,prev, pager, next, sizes, jumper"
-                     :total="total">
+                     :layout="pageConfig.layout"
+                     :total="pageConfig.total">
       </el-pagination>
     </div>
   </div>
@@ -124,6 +126,7 @@ export default {
       type: Boolean,
       default: true
     },
+    props: Object,
     headerCellStyle: {
       type: Object,
       default() {
@@ -184,16 +187,25 @@ export default {
       type: String,
       default: 'small'
     },
-    page: Number,
-    total: Number,
-    pageSize: Number
+    pageConfig: {
+      type: Object,
+      default() {
+        return {
+          page: 0,
+          total: 0,
+          pageSize: 10,
+          pageSizes: [10, 20, 50, 100],
+          layout: 'total,prev, pager, next, sizes, jumper',
+          background: true
+        }
+      }
+    }
   },
   computed: {
     groupForm() {
       return this.columns && this.columns.filter(item => item.isQuery)
     },
     columnsUse() {
-      console.log(this.columns, 111);
       const columns = cloneDeep(this.columns) || []
       if (this.type === 'readonly') {
         columns.map(item => {
@@ -204,7 +216,7 @@ export default {
     },
     usePage: {
       get() {
-        return this.page || 0
+        return this.pageConfig.page || 0
       },
       set(pageNumber) {
         this.$emit('changePageNumber', pageNumber)
@@ -212,7 +224,7 @@ export default {
     },
     usePageSize: {
       get() {
-        return this.pageSize
+        return this.pageConfig.pageSize
       },
       set(pageSize) {
         this.$emit('changePageSize', pageSize)
@@ -223,7 +235,6 @@ export default {
     columns: {
       deep: true,
       handler() {
-        console.log(this.columns);
         this.$nextTick(() => {
           this.$refs.table && this.$refs.table.doLayout()
         })

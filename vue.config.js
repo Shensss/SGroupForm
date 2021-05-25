@@ -16,7 +16,6 @@ function getEntries (path) {
         }
         return ret
     }, {})
-    console.log(entries);
     return entries
 }
 

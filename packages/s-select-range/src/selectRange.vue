@@ -56,9 +56,6 @@ export default {
     change (val) {
       this.$emit('change', this.config, val)
     }
-  },
-  mounted(){
-    console.log(this.mapper);
   }
 }
 </script>
