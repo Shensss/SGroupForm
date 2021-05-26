@@ -29,9 +29,13 @@
         <li v-for="(item,index) in viewList"
             :key="'file'+index"
             :style="imageStyle">
-          <template v-if="item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
+          <template
+              v-if="item.url.indexOf('.mp4')>0||item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
             <video :src="mergeConfig.domain+item.url"
-                   @click="viewVideo(mergeConfig.domain+item.url)"/>
+                   @click="viewVideo(item.url)"/>
+            <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
+              <use xlink:href="#icon-remove"/>
+            </svg>
           </template>
           <template v-else>
             <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="preview"></s-image>

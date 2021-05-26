@@ -27,6 +27,7 @@ export default {
           this.$emit('changeValue', val)
         } else {
           this.$emit('changeValue', val || '')
+          this.$emit('input', val)
         }
       },
       get () {

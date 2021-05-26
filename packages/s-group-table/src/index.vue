@@ -15,7 +15,11 @@
               :size="size"
               :border="border"
               :height="height"
+              :span-method="objectSpanMethod"
               v-bind="props"
+              @sort-change="sortChange"
+              @row-click="rowClick"
+              @filter-change="filterChange"
               @selection-change="handleSelectionChange"
               :header-cell-style="headerCellStyle"
               :data="tableData">
@@ -41,21 +45,25 @@
             <slot v-if="item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
             <single-tag v-if="singleTag.indexOf(item.type)>=0"
                         :mapper="mergeMapper(item)"
+                        @change="$emit('change',item,scope.row)"
                         v-model="scope.row[item.key]"
                         :config="item">
             </single-tag>
             <group-tag v-if="groupTag.indexOf(item.type)>=0"
                        :mapper="mergeMapper(item)"
+                       @change="$emit('change',item,scope.row)"
                        v-model="scope.row[item.key]"
                        :config="item">
             </group-tag>
             <options-tag v-if="optionsTag.indexOf(item.type)>=0"
                          :mapper="mergeMapper(item)"
+                         @change="$emit('change',item,scope.row)"
                          v-model="scope.row[item.key]"
                          :config="item">
             </options-tag>
             <self-tag v-if="selfTag.indexOf(item.type)>=0"
                       :mapper="mergeMapper(item)"
+                      @change="$emit('change',item,scope.row)"
                       v-model="scope.row[item.key]"
                       :config="item">
               <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
@@ -106,6 +114,7 @@ import GroupTag from '../../s-group-form/src/types/groupTag'
 import OptionsTag from '../../s-group-form/src/types/optionsTag'
 import SelfTag from '../../s-group-form/src/types/selfTag'
 import config from '../../config'
+import {transformToTree} from "../../utils";
 
 export default {
   name: 'SGroupTable',
@@ -117,11 +126,19 @@ export default {
       content: '',
       dialogVisible: false,
       currentRow: {},
-      formData: {}
+      formData: {},
     }
   },
   props: {
     id: [String, Number],
+    spanKey: {
+      type: Array,
+      default: () => []
+    },
+    spanCol: {
+      type: Array,
+      default: () => []
+    },
     showHeader: {
       type: Boolean,
       default: true
@@ -160,7 +177,7 @@ export default {
       }
     },
     columns: Array,
-    tableData: Array,
+    value: Array,
     border: {
       type: Boolean,
       default: true
@@ -202,6 +219,14 @@ export default {
     }
   },
   computed: {
+    tableData: {
+      get() {
+        return cloneDeep(this.value)
+      },
+      set(value) {
+        this.$emit('input', value)
+      }
+    },
     groupForm() {
       return this.columns && this.columns.filter(item => item.isQuery)
     },
@@ -339,7 +364,102 @@ export default {
     },
     handleSelectionChange(selection) {
       this.$emit('selectChange', selection)
-    }
+    },
+    sortChange(data) {
+      this.$emit('sortChange', data)
+    },
+    rowClick(data) {
+      this.$emit('rowClick', data)
+    },
+    filterChange(data) {
+      this.$emit('filterChange', data)
+    },
+    calcSpanObj() {
+      const spanObj = []
+      this.spanKey.map((key, index) => {
+        const data = cloneDeep(this.tableData)
+        let group = []
+        data.map(item => {
+          if (index >= 1) {
+            let bkey = key
+            let bvalue = item[key]
+            for (let i = 0; i < index; i++) {
+              bkey += this.spanKey[index - 1 - i]
+              bvalue += item[this.spanKey[index - 1 - i]]
+            }
+            item[bkey] = bvalue
+            group.push(bvalue)
+          } else {
+            group.push(item[key])
+          }
+        })
+        const arr = []
+        group = [...new Set(group)]
+        group.map(item => {
+          const obj = {}
+          obj.qqqqq = item
+          if (index >= 1) {
+            let bkey = key
+            for (let i = 0; i < index; i++) {
+              bkey += this.spanKey[index - 1 - i]
+            }
+            obj[bkey] = 0
+          } else {
+            obj[key] = 0
+          }
+          arr.push(obj)
+        })
+        const treeAll = cloneDeep(data).concat([...new Set(arr)])
+        let bkey = key
+        for (let i = 0; i < index; i++) {
+          bkey += this.spanKey[index - 1 - i]
+        }
+        const treeData = transformToTree(cloneDeep(treeAll), {
+          children: 'children',
+          idKey: 'qqqqq',
+          pIdKey: bkey,
+          label: 'name'
+        })
+        spanObj.push(treeData)
+      })
+      return spanObj
+    },
+    objectSpanMethod({row, column, rowIndex, columnIndex}) {
+      const spanObj = this.calcSpanObj()
+      const rowIndexArr = []
+      const lengthArr = []
+      let result = {}
+      const index = this.spanCol.indexOf(columnIndex)
+      if (index >= 0) {
+        spanObj[index].map((item, index) => {
+          if (item.children) {
+            lengthArr.push(item.children.length)
+          }
+        })
+        let sum = 0
+        lengthArr.map((length, index) => {
+          rowIndexArr.push(sum)
+          sum = sum + length
+        })
+        if (rowIndexArr.indexOf(rowIndex) >= 0) {
+          result = {
+            rowspan: lengthArr[rowIndexArr.indexOf(rowIndex)],
+            colspan: 1
+          }
+        } else {
+          result = {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+        if (columnIndex === this.spanCol[index]) {
+          return result
+        }
+      }
+    },
+    component(row, col, start, span) {
+      return row[col.key]
+    },
   }
 }
 </script>

@@ -8,10 +8,15 @@
                       background:true
                    }"
                    :props="{
+                      rowKey:'id',
+                      defaultExpandAll:true,
                       treeProps:{children: 'children', hasChildren: 'hasChildren'}
                    }"
+                   @change="changeRow"
                    :columns="columns"
-                   :table-data="tableData"
+                   :spanKey="['name','address']"
+                   :spanCol="[1,2]"
+                   v-model="tableData"
                    :option="option">
     </s-group-table>
     <el-button @click="change">输出结果</el-button>
@@ -40,27 +45,35 @@ export default {
       columns: [
         {
           label: '项目名称',
-          key: 'aaa',
-          type: 'fileView',
-          props: {
-            view: 'image',
-            asyncConfig: {
-              getType: 'string',
-              domain: ''
-            }
-          }
+          key: 'name',
+          type: 'input'
+        },
+        {
+          label: '项目名称',
+          key: 'address',
         }
       ],
-      tableData: [
-        {
-          aaa: 'http://121.40.133.115/digov/data/img/2021/05/图片 4_1620454100190.png',
-          children: [
-            {
-              aaa: 'http://121.40.133.115/digov/data/img/2021/05/图片 4_1620454100190.png',
-            }
-          ]
-        }
-      ]
+      tableData: [{
+        id: 1,
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 2,
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        id: 3,
+        date: '2016-05-04',
+        name: '王小虎2',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }, {
+        id: 4,
+        date: '2016-05-04',
+        name: '王小虎2',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }],
     }
   },
   methods: {
@@ -73,6 +86,9 @@ export default {
           aaa: 'http://121.40.133.115/digov/data/img/2021/05/物源云协_1620616243884.png',
         }
       ]
+    },
+    changeRow(col, row) {
+      console.log(col, row);
     }
   }
 }

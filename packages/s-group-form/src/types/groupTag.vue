@@ -27,6 +27,7 @@ export default {
     model: {
       set (val) {
         this.$emit('changeValue', val)
+        this.$emit('input', val)
       },
       get () {
         return this.value
