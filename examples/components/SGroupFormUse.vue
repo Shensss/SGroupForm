@@ -38,132 +38,11 @@ export default {
       type: '',
       form: [
         {
-          label: '范围选择',
-          type: 'selectRange',
-          key: ['month.min', 'month.max'],
-          style: {
-            width: '200px',
-            marginBottom: '20px'
-          },
-          inputStyle: {
-            width: '100px'
-          },
-          options: [
-            {
-              label: '咋',
-              value: '[0,1000]',
-            },
-            {
-              label: 'asa',
-              value: '[100,1000]',
-            }
-          ]
-        },
-        {
-          type: 'input',
-          key: 'input',
-          style: {
-            width: '200px',
-            marginBottom: '20px'
-          },
-          inputStyle: {
-            width: '100%'
-          },
-          rule: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-          ]
-        },
-        {
-          type: 'select',
-          key: 'select',
-          style: {
-            width: 'calc(100% - 430px)'
-          },
-          inputStyle: {
-            width: '100%'
-          },
-          options: [
-            {
-              label: '第一个',
-              value: 1
-            },
-            {
-              label: '第二个',
-              value: 2
-            }
-          ]
-        },
-        {
-          label: '单选',
-          type: 'radio',
-          key: 'radio',
-          options: [
-            {
-              label: '第一个',
-              value: 1
-            },
-            {
-              label: '第二个',
-              value: 2
-            }
-          ],
-        },
-        {
-          show: (value) => {
-            return value.radio === 1
-          },
-          label: '多选',
-          type: 'checkbox',
-          key: 'checkbox1',
-          options: [
-            {
-              label: '第一个',
-              value: 1
-            },
-            {
-              label: '第二个',
-              value: 2
-            }
-          ]
-        },
-        {
-          label: '时间',
-          type: 'datePicker',
-          key: ['startTime', 'endTime'],
-          props: {
-            type: 'daterange',
-            format: 'yyyy,MM,dd'
-          }
-        },
-        {
-          label: '上传',
-          type: 'upload',
-          key: 'upload',
-          props: {
-            accept: '.png,.jpg',
-            length: 2,
-            btnView: 'plus',
-            view: 'image',
-            remove: false
-          }
-        },
-        {
           label: '富文本',
           type: 'richText',
           inputStyle: {
             height: "500px"
           }
-        },
-        {
-          label: '自定义',
-          key: 'diy',
-          type: 'slot',
-          slotName: 'slot',
-          rule: [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-          ]
         }
       ],
       marginBottom: 10,
@@ -194,17 +73,7 @@ export default {
     changeRange(val) {
     },
     changeRadio() {
-      if (this.formData.radio === 2) {
-        this.$refs.form.getItem('input')[0].rule[0].required = false
-        this.$refs.form.getItem('select')[0].options = [
-          {
-            label: '改版',
-            value: 111
-          }
-        ]
-      } else if (this.formData.radio === 1) {
-        this.$refs.form.getItem('input')[0].rule[0].required = true
-      }
+
     },
     changeMarginBottom() {
       this.itemStyle.marginBottom = this.marginBottom + 'px'

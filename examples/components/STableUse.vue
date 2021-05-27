@@ -15,7 +15,6 @@
                    @change="changeRow"
                    :columns="columns"
                    :spanKey="['name','address']"
-                   :spanCol="[1,2]"
                    v-model="tableData"
                    :option="option">
     </s-group-table>
@@ -45,6 +44,15 @@ export default {
       columns: [
         {
           label: '项目名称',
+          key: 'aa',
+          type: 'dict',
+          options: [{
+            value: 2,
+            label: '1212'
+          }]
+        },
+        {
+          label: '项目名称',
           key: 'name',
           type: 'input'
         },
@@ -54,6 +62,7 @@ export default {
         }
       ],
       tableData: [{
+        aa: 2,
         id: 1,
         date: '2016-05-02',
         name: '王小虎',
@@ -81,11 +90,10 @@ export default {
       this.tableData.push({})
     },
     change() {
-      this.tableData = [
-        {
-          aaa: 'http://121.40.133.115/digov/data/img/2021/05/物源云协_1620616243884.png',
-        }
-      ]
+      this.columns[0].options = [{
+        value: 2,
+        label: '1222212'
+      }]
     },
     changeRow(col, row) {
       console.log(col, row);

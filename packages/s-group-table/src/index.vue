@@ -135,10 +135,6 @@ export default {
       type: Array,
       default: () => []
     },
-    spanCol: {
-      type: Array,
-      default: () => []
-    },
     showHeader: {
       type: Boolean,
       default: true
@@ -231,13 +227,12 @@ export default {
       return this.columns && this.columns.filter(item => item.isQuery)
     },
     columnsUse() {
-      const columns = cloneDeep(this.columns) || []
       if (this.type === 'readonly') {
-        columns.map(item => {
+        this.columns.map(item => {
           this.setRead(item)
         })
       }
-      return columns
+      return this.columns
     },
     usePage: {
       get() {
@@ -254,6 +249,22 @@ export default {
       set(pageSize) {
         this.$emit('changePageSize', pageSize)
       }
+    },
+    spanCol() {
+      const indexArr = []
+      this.spanKey.map(key => {
+        const index = this.columns.findIndex(item => item.key === key)
+        if ((this.index && !this.select) || (!this.index && this.select)) {
+          indexArr.push(index + 1)
+        }
+        if (this.index && this.select) {
+          indexArr.push(index + 2)
+        }
+        if (!this.index && !this.select) {
+          indexArr.push(index)
+        }
+      })
+      return indexArr
     }
   },
   watch: {
@@ -424,7 +435,7 @@ export default {
       })
       return spanObj
     },
-    objectSpanMethod({row, column, rowIndex, columnIndex}) {
+    objectSpanMethod({rowIndex, columnIndex}) {
       const spanObj = this.calcSpanObj()
       const rowIndexArr = []
       const lengthArr = []
@@ -456,10 +467,7 @@ export default {
           return result
         }
       }
-    },
-    component(row, col, start, span) {
-      return row[col.key]
-    },
+    }
   }
 }
 </script>

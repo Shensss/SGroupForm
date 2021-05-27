@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'singleTag',
-  data () {
+  data() {
     return {}
   },
   props: {
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     model: {
-      set (val) {
+      set(val) {
         if (this.config.props && this.config.props.valueFormat === 'timestamp' && !val) {
           this.$emit('changeValue', val)
         } else {
@@ -30,23 +30,23 @@ export default {
           this.$emit('input', val)
         }
       },
-      get () {
+      get() {
         return this.value
       }
     }
   },
   methods: {
-    change (value) {
+    change(value) {
       if (this.config.change) {
         this.$emit('change', value)
       }
     },
-    focus () {
+    focus() {
       if (this.config.focus) {
         this.$emit('focus', this.value)
       }
     },
-    blur () {
+    blur() {
       if (this.config.blur) {
         this.$emit('blur', this.value)
       }

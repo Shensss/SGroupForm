@@ -83,8 +83,8 @@ import config from '../../config'
 
 export default {
   name: 'items',
-  components: { SelfTag, OptionsTag, GroupTag, SingleTag },
-  data () {
+  components: {SelfTag, OptionsTag, GroupTag, SingleTag},
+  data() {
     return {
       ...config
     }
@@ -92,13 +92,18 @@ export default {
   props: {
     formData: Object,
     type: String,
-    value: String | Number,
-    config: Object,
+    value: [String, Number],
+    config: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     mergeStyle: Object,
     props: Object
   },
   computed: {
-    required () {
+    required() {
       let required = false
       this.config.rule && this.config.rule.map(item => {
         if (item.required) {
@@ -107,7 +112,7 @@ export default {
       })
       return required
     },
-    mapper () {
+    mapper() {
       const allMapper = cloneDeep(this.props.mapper) || {}
       const selfMapper = this.config.mapper || {}
       return Object.assign({
@@ -118,7 +123,7 @@ export default {
     }
   },
   methods: {
-    changeModel (val) {
+    changeModel(val) {
       if (this.config.props && !this.config.props.multiple && Array.isArray(val)) {
         const current = val
         if (this.config.join) {
@@ -134,17 +139,17 @@ export default {
         }
       }
     },
-    change (value) {
+    change(value) {
       if (this.config.change) {
         this.config.change(this.config, value, this.formData)
       }
     },
-    focus () {
+    focus() {
       if (this.config.focus) {
         this.config.focus(this.config, this.value, this.formData)
       }
     },
-    blur () {
+    blur() {
       if (this.config.blur) {
         this.config.blur(this.config, this.value, this.formData)
       }

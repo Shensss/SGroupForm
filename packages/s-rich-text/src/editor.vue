@@ -9,11 +9,15 @@
 import _Quill from 'quill'
 import defaultOptions from './options'
 import ImageResize from 'quill-image-resize-module'
-
+import VideoBlot from './VideoBlot'
+VideoBlot.blotName = 'simpleVideo'
+VideoBlot.tagName = 'video'
+_Quill.register(VideoBlot)
 _Quill.register('modules/imageResize', ImageResize)
+_Quill.register('modules/videoResize', ImageResize)
 if (typeof Object.assign !== 'function') {
   Object.defineProperty(Object, 'assign', {
-    value (target, varArgs) {
+    value(target, varArgs) {
       if (target == null) {
         throw new TypeError('Cannot convert undefined or null to object')
       }
@@ -38,7 +42,7 @@ if (typeof Object.assign !== 'function') {
 // export
 export default {
   name: 'quill-editor',
-  data () {
+  data() {
     return {
       Options: {},
       Content: '',
@@ -63,16 +67,16 @@ export default {
       default: () => ({})
     }
   },
-  mounted () {
+  mounted() {
     this.initialize()
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.quill = null
     delete this.quill
   },
   methods: {
     // Init Quill instance
-    initialize () {
+    initialize() {
       if (this.$el) {
         // Options
         this.Options = Object.assign({}, this.defaultOptions, this.globalOptions, this.options)
@@ -109,7 +113,7 @@ export default {
           if (html === '<p><br></p>') html = ''
           this.Content = html
           this.$emit('input', this.Content)
-          this.$emit('change', { html, text, quill })
+          this.$emit('change', {html, text, quill})
         })
 
         // Emit ready event
@@ -119,7 +123,7 @@ export default {
   },
   watch: {
     // Watch content change
-    content (newVal, oldVal) {
+    content(newVal, oldVal) {
       if (this.quill) {
         if (newVal && newVal !== this.Content) {
           this.Content = newVal
@@ -130,7 +134,7 @@ export default {
       }
     },
     // Watch content change
-    value (newVal, oldVal) {
+    value(newVal, oldVal) {
       if (this.quill) {
         if (newVal && newVal !== this.Content) {
           this.Content = newVal
@@ -141,7 +145,7 @@ export default {
       }
     },
     // Watch disabled change
-    disabled (newVal, oldVal) {
+    disabled(newVal, oldVal) {
       if (this.quill) {
         this.quill.enable(!newVal)
       }

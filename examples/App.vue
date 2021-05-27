@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-<!--    <s-group-form-use></s-group-form-use>-->
-    <STableUse></STableUse>
+    <s-group-form-use></s-group-form-use>
+<!--    <STableUse></STableUse>-->
   </div>
 </template>
 

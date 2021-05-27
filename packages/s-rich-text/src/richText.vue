@@ -12,7 +12,7 @@
     <input ref="input"
            class="button"
            type="file"
-           :accept="accept"
+           :accept="fileType"
            @change="handleChange">
   </div>
 </template>
@@ -43,10 +43,6 @@ export default {
     inputStyle: Object,
     placeholder: String,
     readonly: Boolean,
-    accept: {
-      type: [String, Array],
-      default: '.png,.jpg,.jpeg,.gif'
-    }
   },
   components: {
     quillEditor
@@ -55,6 +51,9 @@ export default {
     return {
       option: {},
       file: '',
+      accept: '',
+      imageAccept: '.png,.jpg,.jpeg,.gif',
+      videoAccept: '.mp4',
       fileTypeToAccept: {
         '.pdf': 'application/pdf',
         '.gif': 'image/gif',
@@ -72,7 +71,8 @@ export default {
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
-      }
+      },
+      uploadType: 'image'
     }
   },
   computed: {
@@ -160,14 +160,31 @@ export default {
         item.name = item[this.mergeConfig.nameKey]
         item.url = item[this.mergeConfig.urlKey]
         let Range = this.editor.getSelection()
-        this.editor.insertEmbed(Range != null ? Range.index : 0, 'image', this.mergeConfig.domain + item.url)
+        if (this.uploadType === 'image') {
+          this.editor.insertEmbed(Range != null ? Range.index : 0, this.uploadType, this.mergeConfig.domain + item.url)
+        } else {
+          this.editor.insertEmbed(Range != null ? Range.index : 0, 'simpleVideo', {
+            url: this.mergeConfig.domain + item.url,
+            controls: 'controls',
+            width: '1150px',
+            height: '500px'
+          })
+        }
         this.$refs.input.value = ''
       })
     },
     initUploadImage() {
       this.editor.getModule('toolbar').addHandler('image', this.imgHandler)
+      this.editor.getModule('toolbar').addHandler('video', this.videoHandler)
     },
     imgHandler() {
+      this.accept = this.imageAccept
+      this.uploadType = 'image'
+      this.$refs.input.click()
+    },
+    videoHandler() {
+      this.accept = this.videoAccept
+      this.uploadType = 'video'
       this.$refs.input.click()
     },
     // 失去焦点事件
