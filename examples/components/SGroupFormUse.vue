@@ -39,6 +39,7 @@ export default {
       form: [
         {
           label: '富文本',
+          key:'aaa',
           type: 'richText',
           inputStyle: {
             height: "500px"

@@ -38,39 +38,37 @@
                        :key="cindex"
                        v-bind="item">
         <template slot-scope="scope">
-            <span :style="item.style" v-if="!item.type">
-               {{ get(scope.row, item.key) || '-' }}
-            </span>
-          <template v-if="item.type">
-            <slot v-if="item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
-            <single-tag v-if="singleTag.indexOf(item.type)>=0"
-                        :mapper="mergeMapper(item)"
-                        @change="$emit('change',item,scope.row)"
-                        v-model="scope.row[item.key]"
-                        :config="item">
-            </single-tag>
-            <group-tag v-if="groupTag.indexOf(item.type)>=0"
-                       :mapper="mergeMapper(item)"
-                       @change="$emit('change',item,scope.row)"
-                       v-model="scope.row[item.key]"
-                       :config="item">
-            </group-tag>
-            <options-tag v-if="optionsTag.indexOf(item.type)>=0"
-                         :mapper="mergeMapper(item)"
-                         @change="$emit('change',item,scope.row)"
-                         v-model="scope.row[item.key]"
-                         :config="item">
-            </options-tag>
-            <self-tag v-if="selfTag.indexOf(item.type)>=0"
+          <span :style="item.style" v-if="!item.type">
+             {{ get(scope.row, item.key) || '-' }}
+          </span>
+          <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
+          <single-tag v-else-if="item.type&&singleTag.indexOf(item.type)>=0"
                       :mapper="mergeMapper(item)"
                       @change="$emit('change',item,scope.row)"
                       v-model="scope.row[item.key]"
                       :config="item">
-              <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
-                <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
-              </template>
-            </self-tag>
-          </template>
+          </single-tag>
+          <group-tag v-else-if="item.type&&groupTag.indexOf(item.type)>=0"
+                     :mapper="mergeMapper(item)"
+                     @change="$emit('change',item,scope.row)"
+                     v-model="scope.row[item.key]"
+                     :config="item">
+          </group-tag>
+          <options-tag v-else-if="item.type&&optionsTag.indexOf(item.type)>=0"
+                       :mapper="mergeMapper(item)"
+                       @change="$emit('change',item,scope.row)"
+                       v-model="scope.row[item.key]"
+                       :config="item">
+          </options-tag>
+          <self-tag v-else-if="item.type&&selfTag.indexOf(item.type)>=0"
+                    :mapper="mergeMapper(item)"
+                    @change="$emit('change',item,scope.row)"
+                    v-model="scope.row[item.key]"
+                    :config="item">
+            <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
+              <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
+            </template>
+          </self-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="option&&option.btns.length>0"

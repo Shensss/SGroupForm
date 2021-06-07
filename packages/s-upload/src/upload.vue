@@ -191,10 +191,14 @@ export default {
       this.loading = true
       if (!access) {
         this.$refs.input.value = ''
+        this.loading = false
+        this.progressRatio = 0
         return
       }
       if (file.size > this.size * 1024 * 1024) {
         this.$refs.input.value = ''
+        this.loading = false
+        this.progressRatio = 0
         return this.$message.error(`文件${file.name}过大!`)
       }
       if (this.mergeConfig.fileType !== 'base64') {

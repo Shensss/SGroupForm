@@ -52,6 +52,14 @@ export default {
           }]
         },
         {
+          label: '时间',
+          key: 'date',
+          props: {
+            format: 'yyyy年'
+          },
+          type: 'time'
+        },
+        {
           label: '项目名称',
           key: 'name',
           type: 'input'
