@@ -30,7 +30,7 @@
             :key="'file'+index"
             :style="imageStyle">
           <template
-              v-if="item.url.indexOf('.mp4')>0||item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
+              v-if="String(item.url).indexOf('.mp4')>0||item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
             <video :src="mergeConfig.domain+item.url"
                    @click="viewVideo(item.url)"/>
             <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">

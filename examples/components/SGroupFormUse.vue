@@ -38,6 +38,11 @@ export default {
       type: '',
       form: [
         {
+          label: '文件',
+          key:'upload',
+          type: 'upload'
+        },
+        {
           label: '富文本',
           key:'aaa',
           type: 'richText',
@@ -58,7 +63,7 @@ export default {
         radio: 1,
         checkbox1: '',
         checkbox2: '',
-        upload: '[{"name":"aaa.png"}]'
+        upload: '[{"name":"aaa.png","url":1}]'
       },
       itemStyle: {
         width: '100%',

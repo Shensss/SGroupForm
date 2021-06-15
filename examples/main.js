@@ -4,12 +4,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
-import SGroupForm from '../lib/index'
+import SGroupForm from '../packages'
 
 Vue.use(SGroupForm, {
     UploadConfig: {
         getType: 'JSON',
-        fileType: 'path',
+        fileType: 'base64',
         path: '/szzt/pc/upload/file',
         data: [
             {

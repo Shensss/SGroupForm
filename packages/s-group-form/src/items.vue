@@ -92,7 +92,7 @@ export default {
   props: {
     formData: Object,
     type: String,
-    value: [String, Number],
+    value: [String, Number, Array],
     config: {
       type: Object,
       default() {

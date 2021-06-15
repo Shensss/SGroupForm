@@ -4,6 +4,7 @@
                    :page-config="{
                       page:1,
                       pageSize:10,
+                      layout: 'total, sizes, prev, pager, next, jumper',
                       total:100,
                       background:true
                    }"
@@ -12,7 +13,7 @@
                       defaultExpandAll:true,
                       treeProps:{children: 'children', hasChildren: 'hasChildren'}
                    }"
-                   @change="changeRow"
+                   @changePageNumber="changePageNumber"
                    :columns="columns"
                    :spanKey="['name','address']"
                    v-model="tableData"
@@ -53,9 +54,10 @@ export default {
         },
         {
           label: '时间',
-          key: 'date',
-          props: {
-            format: 'yyyy年'
+          separator: '-',
+          key: ['date', 'dat2'],
+          props:{
+            format:'yyyy年'
           },
           type: 'time'
         },
@@ -73,11 +75,13 @@ export default {
         aa: 2,
         id: 1,
         date: '2016-05-02',
+        dat2: '2016-05-02',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
         id: 2,
         date: '2016-05-04',
+        dat2: '2016-05-02',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1517 弄'
       }, {
@@ -93,6 +97,9 @@ export default {
       }],
     }
   },
+  mounted() {
+    console.log(1)
+  },
   methods: {
     addRow() {
       this.tableData.push({})
@@ -102,6 +109,9 @@ export default {
         value: 2,
         label: '1222212'
       }]
+    },
+    changePageNumber() {
+      console.log(11)
     },
     changeRow(col, row) {
       console.log(col, row);

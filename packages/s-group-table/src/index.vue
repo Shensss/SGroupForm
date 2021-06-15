@@ -38,8 +38,44 @@
                        :key="cindex"
                        v-bind="item">
         <template slot-scope="scope">
-          <span :style="item.style" v-if="!item.type">
-             {{ get(scope.row, item.key) || '-' }}
+          <div :style="item.style" v-if="Array.isArray(item.key)">
+             <span class="item-cell" v-for="(val,si) in item.key">
+                  <span v-if="!item.type">
+                    {{ get(scope.row, val) || '-' }}
+                  </span>
+                  <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
+                  <single-tag v-else-if="item.type&&singleTag.indexOf(item.type)>=0"
+                              :mapper="mergeMapper(item)"
+                              @change="$emit('change',item,scope.row)"
+                              v-model="scope.row[val]"
+                              :config="item">
+                  </single-tag>
+                  <group-tag v-else-if="item.type&&groupTag.indexOf(item.type)>=0"
+                             :mapper="mergeMapper(item)"
+                             @change="$emit('change',item,scope.row)"
+                             v-model="scope.row[val]"
+                             :config="item">
+                  </group-tag>
+                  <options-tag v-else-if="item.type&&optionsTag.indexOf(item.type)>=0"
+                               :mapper="mergeMapper(item)"
+                               @change="$emit('change',item,scope.row)"
+                               v-model="scope.row[val]"
+                               :config="item">
+                  </options-tag>
+                  <self-tag v-else-if="item.type&&selfTag.indexOf(item.type)>=0"
+                            :mapper="mergeMapper(item)"
+                            @change="$emit('change',item,scope.row)"
+                            v-model="scope.row[val]"
+                            :config="item">
+                    <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
+                      <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
+                    </template>
+                  </self-tag>
+                  <template v-if="item.separator&&si!==item.key.length-1">{{ item.separator }}</template>
+             </span>
+          </div>
+          <span :style="item.style" v-else-if="!item.type&&!Array.isArray(item.key)">
+            {{ get(scope.row, item.key, null) || '-' }}
           </span>
           <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
           <single-tag v-else-if="item.type&&singleTag.indexOf(item.type)>=0"
@@ -94,7 +130,7 @@
       <el-pagination @size-change="handleSizeChange"
                      @current-change="handleCurrentChange"
                      :background="pageConfig.background"
-                     :current-page.sync="usePage"
+                     :current-page="usePage"
                      :page-sizes="pageConfig.pageSizes"
                      :page-size="usePageSize"
                      :layout="pageConfig.layout"
@@ -281,6 +317,7 @@ export default {
     }
   },
   methods: {
+    get,
     setRead(item) {
       let readType = item.type
       switch (item.type) {
@@ -337,9 +374,6 @@ export default {
           break
       }
       item.type = readType
-    },
-    get(data, key) {
-      return get(data, key)
     },
     mergeMapper(config) {
       if (config.props && config.props.mapper) {
