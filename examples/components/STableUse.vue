@@ -37,6 +37,9 @@ export default {
         width: '100px',
         btns: [
           {
+            show: (row) => {
+              return row.aa
+            },
             name: '添加一行',
             handler: this.addRow
           }
@@ -46,18 +49,13 @@ export default {
         {
           label: '项目名称',
           key: 'aa',
-          type: 'dict',
-          options: [{
-            value: 2,
-            label: '1212'
-          }]
         },
         {
           label: '时间',
           separator: '-',
           key: ['date', 'dat2'],
           props:{
-            format:'yyyy年'
+
           },
           type: 'time'
         },

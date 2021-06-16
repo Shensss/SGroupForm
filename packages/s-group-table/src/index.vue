@@ -43,34 +43,10 @@
                   <span v-if="!item.type">
                     {{ get(scope.row, val) || '-' }}
                   </span>
-                  <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
-                  <single-tag v-else-if="item.type&&singleTag.indexOf(item.type)>=0"
-                              :mapper="mergeMapper(item)"
-                              @change="$emit('change',item,scope.row)"
-                              v-model="scope.row[val]"
-                              :config="item">
-                  </single-tag>
-                  <group-tag v-else-if="item.type&&groupTag.indexOf(item.type)>=0"
-                             :mapper="mergeMapper(item)"
-                             @change="$emit('change',item,scope.row)"
-                             v-model="scope.row[val]"
-                             :config="item">
-                  </group-tag>
-                  <options-tag v-else-if="item.type&&optionsTag.indexOf(item.type)>=0"
-                               :mapper="mergeMapper(item)"
-                               @change="$emit('change',item,scope.row)"
-                               v-model="scope.row[val]"
-                               :config="item">
-                  </options-tag>
-                  <self-tag v-else-if="item.type&&selfTag.indexOf(item.type)>=0"
-                            :mapper="mergeMapper(item)"
-                            @change="$emit('change',item,scope.row)"
-                            v-model="scope.row[val]"
-                            :config="item">
-                    <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
-                      <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
-                    </template>
-                  </self-tag>
+                  <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row"
+                        :config="item"></slot>
+                  <item-cell v-else-if="item.type" :merge-mapper="mergeMapper" :item="item"
+                             v-model="scope.row[val]"></item-cell>
                   <template v-if="item.separator&&si!==item.key.length-1">{{ item.separator }}</template>
              </span>
           </div>
@@ -78,33 +54,8 @@
             {{ get(scope.row, item.key, null) || '-' }}
           </span>
           <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
-          <single-tag v-else-if="item.type&&singleTag.indexOf(item.type)>=0"
-                      :mapper="mergeMapper(item)"
-                      @change="$emit('change',item,scope.row)"
-                      v-model="scope.row[item.key]"
-                      :config="item">
-          </single-tag>
-          <group-tag v-else-if="item.type&&groupTag.indexOf(item.type)>=0"
-                     :mapper="mergeMapper(item)"
-                     @change="$emit('change',item,scope.row)"
-                     v-model="scope.row[item.key]"
-                     :config="item">
-          </group-tag>
-          <options-tag v-else-if="item.type&&optionsTag.indexOf(item.type)>=0"
-                       :mapper="mergeMapper(item)"
-                       @change="$emit('change',item,scope.row)"
-                       v-model="scope.row[item.key]"
-                       :config="item">
-          </options-tag>
-          <self-tag v-else-if="item.type&&selfTag.indexOf(item.type)>=0"
-                    :mapper="mergeMapper(item)"
-                    @change="$emit('change',item,scope.row)"
-                    v-model="scope.row[item.key]"
-                    :config="item">
-            <template :name="'content-'+item._code" :option="item" :data="data" slot-scope="data">
-              <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
-            </template>
-          </self-tag>
+          <item-cell v-else-if="item.type" :merge-mapper="mergeMapper" :item="item"
+                     v-model="scope.row[item.key]"></item-cell>
         </template>
       </el-table-column>
       <el-table-column v-if="option&&option.btns.length>0"
@@ -143,19 +94,14 @@
 <script>
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
-import SingleTag from '../../s-group-form/src/types/singleTag'
-import GroupTag from '../../s-group-form/src/types/groupTag'
-import OptionsTag from '../../s-group-form/src/types/optionsTag'
-import SelfTag from '../../s-group-form/src/types/selfTag'
-import config from '../../config'
 import {transformToTree} from "../../utils";
+import ItemCell from "./item-cell";
 
 export default {
   name: 'SGroupTable',
-  components: {SelfTag, OptionsTag, GroupTag, SingleTag},
+  components: {ItemCell},
   data() {
     return {
-      ...config,
       selectList: [],
       content: '',
       dialogVisible: false,
@@ -328,14 +274,14 @@ export default {
           break
         case 'timePicker':
           item.props = Object.assign({
-            format: item.props ? item.props.format || 'HH:mm:ss' : 'HH:mm:ss'
-          }, item.props)
+            format: item.props ? (item.props.format || 'HH:mm:ss') : 'HH:mm:ss'
+          }, item.props || {})
           readType = 'time'
           break
         case 'datePicker':
           item.props = Object.assign({
-            format: item.props ? item.props.format || 'HH:mm:ss' : 'yyyy-MM-dd'
-          }, item.props)
+            format: item.props ? (item.props.format || 'HH:mm:ss') : 'yyyy-MM-dd'
+          }, item.props || {})
           readType = 'time'
           break
         case 'checkTag':
