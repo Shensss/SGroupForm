@@ -49,14 +49,29 @@ export default {
         {
           label: '项目名称',
           key: 'aa',
+          type: 'input'
+        },
+        {
+          label: '父级',
+          type: 'columns',
+          columns: [
+            {
+              label: '11',
+              type: 'input',
+              key: 'aa1',
+            },
+            {
+              label: '22',
+              type: 'input',
+              key: 'aa2',
+            }
+          ]
         },
         {
           label: '时间',
           separator: '-',
           key: ['date', 'dat2'],
-          props:{
-
-          },
+          props: {},
           type: 'time'
         },
         {
@@ -72,6 +87,7 @@ export default {
       tableData: [{
         aa: 2,
         id: 1,
+        aa1: 123,
         date: '2016-05-02',
         dat2: '2016-05-02',
         name: '王小虎',
@@ -103,10 +119,7 @@ export default {
       this.tableData.push({})
     },
     change() {
-      this.columns[0].options = [{
-        value: 2,
-        label: '1222212'
-      }]
+      console.log(this.tableData);
     },
     changePageNumber() {
       console.log(11)

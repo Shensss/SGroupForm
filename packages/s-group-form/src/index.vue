@@ -7,7 +7,7 @@
            :model="formData">
     <div class="group" :key="name" v-for="name in Object.keys(groups)">
       <p class="group-title">{{ name }}</p>
-      <template v-for="(item) in groups[name]">
+      <div class="group-content" v-for="(item) in groups[name]">
         <items v-if="showFunction(item.show)"
                :key="item._code"
                :config="item"
@@ -52,7 +52,7 @@
             <slot v-else :name="'content-'+item.key" :option="option"></slot>
           </template>
         </items>
-      </template>
+      </div>
     </div>
     <template v-for="(item) in unGroups">
       <items v-if="showFunction(item.show)"
@@ -469,6 +469,12 @@ export default {
       font-weight: bold;
       color: #333;
       border-bottom: 1px solid #ccc;
+    }
+
+    .group-content {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
     }
   }
 

@@ -36,6 +36,7 @@ import SingleTag from '../../s-group-form/src/types/singleTag'
 import GroupTag from '../../s-group-form/src/types/groupTag'
 import OptionsTag from '../../s-group-form/src/types/optionsTag'
 import SelfTag from '../../s-group-form/src/types/selfTag'
+
 export default {
   name: 'item-cell',
   data() {
@@ -43,20 +44,21 @@ export default {
       ...config
     }
   },
-  components: { SelfTag, OptionsTag, GroupTag, SingleTag},
-  computed:{
-    model:{
-      get(){
+  components: {SelfTag, OptionsTag, GroupTag, SingleTag},
+  computed: {
+    model: {
+      get() {
         return this.value
       },
-      set(val){
-        this.$emit('input',val)
+      set(val) {
+        this.$emit('change', val)
+        this.$emit('input', val)
       }
     }
   },
   props: {
-    value:[Object,Array,String,Number,Boolean,Array],
-      mergeMapper: Function,
+    value: [Object, Array, String, Number, Boolean, Array],
+    mergeMapper: Function,
     item: Object
   }
 }

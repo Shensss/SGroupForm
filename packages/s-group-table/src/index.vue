@@ -1,6 +1,6 @@
 <template>
   <div class="sTable">
-    <div class="head">
+    <div class="head" v-if="$slots.default||query">
       <template v-if="$slots.default">
         <slot></slot>
       </template>
@@ -34,30 +34,19 @@
                        fixed="left"
                        v-if="index">
       </el-table-column>
-      <el-table-column v-for="(item,cindex) in columnsUse"
-                       :key="cindex"
-                       v-bind="item">
-        <template slot-scope="scope">
-          <div :style="item.style" v-if="Array.isArray(item.key)">
-             <span class="item-cell" v-for="(val,si) in item.key">
-                  <span v-if="!item.type">
-                    {{ get(scope.row, val) || '-' }}
-                  </span>
-                  <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row"
-                        :config="item"></slot>
-                  <item-cell v-else-if="item.type" :merge-mapper="mergeMapper" :item="item"
-                             v-model="scope.row[val]"></item-cell>
-                  <template v-if="item.separator&&si!==item.key.length-1">{{ item.separator }}</template>
-             </span>
-          </div>
-          <span :style="item.style" v-else-if="!item.type&&!Array.isArray(item.key)">
-            {{ get(scope.row, item.key, null) || '-' }}
-          </span>
-          <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row" :config="item"></slot>
-          <item-cell v-else-if="item.type" :merge-mapper="mergeMapper" :item="item"
-                     v-model="scope.row[item.key]"></item-cell>
-        </template>
+      <el-table-column
+          prop="date"
+          label="日期"
+          width="150">
       </el-table-column>
+      <el-table-column label="配送信息">
+        <el-table-column
+            prop="name"
+            label="姓名"
+            width="120">
+        </el-table-column>
+      </el-table-column>
+      <columns :columnsUse="columnsUse" :mergeMapper="mergeMapper" v-model="tableData"></columns>
       <el-table-column v-if="option&&option.btns.length>0"
                        align="center"
                        fixed="right"
@@ -96,10 +85,11 @@ import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {transformToTree} from "../../utils";
 import ItemCell from "./item-cell";
+import Columns from "./columns";
 
 export default {
   name: 'SGroupTable',
-  components: {ItemCell},
+  components: {Columns, ItemCell},
   data() {
     return {
       selectList: [],
