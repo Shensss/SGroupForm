@@ -38,17 +38,16 @@ export default {
       type: '',
       form: [
         {
+          group: '111',
           label: '文件',
-          key:'upload',
+          key: 'upload',
           type: 'upload'
         },
         {
+          group: '111',
           label: '富文本',
-          key:'aaa',
-          type: 'richText',
-          inputStyle: {
-            height: "500px"
-          }
+          key: 'aaa',
+          type: 'number',
         }
       ],
       marginBottom: 10,
@@ -66,7 +65,7 @@ export default {
         upload: '[{"name":"aaa.png","url":1}]'
       },
       itemStyle: {
-        width: '100%',
+        width: '30%',
         marginBottom: '20px'
       },
       props: {

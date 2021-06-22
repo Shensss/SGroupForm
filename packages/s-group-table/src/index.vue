@@ -31,22 +31,18 @@
       <el-table-column type="index"
                        :index="calcIndex"
                        align="center"
-                       fixed="left"
                        v-if="index">
       </el-table-column>
-      <el-table-column
-          prop="date"
-          label="日期"
-          width="150">
-      </el-table-column>
-      <el-table-column label="配送信息">
-        <el-table-column
-            prop="name"
-            label="姓名"
-            width="120">
-        </el-table-column>
-      </el-table-column>
-      <columns :columnsUse="columnsUse" :mergeMapper="mergeMapper" v-model="tableData"></columns>
+      <columns v-for="(item,cindex) in columnsUse"
+               :key="cindex"
+               :item="item"
+               :mergeMapper="mergeMapper" v-model="tableData">
+        <slot :slot="item.key" v-for="item in columnsUse.filter(item=>item.type==='slot')" slot-scope="{row,config}">
+          <slot :name="item.key"
+                :row="row"
+                :config="config"></slot>
+        </slot>
+      </columns>
       <el-table-column v-if="option&&option.btns.length>0"
                        align="center"
                        fixed="right"
@@ -197,11 +193,24 @@ export default {
       return this.columns && this.columns.filter(item => item.isQuery)
     },
     columnsUse() {
-      if (this.type === 'readonly') {
-        this.columns.map(item => {
+      this.columns.map(item => {
+        if (this.type === 'readonly') {
           this.setRead(item)
-        })
-      }
+        }
+        if (item.type === 'columns') {
+          item.columns.map(scol => {
+            if (this.type === 'readonly') {
+              this.setRead(scol)
+            }
+            if (!scol.type) {
+              scol.type = 'text'
+            }
+          })
+        }
+        if (!item.type) {
+          item.type = 'text'
+        }
+      })
       return this.columns
     },
     usePage: {

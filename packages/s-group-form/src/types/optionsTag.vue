@@ -5,9 +5,9 @@
        @blur="blur"
        v-bind="config.props"
        v-model="model">
-    <el-option v-bind="config.props"
-               :key="index"
+    <el-option :key="index"
                v-for="(item,index) in config.options"
+               v-bind="item"
                :label="item[mapper.label]"
                :value="item[mapper.value]">
     </el-option>

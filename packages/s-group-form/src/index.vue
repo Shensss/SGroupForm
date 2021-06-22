@@ -7,8 +7,8 @@
            :model="formData">
     <div class="group" :key="name" v-for="name in Object.keys(groups)">
       <p class="group-title">{{ name }}</p>
-      <div class="group-content" v-for="(item) in groups[name]">
-        <items v-if="showFunction(item.show)"
+      <div class="group-content">
+        <items v-for="(item) in groups[name]" v-if="showFunction(item.show)"
                :key="item._code"
                :config="item"
                :type="type"

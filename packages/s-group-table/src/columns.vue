@@ -1,40 +1,30 @@
 <template>
-  <div>
-    <el-table-column v-for="(item,cindex) in columnsUse"
-                     :key="cindex"
-                     v-bind="item">
-      <template v-if="item.type!=='columns'||!item.type" slot-scope="scope">
-        <div :style="item.style" v-if="Array.isArray(item.key)">
+  <el-table-column v-bind="item" d>
+    <template v-if="item.type!=='columns'||!item.type" slot-scope="scope">
+      <div :style="item.style" v-if="Array.isArray(item.key)">
              <span class="item-cell" v-for="(val,si) in item.key">
-                  <span v-if="!item.type">
-                    {{ get(scope.row, val) || '-' }}
-                  </span>
-                  <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row"
+                  <slot v-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row"
                         :config="item"></slot>
-                  <item-cell v-else-if="item.type"
+                  <item-cell v-if="item.type&&item.type!=='slot'"
                              :merge-mapper="mergeMapper"
                              :item="item"
                              :value="tableData[scope.$index][item.key]"
                              @change="value=>valueChange(value,scope.$index,item.key)"></item-cell>
                   <template v-if="item.separator&&si!==item.key.length-1">{{ item.separator }}</template>
              </span>
-        </div>
-        <span :style="item.style" v-else-if="!item.type&&!Array.isArray(item.key)">
-            {{ get(tableData[scope.$index], item.key, null) || '-' }}
-        </span>
-        <slot v-else-if="item.type&&item.type==='slot'" :name="item.key" :row="tableData[scope.$index]"
-              :config="item"></slot>
-        <item-cell v-else-if="item.type"
-                   :merge-mapper="mergeMapper"
-                   :item="item"
-                   :value="tableData[scope.$index][item.key]"
-                   @change="value=>valueChange(value,scope.$index,item.key)"></item-cell>
-      </template>
-      <template v-if="item.type==='columns'">
-        <columns :columnsUse="item.columns" :mergeMapper="mergeMapper" v-model="tableData"></columns>
-      </template>
-    </el-table-column>
-  </div>
+      </div>
+      <slot v-if="item.type&&item.type==='slot'" :name="item.key" :row="tableData[scope.$index]"
+            :config="item"></slot>
+      <item-cell v-if="item.type&&item.type!=='slot'"
+                 :merge-mapper="mergeMapper"
+                 :item="item"
+                 :value="tableData[scope.$index][item.key]"
+                 @change="value=>valueChange(value,scope.$index,item.key)"></item-cell>
+    </template>
+    <template v-if="item.type==='columns'">
+      <columns v-for="sitem in item.columns" :item="sitem" :mergeMapper="mergeMapper" v-model="tableData"></columns>
+    </template>
+  </el-table-column>
 </template>
 
 <script>
@@ -59,7 +49,7 @@ export default {
     }
   },
   props: {
-    columnsUse: Array,
+    item: Object,
     mergeMapper: Function,
     value: {
       type: Array,
@@ -67,6 +57,9 @@ export default {
         return []
       }
     }
+  },
+  mounted() {
+    console.log(this.columnsUse);
   },
   methods: {
     get,

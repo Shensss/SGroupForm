@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import './index'
-
 export default {
   name: 'sNumber',
   data () {

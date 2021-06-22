@@ -16,6 +16,7 @@
                    @changePageNumber="changePageNumber"
                    :columns="columns"
                    :spanKey="['name','address']"
+                   :index="false"
                    v-model="tableData"
                    :option="option">
     </s-group-table>
@@ -47,68 +48,66 @@ export default {
       },
       columns: [
         {
-          label: '项目名称',
-          key: 'aa',
-          type: 'input'
+          label: '序号',
+          width: 60,
+          key: 'index'
         },
         {
-          label: '父级',
+          label: '姓名',
+          width: 80,
           type: 'columns',
           columns: [
             {
-              label: '11',
-              type: 'input',
-              key: 'aa1',
+              label: '序号1',
+              width: 60,
+              key: 'index',
+              type: 'columns',
+              columns: [
+                {
+                  label: '序号1-1',
+                  width: 60,
+                  key: 'index'
+                },
+                {
+                  label: '序号1-2',
+                  width: 60,
+                  key: 'index',
+                  type: 'input'
+                }
+              ]
             },
             {
-              label: '22',
-              type: 'input',
-              key: 'aa2',
+              label: '序号2',
+              width: 60,
+              key: 'index',
+              type: 'input'
             }
           ]
         },
         {
-          label: '时间',
-          separator: '-',
-          key: ['date', 'dat2'],
-          props: {},
-          type: 'time'
-        },
-        {
-          label: '项目名称',
-          key: 'name',
-          type: 'input'
-        },
-        {
-          label: '项目名称',
-          key: 'address',
+          label: '性别',
+          key: 'gender',
+          width: 45,
+          type: 'dict',
+          options: [
+            {
+              label: '男',
+              value: 1
+            },
+            {
+              label: '女',
+              value: 0
+            }
+          ]
         }
       ],
-      tableData: [{
-        aa: 2,
-        id: 1,
-        aa1: 123,
-        date: '2016-05-02',
-        dat2: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 2,
-        date: '2016-05-04',
-        dat2: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        id: 3,
-        date: '2016-05-04',
-        name: '王小虎2',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        id: 4,
-        date: '2016-05-04',
-        name: '王小虎2',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
+      tableData: [
+        {
+          index: 2,
+          name: '王小虎',
+          sex: 1
+        }
+      ],
     }
   },
   mounted() {
