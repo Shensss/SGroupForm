@@ -9,11 +9,8 @@
         :form="form"
         :item-style="itemStyle"
         :props="props">
-      <template slot="inputInsert-select">
-        <p>提示：xxxx</p>
-      </template>
       <template slot="inputAdd-select">
-        <p>提示：xxxx</p>
+        <div>提示：Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores doloremque eveniet nulla praesentium quas quod reiciendis suscipit, unde? Alias doloribus eius ex facere id illo laudantium nulla perferendis repellat sunt?</div>
       </template>
       <template slot="content-slot" slot-scope="data">
         <input type="text" v-model="formData.diy">
@@ -39,33 +36,38 @@ export default {
       form: [
         {
           group: '111',
-          label: '文件',
-          key: 'upload',
-          type: 'upload'
-        },
-        {
-          group: '111',
           label: '富文本',
-          key: 'aaa',
-          type: 'number',
+          key: 'select',
+          type: 'cascader',
+          props: {},
+          inputStyle: {
+            width: '100px'
+          },
+          options: [
+            {
+              label: 'a',
+              value: 1,
+              children: [
+                {
+                  label: 'a1',
+                  value: 2
+                }
+              ]
+            }
+          ],
+          rule: [
+            {
+              required: true,
+              message: '必填的哦',
+              trigger: 'blur'
+            }
+          ]
         }
       ],
       marginBottom: 10,
-      formData: {
-        month: {
-          min: 0,
-          max: 1000
-        },
-        input: 'xxxxx',
-        startTime: '',
-        endTime: '',
-        radio: 1,
-        checkbox1: '',
-        checkbox2: '',
-        upload: '[{"name":"aaa.png","url":1}]'
-      },
+      formData: {},
       itemStyle: {
-        width: '30%',
+        width: '500px',
         marginBottom: '20px'
       },
       props: {
