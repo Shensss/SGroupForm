@@ -55,48 +55,28 @@ export default {
         {
           label: '姓名',
           width: 80,
-          type: 'columns',
-          columns: [
-            {
-              label: '序号1',
-              width: 60,
-              key: 'index',
-              type: 'columns',
-              columns: [
-                {
-                  label: '序号1-1',
-                  width: 60,
-                  key: 'index'
-                },
-                {
-                  label: '序号1-2',
-                  width: 60,
-                  key: 'index',
-                  type: 'input'
-                }
-              ]
-            },
-            {
-              label: '序号2',
-              width: 60,
-              key: 'index',
-              type: 'input'
-            }
-          ]
+          separator: '-',
+          key: ['name', 'index']
         },
         {
           label: '性别',
-          key: 'gender',
+          key: 'sex',
           width: 45,
           type: 'dict',
+          props: {
+            mapper: {
+              label: 'a',
+              value: 'b'
+            }
+          },
           options: [
             {
-              label: '男',
-              value: 1
+              a: '男',
+              b: 1
             },
             {
-              label: '女',
-              value: 0
+              a: '女',
+              b: 0
             }
           ]
         }

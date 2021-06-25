@@ -2,13 +2,13 @@
   <el-table-column v-bind="item" d>
     <template v-if="item.type!=='columns'||!item.type" slot-scope="scope">
       <div :style="item.style" v-if="Array.isArray(item.key)">
-             <span class="item-cell" v-for="(val,si) in item.key">
+             <span class="item-cell" :keu="'s'+si" v-for="(val,si) in item.key">
                   <slot v-if="item.type&&item.type==='slot'" :name="item.key" :row="scope.row"
                         :config="item"></slot>
                   <item-cell v-if="item.type&&item.type!=='slot'"
                              :merge-mapper="mergeMapper"
                              :item="item"
-                             :value="tableData[scope.$index][item.key]"
+                             :value="tableData[scope.$index][val]"
                              @change="value=>valueChange(value,scope.$index,item.key)"></item-cell>
                   <template v-if="item.separator&&si!==item.key.length-1">{{ item.separator }}</template>
              </span>
@@ -57,9 +57,6 @@ export default {
         return []
       }
     }
-  },
-  mounted() {
-    console.log(this.columnsUse);
   },
   methods: {
     get,
