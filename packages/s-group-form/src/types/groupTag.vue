@@ -1,16 +1,18 @@
 <template>
-  <div :is="'el-'+config.type.replace('Button','')+'-group'"
-       @change="change"
-       @focus="focus"
-       @blur="blur"
-       v-model="model">
-    <div :is="'el-'+config.type"
-         v-bind="config.props"
-         :key="index"
-         v-for="(item,index) in config.options"
-         :label="item[mapper.value]">
-      {{ item[mapper.label] }}
-    </div>
+  <div
+    :is="'el-'+config.type.replace('Button','')+'-group'"
+    @change="change"
+    @focus="focus"
+    @blur="blur"
+    v-model="model"
+  >
+    <div
+      :is="'el-'+config.type"
+      v-bind="config.props"
+      :key="index"
+      v-for="(item,index) in config.options"
+      :label="item[mapper.value]"
+    >{{ item[mapper.label] }}</div>
   </div>
 </template>
 
@@ -18,7 +20,7 @@
 export default {
   name: 'groupTag',
   props: {
-    value: String | Number,
+    value: [Number, String, Array],
     config: Object,
     mapper: Object,
     inputStyle: Object

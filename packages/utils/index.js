@@ -1,4 +1,4 @@
-export function randomCode (codeLength) {
+export function randomCode(codeLength) {
     const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     const LOWER = UPPER.toLocaleLowerCase()
     const DIGITS = '0123456789'
@@ -17,7 +17,7 @@ export function randomCode (codeLength) {
     return stateCode
 }
 
-export function removeObjWithArr (_arr, _obj) {
+export function removeObjWithArr(_arr, _obj) {
     const length = _arr.length
     for (let i = 0; i < length; i++) {
         if (_arr[i] === _obj) {
@@ -35,7 +35,7 @@ export function removeObjWithArr (_arr, _obj) {
     }
 }
 
-export function dateFormat (fmt, time) {
+export function dateFormat(fmt, time) {
     const date = new Date(time)
     let ret
     const opt = {
@@ -56,7 +56,8 @@ export function dateFormat (fmt, time) {
 
     return fmt
 }
-export function transformToTree (sNodes, setting) {
+
+export function transformToTree(sNodes, setting) {
     let set = {
         children: 'children',
         idKey: 'id',
@@ -64,7 +65,7 @@ export function transformToTree (sNodes, setting) {
         label: 'name'
     }
     if (setting) {
-        set = setting
+        set = Object.assign(set, setting)
     }
     var i
     var l
@@ -95,4 +96,29 @@ export function transformToTree (sNodes, setting) {
     } else {
         return [sNodes]
     }
+}
+
+export function treeToTransForm(data, setting) {
+    let set = {
+        idKey: 'id',
+        pIdKey: 'pId',
+        children: 'children'
+    }
+    if (setting) {
+        set = Object.assign(set, setting)
+    }
+    let res = []
+    const childrenKey = set.children
+    const fn = (source, key, pIdValue) => {
+        source.forEach(el => {
+            if (key && pIdValue) {
+                el[key] = pIdValue
+            }
+            res.push(el)
+            el[childrenKey] && el[childrenKey].length > 0 ? fn(el[childrenKey], set.pIdKey, el[set.idKey]) : ""
+            delete el[childrenKey]
+        })
+    }
+    fn(data, null, null)
+    return res
 }

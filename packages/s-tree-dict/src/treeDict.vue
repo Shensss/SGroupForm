@@ -2,16 +2,12 @@
   <div class="text">
     <div class="text">
       <template v-if="props.multiple">
-      <span v-for="(item,index) in labels">
-        {{ item.join('/') }}
-        <template v-if="index!==labels.length-1">
-          {{ separator }}
-        </template>
-      </span>
+        <span :key="index" v-for="(item,index) in labels">
+          {{ item.join('/') }}
+          <template v-if="index!==labels.length-1">{{ separator }}</template>
+        </span>
       </template>
-      <template v-else>
-        {{ labels.join(separator) }}
-      </template>
+      <template v-else>{{ labels.join(separator) }}</template>
     </div>
   </div>
 </template>
@@ -21,7 +17,7 @@ import find from 'lodash-es/find'
 
 export default {
   name: 'sTreeDict',
-  data() {
+  data () {
     return {
       labels: []
     }
@@ -33,7 +29,7 @@ export default {
     },
     options: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
@@ -47,7 +43,7 @@ export default {
     },
     mapper: {
       type: Object,
-      default() {
+      default () {
         return {
           label: 'label',
           value: 'value',
@@ -58,20 +54,20 @@ export default {
     props: Object
   },
   watch: {
-    value() {
+    value () {
       this.init()
     },
-    options() {
+    options () {
       this.init()
     }
   },
   filters: {
-    lastFilter(labels) {
+    lastFilter (labels) {
 
     }
   },
   methods: {
-    init() {
+    init () {
       this.labels = []
       if (this.props && this.props.multiple) {
         this.value.map(value => {
@@ -100,7 +96,7 @@ export default {
         }
       }
     },
-    getLabel(option, data, index) {
+    getLabel (option, data, index) {
       if (option) {
         if (data[index] !== undefined || data[index] === 0) {
           const is = find(option, (item) => item[this.mapper.value] == data[index])
@@ -113,7 +109,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.init()
   }
 }

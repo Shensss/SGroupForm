@@ -1,5 +1,5 @@
 <template>
-  <div class="item-cell">
+  <span class="items">
     <single-tag v-if="item.type&&singleTag.indexOf(item.type)>=0"
                 :mapper="mergeMapper(item)"
                 @change="$emit('change',item,scope.row)"
@@ -27,7 +27,7 @@
         <slot :name="'content-'+item._code" :option="item" :data="data"></slot>
       </template>
     </self-tag>
-  </div>
+  </span>
 </template>
 
 <script>

@@ -1,22 +1,12 @@
 <template>
   <div>
     <s-group-form
-        v-change.key.radio="changeRadio"
-        v-change.label.范围选择="changeRange"
-        :type="type"
-        ref="form"
-        v-model="formData"
-        :form="form"
-        :item-style="itemStyle"
-        :props="props">
-      <template slot="inputAdd-select">
-        <div>提示：Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores doloremque eveniet nulla praesentium quas quod reiciendis suscipit, unde? Alias doloribus eius ex facere id illo laudantium nulla perferendis repellat sunt?</div>
-      </template>
-      <template slot="content-slot" slot-scope="data">
-        <input type="text" v-model="formData.diy">
-      </template>
-    </s-group-form>
-    <input type="text" @change="changeMarginBottom" v-model="marginBottom">
+      :type="type"
+      v-model="formData"
+      :form="form"
+      :item-style="itemStyle"
+      :props="props"
+    ></s-group-form>
     <el-button @click="onchange">change</el-button>
     <el-button @click="submit">submit</el-button>
     <el-button @click="formData={}">clear</el-button>
@@ -30,79 +20,54 @@ import area from './area.json'
 
 export default {
   name: 'SGroupFormUse',
-  data() {
+  data () {
     return {
       type: '',
       form: [
         {
-          group: '111',
-          label: '富文本',
-          key: 'select',
-          type: 'cascader',
-          props: {},
-          inputStyle: {
-            width: '100px'
-          },
+          label: '选择',
+          key: 'check',
+          type: 'checkbox',
           options: [
             {
-              label: 'a',
-              value: 1,
-              children: [
-                {
-                  label: 'a1',
-                  value: 2
-                }
-              ]
-            }
-          ],
-          rule: [
-            {
-              required: true,
-              message: '必填的哦',
-              trigger: 'blur'
+              label: 1,
+              value: 1
             }
           ]
         }
       ],
-      marginBottom: 10,
-      formData: {},
+      formData: {
+
+      },
       itemStyle: {
         width: '500px',
         marginBottom: '20px'
       },
       props: {
         labelWidth: '120px',
-        labelPosition: 'left'
+        labelPosition: 'left',
       }
     }
   },
   methods: {
-    changeRange(val) {
+    onchange () {
+      console.log(this.formData)
     },
-    changeRadio() {
-
-    },
-    changeMarginBottom() {
-      this.itemStyle.marginBottom = this.marginBottom + 'px'
-    },
-    onchange() {
-      this.type = 'readonly'
-    },
-    submit() {
+    submit () {
       this.$refs.form.validate(vali => {
         console.log(vali, this.formData)
       })
     },
-    remove() {
+    remove () {
       const index = this.$refs.form.getIndex('abc')
       this.form.splice(index, 1)
     },
-    add() {
+    add () {
       this.formData.month = 12121
       console.log(this.formData);
     }
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>

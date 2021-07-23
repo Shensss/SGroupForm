@@ -1,16 +1,19 @@
 <template>
-  <div :is="'el-'+config.type"
-       @change="change"
-       @focus="focus"
-       @blur="blur"
-       v-bind="config.props"
-       v-model="model">
-    <el-option :key="index"
-               v-for="(item,index) in config.options"
-               v-bind="item"
-               :label="item[mapper.label]"
-               :value="item[mapper.value]">
-    </el-option>
+  <div
+    :is="'el-'+config.type"
+    @change="change"
+    @focus="focus"
+    @blur="blur"
+    v-bind="config.props"
+    v-model="model"
+  >
+    <el-option
+      :key="index"
+      v-for="(item,index) in config.options"
+      v-bind="item"
+      :label="item[mapper.label]"
+      :value="item[mapper.value]"
+    ></el-option>
   </div>
 </template>
 

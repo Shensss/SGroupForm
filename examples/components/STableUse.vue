@@ -10,17 +10,22 @@
                    }"
                    :props="{
                       rowKey:'id',
-                      defaultExpandAll:true,
-                      treeProps:{children: 'children', hasChildren: 'hasChildren'}
-                   }"
+                      treeProps:{
+                        children:'children',
+                      }
+                    }"
                    @changePageNumber="changePageNumber"
                    :columns="columns"
-                   :spanKey="['name','address']"
                    :index="false"
                    v-model="tableData"
                    :option="option">
     </s-group-table>
-    <el-button @click="change">输出结果</el-button>
+<button @click="change"></button>
+    <!--  option 操作列 -->
+    <!--  props  element的表格属性 -->
+    <!--  page-config 分页 -->
+    <!--  index 序号 -->
+    <!--  spanKey 需要跨行的字段 -->
   </div>
 </template>
 
@@ -54,21 +59,24 @@ export default {
         },
         {
           label: '姓名',
-          width: 80,
           separator: '-',
           key: ['name', 'index']
         },
         {
+          label: '姓名1',
+          key: 'name1'
+        },
+        {
           label: '性别',
           key: 'sex',
-          width: 45,
-          type: 'dict',
+          width: 111,
+          type: 'input',
           props: {
             mapper: {
               label: 'a',
               value: 'b'
             }
-          },
+          }, // options默认是label value
           options: [
             {
               a: '男',
@@ -83,9 +91,36 @@ export default {
       ],
       tableData: [
         {
+          id: 111,
           index: 2,
           name: '王小虎',
-          sex: 1
+          name1: '王小虎',
+          sex: 1,
+          children: [
+            {
+              id: 12133,
+              index: 2,
+              name: '王小虎',
+              name1: '王小虎',
+              sex: 1,
+            }
+          ]
+        },
+        {
+          id: 11211,
+          index: 2,
+          name: '王小虎',
+          name1: '王小虎',
+          sex: 1,
+          children: [
+            {
+              id: 33,
+              index: 2,
+              name: '王小虎',
+              name1: '王小虎',
+              sex: 1,
+            }
+          ]
         }
       ],
     }

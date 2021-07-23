@@ -1,95 +1,70 @@
 <template>
-  <el-form ref="instance"
-           class="s-form"
-           :class="'form-'+type"
-           :inline="true"
-           v-bind="propsAll"
-           :model="formData">
+  <el-form
+      @submit.native.prevent
+      ref="instance"
+      class="s-form"
+      :class="'form-'+type"
+      :inline="true"
+      v-bind="propsAll"
+      :model="formData"
+  >
     <div class="group" :key="name" v-for="name in Object.keys(groups)">
       <p class="group-title">{{ name }}</p>
       <div class="group-content">
-        <items v-for="(item) in groups[name]" v-if="showFunction(item.show)"
-               :key="item._code"
-               :config="item"
-               :type="type"
-               :form-data="formData"
-               :props="propsAll"
-               :value="formData[item._code]"
-               :mergeStyle="mergeStyle(item.style)"
-               @setValue="setValue">
-          <template :slot="'labelAdd-'+item._code"
-                    slot-scope="{option}">
-            <slot v-if="item.slotName"
-                  :name="'labelAdd-'+item.slotName"
-                  :option="option"></slot>
-            <slot v-else
-                  :name="'labelAdd-'+item.key"
-                  :option="option"></slot>
+        <items
+            v-for="(item) in groups[name]"
+            v-if="showFunction(item.show)"
+            :key="item._code"
+            :config="item"
+            :type="type"
+            :form-data="formData"
+            :props="propsAll"
+            :value="formData[item._code]"
+            :mergeStyle="mergeStyle(item.style)"
+            @setValue="setValue"
+        >
+          <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
+            <slot v-if="item.slotName" :name="'labelAdd-'+item.slotName" :option="option"></slot>
+            <slot v-else :name="'labelAdd-'+item.key" :option="option"></slot>
           </template>
-          <template :slot="'inputInsert-'+item._code"
-                    slot-scope="{option}">
-            <slot v-if="item.slotName"
-                  :name="'inputInsert-'+item.slotName"
-                  :option="option"></slot>
-            <slot v-else
-                  :name="'inputInsert-'+item.key"
-                  :option="option"></slot>
+          <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
+            <slot v-if="item.slotName" :name="'inputInsert-'+item.slotName" :option="option"></slot>
+            <slot v-else :name="'inputInsert-'+item.key" :option="option"></slot>
           </template>
-          <template :slot="'inputAdd-'+item._code"
-                    slot-scope="{option}">
-            <slot v-if="item.slotName"
-                  :name="'inputAdd-'+item.slotName"
-                  :option="option"></slot>
-            <slot v-else
-                  :name="'inputAdd-'+item.key"
-                  :option="option"></slot>
+          <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
+            <slot v-if="item.slotName" :name="'inputAdd-'+item.slotName" :option="option"></slot>
+            <slot v-else :name="'inputAdd-'+item.key" :option="option"></slot>
           </template>
-          <template :slot="'content-'+item._code"
-                    slot-scope="{option}">
-            <slot v-if="item.slotName"
-                  :name="'content-'+item.slotName"
-                  :option="option"></slot>
+          <template :slot="'content-'+item._code" slot-scope="{option}">
+            <slot v-if="item.slotName" :name="'content-'+item.slotName" :option="option"></slot>
             <slot v-else :name="'content-'+item.key" :option="option"></slot>
           </template>
         </items>
       </div>
     </div>
     <template v-for="(item) in unGroups">
-      <items v-if="showFunction(item.show)"
-             :key="item._code"
-             :config="item"
-             :type="type"
-             :form-data="formData"
-             :props="propsAll"
-             :value="formData[item._code]"
-             :mergeStyle="mergeStyle(item.style)"
-             @setValue="setValue">
-        <template :slot="'labelAdd-'+item._code"
-                  slot-scope="{option}">
-          <slot v-if="item.slotName"
-                :name="'labelAdd-'+item.slotName"
-                :option="option"></slot>
-          <slot v-else
-                :name="'labelAdd-'+item.key"
-                :option="option"></slot>
+      <items
+          v-if="showFunction(item.show)"
+          :key="item._code"
+          :config="item"
+          :type="type"
+          :form-data="formData"
+          :props="propsAll"
+          :value="formData[item._code]"
+          :mergeStyle="mergeStyle(item.style)"
+          @setValue="setValue"
+      >
+        <template :slot="'labelAdd-'+item._code" slot-scope="{option}">
+          <slot v-if="item.slotName" :name="'labelAdd-'+item.slotName" :option="option"></slot>
+          <slot v-else :name="'labelAdd-'+item.key" :option="option"></slot>
         </template>
-        <template :slot="'inputInsert-'+item._code"
-                  slot-scope="{option}">
-          <slot v-if="item.slotName"
-                :name="'inputInsert-'+item.slotName"
-                :option="option"></slot>
-          <slot v-else
-                :name="'inputInsert-'+item.key"
-                :option="option"></slot>
+        <template :slot="'inputInsert-'+item._code" slot-scope="{option}">
+          <slot v-if="item.slotName" :name="'inputInsert-'+item.slotName" :option="option"></slot>
+          <slot v-else :name="'inputInsert-'+item.key" :option="option"></slot>
         </template>
-        <template :slot="'inputAdd-'+item._code"
-                  slot-scope="{option}">
-          <slot v-if="item.slotName"
-                :name="'inputAdd-'+item.slotName"
-                :option="option"></slot>
-          <slot v-else
-                :name="'inputAdd-'+item.key"
-                :option="option"></slot>
+        <template :slot="'inputAdd-'+item._code" slot-scope="{option}">
+          <slot v-if="item.slotName" :name="'inputAdd-'+item.slotName" :option="option"></slot>
+          <slot v-else :name="'inputAdd-'+item.key" :option="option"></slot>
         </template>
         <template :slot="'content-'+item._code" slot-scope="{option,data}">
           <slot v-if="item.slotName" :name="'content-'+item.slotName" :option="option"></slot>

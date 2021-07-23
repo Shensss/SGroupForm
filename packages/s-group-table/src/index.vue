@@ -5,73 +5,78 @@
         <slot></slot>
       </template>
       <template v-if="query">
-        <s-group-form v-model="formData" :form="groupForm" :props="queryProps"
-                      :item-style="queryItemStyle"></s-group-form>
+        <s-group-form
+            v-model="formData"
+            :form="groupForm"
+            :props="queryProps"
+            :item-style="queryItemStyle"
+        ></s-group-form>
       </template>
     </div>
-    <el-table ref="table"
-              :show-header="showHeader"
-              :id="id"
-              :size="size"
-              :border="border"
-              :height="height"
-              :span-method="objectSpanMethod"
-              v-bind="props"
-              @sort-change="sortChange"
-              @row-click="rowClick"
-              @filter-change="filterChange"
-              @selection-change="handleSelectionChange"
-              :header-cell-style="headerCellStyle"
-              :data="tableData">
-      <el-table-column type="selection"
-                       width="55"
-                       align="center"
-                       v-if="select">
-      </el-table-column>
-      <el-table-column type="index"
-                       :index="calcIndex"
-                       align="center"
-                       v-if="index">
-      </el-table-column>
-      <columns v-for="(item,cindex) in columnsUse"
-               :key="cindex"
-               :item="item"
-               :mergeMapper="mergeMapper" v-model="tableData">
-        <slot :slot="item.key" v-for="item in columnsUse.filter(item=>item.type==='slot')" slot-scope="{row,config}">
-          <slot :name="item.key"
-                :row="row"
-                :config="config"></slot>
-        </slot>
+    <el-table
+        ref="table"
+        :show-header="showHeader"
+        :id="id"
+        :size="size"
+        :border="border"
+        :height="height"
+        :span-method="objectSpanMethod"
+        v-bind="props"
+        @sort-change="sortChange"
+        @row-click="rowClick"
+        @filter-change="filterChange"
+        @selection-change="handleSelectionChange"
+        :header-cell-style="headerCellStyle"
+        :data="tableData"
+    >
+      <el-table-column type="selection" width="55" align="center" v-if="select"></el-table-column>
+      <el-table-column type="index" :index="calcIndex" align="center" v-if="index"></el-table-column>
+      <columns
+          v-for="(item,cindex) in columnsUse"
+          :key="'c'+cindex"
+          :item="item"
+          :tableProps="props"
+          :mergeMapper="mergeMapper"
+          v-model="tableData"
+      >
+        <template v-for="(item) in columnsUse.filter(item=>item.type==='slot')">
+          <slot :slot="item.key" slot-scope="{row,config}">
+            <slot :name="item.key" :row="row" :config="config"></slot>
+          </slot>
+        </template>
       </columns>
-      <el-table-column v-if="option&&option.btns.length>0"
-                       align="center"
-                       fixed="right"
-                       :width="option.width"
-                       :label="option.name||'操作'">
+      <el-table-column
+          v-if="option&&option.btns.length>0"
+          align="center"
+          fixed="right"
+          :width="option.width"
+          :label="option.name||'操作'"
+      >
         <template slot-scope="scope">
           <span :key="index" v-for="(item,index) in option.btns">
-            <el-button :key="index"
-                       v-if="showFunction(scope.row,item.show)"
-                       :icon="item.icon"
-                       class="optionBtn"
-                       type="text"
-                       @click="item.handler(scope.row)">
-              {{ item.name }}
-            </el-button>
+            <el-button
+                :key="index"
+                v-if="showFunction(scope.row,item.show)"
+                :icon="item.icon"
+                class="optionBtn"
+                type="text"
+                @click="item.handler(scope.row)"
+            >{{ item.name }}</el-button>
           </span>
         </template>
       </el-table-column>
     </el-table>
     <div class="page" v-if="usePage">
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :background="pageConfig.background"
-                     :current-page="usePage"
-                     :page-sizes="pageConfig.pageSizes"
-                     :page-size="usePageSize"
-                     :layout="pageConfig.layout"
-                     :total="pageConfig.total">
-      </el-pagination>
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :background="pageConfig.background"
+          :current-page="usePage"
+          :page-sizes="pageConfig.pageSizes"
+          :page-size="usePageSize"
+          :layout="pageConfig.layout"
+          :total="pageConfig.total"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -464,7 +469,7 @@ export default {
   }
 
   .dict:not(:last-child):after {
-    content: ',';
+    content: ",";
   }
 
   .remove {
