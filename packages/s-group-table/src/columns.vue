@@ -50,7 +50,7 @@
 import ItemCell from "./item-cell";
 import get from 'lodash-es/get'
 import cloneDeep from 'lodash-es/cloneDeep'
-import {treeToTransForm, transformToTree} from "@/utils";
+import {treeToTransForm, transformToTree} from "../../utils";
 
 export default {
   name: 'columns',
@@ -88,7 +88,7 @@ export default {
       const key = this.tableProps.rowKey || Object.keys(row)[0]
       const platData = treeToTransForm(tableData, this.tableProps.treeProps)
       const item = platData.find(item => item[key] === row[key])
-      this.$set(item, valueKey,value)
+      this.$set(item, valueKey, value)
       this.tableData = transformToTree(platData, this.tableProps.treeProps)
     }
   }

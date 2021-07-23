@@ -20,7 +20,7 @@
                    v-model="tableData"
                    :option="option">
     </s-group-table>
-<button @click="change"></button>
+    <button @click="change"></button>
     <!--  option 操作列 -->
     <!--  props  element的表格属性 -->
     <!--  page-config 分页 -->
@@ -43,20 +43,12 @@ export default {
         width: '100px',
         btns: [
           {
-            show: (row) => {
-              return row.aa
-            },
             name: '添加一行',
             handler: this.addRow
           }
         ]
       },
       columns: [
-        {
-          label: '序号',
-          width: 60,
-          key: 'index'
-        },
         {
           label: '姓名',
           separator: '-',

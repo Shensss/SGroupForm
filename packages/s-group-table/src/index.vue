@@ -29,6 +29,7 @@
         :header-cell-style="headerCellStyle"
         :data="tableData"
     >
+      <el-table-column width="45" v-if="props.treeProps"></el-table-column>
       <el-table-column type="selection" width="55" align="center" v-if="select"></el-table-column>
       <el-table-column type="index" :index="calcIndex" align="center" v-if="index"></el-table-column>
       <columns
