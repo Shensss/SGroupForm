@@ -38,10 +38,15 @@
             </svg>
           </template>
           <template v-else>
-            <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="preview"></s-image>
-            <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
-              <use xlink:href="#icon-remove"/>
-            </svg>
+            <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="previewHandler"></s-image>
+            <div class="iconGroup">
+              <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
+                <use xlink:href="#icon-remove"/>
+              </svg>
+              <svg class="icon" aria-hidden="true" v-if="preview" @click="previewHandler">
+                <use xlink:href="#icon-yulan"/>
+              </svg>
+            </div>
           </template>
         </li>
       </ul>
@@ -103,6 +108,10 @@ export default {
       type: Boolean,
       default: false
     },
+    preview: {
+      type: Boolean,
+      default: true
+    },
     view: {
       type: String,
       default: 'file'
@@ -154,7 +163,7 @@ export default {
     this.buildViewList()
   },
   methods: {
-    preview() {
+    previewHandler() {
       this.$refs.viewer.rebuildViewer()
       this.$refs.viewer.$viewer.show()
     },
@@ -325,15 +334,21 @@ export default {
     &.remove {
 
       li:hover {
-        .icon {
-          display: block;
+        .iconGroup {
           position: absolute;
+          width: 60%;
           top: 50%;
           left: 50%;
           z-index: 2;
           font-size: 24px;
+          display: flex;
+          justify-content: space-between;
           color: #fff;
           transform: translate(-50%, -50%);
+
+          .icon {
+            display: block;
+          }
         }
 
         &:after {

@@ -22,7 +22,7 @@
       <slot
           v-if="item.type&&item.type==='slot'"
           :name="item.key"
-          :row="scope.row[item.key]"
+          :row="scope.row"
           :config="item"
       ></slot>
       <item-cell
@@ -72,7 +72,10 @@ export default {
     item: Object,
     mergeMapper: Function,
     tableProps: {
-      type: Object
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     value: {
       type: Array,
@@ -89,6 +92,7 @@ export default {
       const platData = treeToTransForm(tableData, this.tableProps.treeProps)
       const item = platData.find(item => item[key] === row[key])
       this.$set(item, valueKey, value)
+      this.$emit('changeRow', item)
       this.tableData = transformToTree(platData, this.tableProps.treeProps)
     }
   }

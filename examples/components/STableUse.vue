@@ -8,17 +8,14 @@
                       total:100,
                       background:true
                    }"
-                   :props="{
-                      rowKey:'id',
-                      treeProps:{
-                        children:'children',
-                      }
-                    }"
                    @changePageNumber="changePageNumber"
+                   @changeRow="changeRow"
                    :columns="columns"
                    :index="false"
                    v-model="tableData"
-                   :option="option">
+                   :option="options">
+      <template #name="{row,config}">
+      </template>
     </s-group-table>
     <button @click="change"></button>
     <!--  option 操作列 -->
@@ -39,46 +36,59 @@ export default {
   },
   data() {
     return {
-      option: {
-        width: '100px',
+      options: {
+        width: '220px',
         btns: [
           {
-            name: '添加一行',
-            handler: this.addRow
+            name: '编辑',
+            code: 'edit',
+            icon: 'el-icon-view',
+            props: {
+              type: 'default',
+              size: 'mini'
+            },
+          },
+          {
+            name: '删除',
+            code: 'delete',
+            icon: 'el-icon-delete',
+            props: {
+              type: 'default',
+              size: 'mini'
+            },
           }
         ]
       },
       columns: [
         {
-          label: '姓名',
-          separator: '-',
-          key: ['name', 'index']
+          label: '编号',
+          key: 'id'
         },
         {
-          label: '姓名1',
-          key: 'name1'
+          label: '类型名称',
+          key: 'name',
+          type: 'slot'
         },
         {
-          label: '性别',
-          key: 'sex',
-          width: 111,
-          type: 'input',
+          label: '状态',
+          key: 'hidden',
+          type: 'switch',
           props: {
-            mapper: {
-              label: 'a',
-              value: 'b'
-            }
-          }, // options默认是label value
-          options: [
-            {
-              a: '男',
-              b: 1
-            },
-            {
-              a: '女',
-              b: 0
-            }
-          ]
+            // activeColor: '#13ce66',
+            // inactiveColor: '#ff4949',
+            activeValue: 0,
+            inactiveValue: 1
+          }
+        },
+        {
+          label: '更新时间',
+          key: 'created',
+          width: '165px',
+          align: 'center',
+          type: 'time',
+          props: {
+            format: 'yyyy-MM-dd HH:mm:ss'
+          }
         }
       ],
       tableData: [
@@ -87,11 +97,13 @@ export default {
           index: 2,
           name: '王小虎',
           name1: '王小虎',
+          time: '2020-12-12',
           sex: 1,
           children: [
             {
               id: 12133,
               index: 2,
+              time: '2020-12-12',
               name: '王小虎',
               name1: '王小虎',
               sex: 1,
@@ -102,12 +114,14 @@ export default {
           id: 11211,
           index: 2,
           name: '王小虎',
+          time: '2020-12-12',
           name1: '王小虎',
           sex: 1,
           children: [
             {
               id: 33,
               index: 2,
+              time: '2020-12-12',
               name: '王小虎',
               name1: '王小虎',
               sex: 1,

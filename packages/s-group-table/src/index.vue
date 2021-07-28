@@ -39,12 +39,11 @@
           :tableProps="props"
           :mergeMapper="mergeMapper"
           v-model="tableData"
+          @changeRow="(row)=>$emit('changeRow',row)"
       >
-        <template v-for="(item) in columnsUse.filter(item=>item.type==='slot')">
-          <slot :slot="item.key" slot-scope="{row,config}">
-            <slot :name="item.key" :row="row" :config="config"></slot>
-          </slot>
-        </template>
+        <slot :slot="item.key" slot-scope="{row,config}" v-for="(item) in columnsUse.filter(item=>item.type==='slot')">
+          <slot :name="item.key" :row="row" :config="config"></slot>
+        </slot>
       </columns>
       <el-table-column
           v-if="option&&option.btns.length>0"
@@ -111,7 +110,10 @@ export default {
       type: Boolean,
       default: true
     },
-    props: Object,
+    props: {
+      type: Object,
+      default: () => ({})
+    },
     headerCellStyle: {
       type: Object,
       default() {
