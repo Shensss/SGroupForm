@@ -16,3 +16,11 @@ this.$refs.form.removeItem(key)
 this.$refs.form.getIndex(key)
 ```
 通过参数key可以获取指定项的序号
+
+```
+this.$refs.form.validate
+this.$refs.form.validateField
+this.$refs.form.resetFields
+this.$refs.form.clearValidate
+```
+表单验证相关 同element

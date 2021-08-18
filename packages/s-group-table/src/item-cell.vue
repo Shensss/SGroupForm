@@ -59,7 +59,8 @@ export default {
   props: {
     value: [Object, Array, String, Number, Boolean, Array],
     mergeMapper: Function,
-    item: Object
+    item: Object,
+    scope: Object
   }
 }
 </script>

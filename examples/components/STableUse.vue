@@ -1,21 +1,12 @@
 <template>
   <div class="table">
-    <s-group-table type="edit"
-                   :page-config="{
-                      page:1,
-                      pageSize:10,
-                      layout: 'total, sizes, prev, pager, next, jumper',
-                      total:100,
-                      background:true
-                   }"
-                   @changePageNumber="changePageNumber"
-                   @changeRow="changeRow"
-                   :columns="columns"
-                   :index="false"
-                   v-model="tableData"
-                   :option="options">
-      <template #name="{row,config}">
-      </template>
+    <s-group-form v-model="query" :form="queryForm"></s-group-form>
+    <s-group-table
+        :columns="columns"
+        type="edit"
+        :index="false"
+        v-model="tableData"
+        @selectChange="selectChange">
     </s-group-table>
     <button @click="change"></button>
     <!--  option 操作列 -->
@@ -36,103 +27,65 @@ export default {
   },
   data() {
     return {
-      options: {
-        width: '220px',
-        btns: [
-          {
-            name: '编辑',
-            code: 'edit',
-            icon: 'el-icon-view',
-            props: {
-              type: 'default',
-              size: 'mini'
-            },
-          },
-          {
-            name: '删除',
-            code: 'delete',
-            icon: 'el-icon-delete',
-            props: {
-              type: 'default',
-              size: 'mini'
-            },
-          }
-        ]
-      },
+      query: {},
+      queryForm: [],
       columns: [
         {
-          label: '编号',
-          key: 'id'
+          label: '类型名称',
+          key: 'checkbox',
+          type: 'checkbox',
+          options: [
+            {
+              label: '',
+              value: 1
+            }
+          ]
         },
         {
           label: '类型名称',
           key: 'name',
-          type: 'slot'
         },
         {
-          label: '状态',
-          key: 'hidden',
-          type: 'switch',
-          props: {
-            // activeColor: '#13ce66',
-            // inactiveColor: '#ff4949',
-            activeValue: 0,
-            inactiveValue: 1
-          }
-        },
-        {
-          label: '更新时间',
-          key: 'created',
-          width: '165px',
-          align: 'center',
-          type: 'time',
-          props: {
-            format: 'yyyy-MM-dd HH:mm:ss'
-          }
-        }
-      ],
-      tableData: [
-        {
-          id: 111,
-          index: 2,
-          name: '王小虎',
-          name1: '王小虎',
-          time: '2020-12-12',
-          sex: 1,
-          children: [
+          label: '类型名称',
+          key: 'type',
+          type: 'dict',
+          options: [
             {
-              id: 12133,
-              index: 2,
-              time: '2020-12-12',
-              name: '王小虎',
-              name1: '王小虎',
-              sex: 1,
+              label: '类型1',
+              value: '类型1'
+            },
+            {
+              label: '类型2',
+              value: '类型2'
+            },
+            {
+              label: '类型3',
+              value: '类型3'
             }
           ]
         },
         {
-          id: 11211,
-          index: 2,
-          name: '王小虎',
-          time: '2020-12-12',
-          name1: '王小虎',
-          sex: 1,
-          children: [
-            {
-              id: 33,
-              index: 2,
-              time: '2020-12-12',
-              name: '王小虎',
-              name1: '王小虎',
-              sex: 1,
-            }
-          ]
-        }
+          label: '类型名称',
+          key: 'time',
+          type: 'datePicker'
+        },
       ],
+      tableData: [],
     }
   },
   mounted() {
-    console.log(1)
+    setTimeout(() => {
+      this.tableData = [
+        {checkbox: [], isd: 12, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 132, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 142, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 152, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 162, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 172, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 182, name: '张三', type: '类型1', time: '2020-01-01'},
+        {checkbox: [], isd: 912, name: '张三', type: '类型1', time: '2020-01-01'},
+      ]
+    }, 100)
   },
   methods: {
     addRow() {
@@ -146,6 +99,9 @@ export default {
     },
     changeRow(col, row) {
       console.log(col, row);
+    },
+    selectChange(val) {
+      console.log(val);
     }
   }
 }

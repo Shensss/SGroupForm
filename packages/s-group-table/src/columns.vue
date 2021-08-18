@@ -13,6 +13,7 @@
               v-if="item.type&&item.type!=='slot'"
               :merge-mapper="mergeMapper"
               :item="item"
+              :scope="scope"
               :value="scope.row[val]"
               @change="value=>valueChange(value,scope.row,item.key)"
           ></item-cell>
@@ -29,6 +30,7 @@
           v-if="item.type&&item.type!=='slot'"
           :merge-mapper="mergeMapper"
           :item="item"
+          :scope="scope"
           v-model="scope.row[item.key]"
           @change="value=>valueChange(value,scope.row,item.key)"
       ></item-cell>

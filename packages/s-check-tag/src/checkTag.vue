@@ -48,6 +48,10 @@ export default {
       type: Boolean,
       default: false
     },
+    multiple: {
+      type: Boolean,
+      default: true
+    },
     mapper: {
       type: Object,
       default () {
@@ -101,8 +105,16 @@ export default {
       this.setValue()
     },
     pick (item) {
-      this.$set(item, 'check', true)
-      this.$emit('change', this.check)
+      if (this.multiple) {
+        this.$set(item, 'check', true)
+        this.$emit('change', this.check)
+      } else {
+        this.check.map(item => {
+          item.check = false
+        })
+        this.$set(item, 'check', true)
+        this.$emit('change', this.check)
+      }
       this.setValue()
     },
     remove (item) {

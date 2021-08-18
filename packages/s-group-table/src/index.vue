@@ -85,12 +85,11 @@
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import {transformToTree} from "../../utils";
-import ItemCell from "./item-cell";
 import Columns from "./columns";
 
 export default {
   name: 'SGroupTable',
-  components: {Columns, ItemCell},
+  components: {Columns},
   data() {
     return {
       selectList: [],
@@ -98,6 +97,8 @@ export default {
       dialogVisible: false,
       currentRow: {},
       formData: {},
+      scrollTimer: null,
+      activeScroll: true
     }
   },
   props: {
@@ -112,7 +113,18 @@ export default {
     },
     props: {
       type: Object,
-      default: () => ({})
+      default: () => ({
+        rowKey: '_rowKey'
+      })
+    },
+    loopConfig: {
+      type: Object,
+      default: () => {
+        return {
+          loop: false,
+          plus: 1
+        }
+      }
     },
     headerCellStyle: {
       type: Object,
@@ -191,6 +203,9 @@ export default {
   computed: {
     tableData: {
       get() {
+        this.value.map((item, index) => {
+          item._rowKey = index
+        })
         return cloneDeep(this.value)
       },
       set(value) {
@@ -269,8 +284,34 @@ export default {
       })
     }
   },
+  mounted() {
+    this.initLoop()
+  },
   methods: {
     get,
+    initLoop() {
+      if (!this.loopConfig.loop) return
+      const table = this.$refs.table
+      const divData = table.bodyWrapper
+      const ing = () => {
+        if (this.activeScroll) {
+          divData.scrollTop += this.loopConfig.plus
+        }
+        if (Math.abs(divData.clientHeight + divData.scrollTop - divData.scrollHeight) < 1 && divData.scrollTop > 0) {
+          setTimeout(() => {
+            divData.scrollTop = 0
+          }, 500)
+        }
+        requestAnimationFrame(ing)
+      }
+      ing()
+      divData.onmouseenter = () => {
+        this.activeScroll = false
+      }
+      divData.onmouseleave = () => {
+        this.activeScroll = true
+      }
+    },
     setRead(item) {
       let readType = item.type
       switch (item.type) {

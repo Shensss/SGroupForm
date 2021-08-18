@@ -1,17 +1,15 @@
 <template>
   <div>
     <s-group-form
-        :type="type"
         v-model="formData"
         :form="form"
         :item-style="itemStyle"
         :props="props"
+        :type="type"
     ></s-group-form>
     <el-button @click="onchange">change</el-button>
     <el-button @click="submit">submit</el-button>
     <el-button @click="formData={}">clear</el-button>
-    <el-button @click="add">add</el-button>
-    <el-button @click="remove">remove</el-button>
   </div>
 </template>
 
@@ -20,17 +18,27 @@ import area from './area.json'
 
 export default {
   name: 'SGroupFormUse',
-  data() {
+  data () {
     return {
       type: '',
       form: [
         {
           label: '选择',
           key: 'upload',
-          type: 'upload',
+          type: 'checkTag',
           props: {
-            view: 'image'
-          }
+            multiple: false
+          },
+          options: [{
+            label: 'aaa',
+            value: 1
+          }, {
+            label: 'bbb',
+            value: 2
+          }, {
+            label: 'ccc',
+            value: 3
+          }]
         }
       ],
       formData: {
@@ -42,29 +50,29 @@ export default {
       },
       props: {
         labelWidth: '120px',
-        labelPosition: 'left',
+        labelPosition: 'left'
       }
     }
   },
   methods: {
-    onchange() {
+    onchange () {
       console.log(this.formData)
     },
-    submit() {
+    submit () {
       this.$refs.form.validate(vali => {
         console.log(vali, this.formData)
       })
     },
-    remove() {
+    remove () {
       const index = this.$refs.form.getIndex('abc')
       this.form.splice(index, 1)
     },
-    add() {
+    add () {
       this.formData.month = 12121
-      console.log(this.formData);
+      console.log(this.formData)
     }
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>
