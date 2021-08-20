@@ -3,9 +3,12 @@
     <s-group-form
         v-model="formData"
         :form="form"
-        :item-style="itemStyle"
-        :props="props"
-        :type="type"
+        :props="{
+        mapper:{
+          label:'name',
+          value:'id'
+        }
+        }"
     ></s-group-form>
     <el-button @click="onchange">change</el-button>
     <el-button @click="submit">submit</el-button>
@@ -14,43 +17,77 @@
 </template>
 
 <script>
-import area from './area.json'
 
 export default {
   name: 'SGroupFormUse',
   data () {
     return {
-      type: '',
       form: [
         {
-          label: '选择',
-          key: 'upload',
-          type: 'checkTag',
+          label: '投放终端：',
+          key: 'aa',
+          type: 'upload',
           props: {
-            multiple: false
+            btnProps: {
+              type: 'text',
+              icon: '',
+              text: '上传'
+            }
           },
-          options: [{
-            label: 'aaa',
-            value: 1
-          }, {
-            label: 'bbb',
-            value: 2
-          }, {
-            label: 'ccc',
-            value: 3
-          }]
+          style: {
+            width: '160px'
+          },
+          rule: [
+            {
+              required: true,
+              message: '请选择'
+            }
+          ]
+        },
+        {
+          show: (formData) => {
+            return formData.aa && formData.aa.indexOf('pc') !== -1
+          },
+          key: 'pcUrl',
+          type: 'input',
+          props: {
+            clearable: true,
+            placeholder: '请输入web应用地址'
+          },
+          style: {
+            width: 'calc(100%-200px)'
+          },
+          rule: [
+            {
+              required: true,
+              message: '请输入web应用地址'
+            }
+          ]
+        },
+        {
+          show: (formData) => {
+            return !formData.aa || formData.aa.indexOf('pc') === -1
+          },
+          key: 'pcUrl',
+          type: 'input',
+          props: {
+            clearable: true,
+            disabled: true,
+            placeholder: '请输入web应用地址'
+          },
+          style: {
+            width: 'calc(100%-200px)'
+          },
+          rule: [
+            {
+              required: true,
+              message: '请输入web应用地址'
+            }
+          ]
         }
       ],
       formData: {
-        upload: 'aa.png&&a.png'
-      },
-      itemStyle: {
-        width: '500px',
-        marginBottom: '20px'
-      },
-      props: {
-        labelWidth: '120px',
-        labelPosition: 'left'
+        aa: []
       }
     }
   },

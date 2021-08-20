@@ -1,30 +1,31 @@
 <template>
   <div class="upload" :class="btnView==='plus'?'start':''">
     <el-button
-      v-show="fileList.length<length"
-      v-if="!btnView"
-      :loading="loading"
-      @click="clickHandle"
+        v-show="fileList.length<length"
+        v-if="!btnView"
+        :loading="loading"
+        v-bind="btnProps"
+        @click="clickHandle"
     >
-      <i class="el-icon-upload" />
       <template v-if="loading">正在上传（{{ progressRatio }}%）</template>
-      <template v-else>点击上传</template>
+      <template v-else>{{ btnProps.text }}</template>
     </el-button>
-    <span :class="fileList.length<length" />
+    <span :class="fileList.length<length"/>
     <div v-show="fileList.length<length" v-if="btnView==='plus'" class="plus" @click="clickHandle">
-      <i class="el-icon-plus" />
+      <i class="el-icon-plus"/>
     </div>
     <span v-html="tips"></span>
-    <input ref="input" type="file" :accept="fileType" @change="handleChange" />
+    <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
     <file-view
-      v-if="fileView&&fileList.length>0"
-      v-model="fileList"
-      :imageStyle="imageStyle"
-      :fileGetPath="fileGetPath"
-      :asyncConfig="asyncConfig"
-      :view="view"
-      :remove="remove"
-    ></file-view>
+        v-if="fileView&&fileList.length>0"
+        v-model="fileList"
+        :imageStyle="imageStyle"
+        :fileGetPath="fileGetPath"
+        :asyncConfig="asyncConfig"
+        :view="view"
+        :remove="remove"
+    >
+    </file-view>
   </div>
 </template>
 
@@ -67,6 +68,15 @@ export default {
       type: Number,
       default: 50
     },
+    btnProps: {
+      type: Object,
+      default: () => {
+        return {
+          icon: 'el-icon-upload',
+          text: '点击上传'
+        }
+      }
+    },
     tips: String,
     remove: {
       type: Boolean,
@@ -106,9 +116,9 @@ export default {
         '.csv': 'text/csv',
         '.xls': 'application/vnd.ms-excel',
         '.xlsx':
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         '.pptx':
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
@@ -195,7 +205,7 @@ export default {
         this.$refs.input.value = ''
         this.loading = false
         this.progressRatio = 0
-        return this.$message.error(`文件${file.name}过大!`)
+        return this.$message.error(`文件${ file.name }过大!`)
       }
       if (this.mergeConfig.fileType !== 'base64') {
         const formData = new FormData()
@@ -208,7 +218,7 @@ export default {
           headers: Object.assign({
             Authorization: Cookies.get('sessionId')
           }, this.mergeConfig.headers || {}),
-          onUploadProgress: this.UploadProgress,
+          onUploadProgress: this.UploadProgress
         }).then(res => {
           const { data } = res
           const item = get(data, this.mergeConfig.listPath || 'data')
@@ -236,7 +246,7 @@ export default {
             headers: Object.assign({
               Authorization: Cookies.get('sessionId')
             }, this.mergeConfig.headers || {}),
-            onUploadProgress: this.UploadProgress,
+            onUploadProgress: this.UploadProgress
           }).then(res => {
             const { data } = res
             const item = get(data, this.mergeConfig.listPath || 'data')
