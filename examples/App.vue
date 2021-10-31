@@ -6,13 +6,19 @@
 </template>
 
 <script>
-
 import SGroupFormUse from './components/SGroupFormUse'
 import STableUse from './components/STableUse'
 
 export default {
   name: 'App',
-  components: {SGroupFormUse, STableUse}
+  components: { SGroupFormUse, STableUse },
+  data () {
+    return {
+      tableCol: [],
+      data: []
+    }
+  },
+  methods: {}
 }
 </script>
 
@@ -23,5 +29,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
+
+  td {
+    border: 1px solid #000;
+  }
 }
 </style>

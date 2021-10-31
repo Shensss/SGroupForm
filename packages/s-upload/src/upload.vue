@@ -1,29 +1,29 @@
 <template>
   <div class="upload" :class="btnView==='plus'?'start':''">
     <el-button
-        v-show="fileList.length<length"
-        v-if="!btnView"
-        :loading="loading"
-        v-bind="btnProps"
-        @click="clickHandle"
+      v-show="fileList.length<length"
+      v-if="!btnView"
+      :loading="loading"
+      v-bind="btnProps"
+      @click="clickHandle"
     >
       <template v-if="loading">正在上传（{{ progressRatio }}%）</template>
       <template v-else>{{ btnProps.text }}</template>
     </el-button>
-    <span :class="fileList.length<length"/>
+    <span :class="fileList.length<length" />
     <div v-show="fileList.length<length" v-if="btnView==='plus'" class="plus" @click="clickHandle">
-      <i class="el-icon-plus"/>
+      <i class="el-icon-plus" />
     </div>
     <span v-html="tips"></span>
-    <input ref="input" type="file" :accept="fileType" @change="handleChange"/>
+    <input ref="input" type="file" :accept="fileType" @change="handleChange" />
     <file-view
-        v-if="fileView&&fileList.length>0"
-        v-model="fileList"
-        :imageStyle="imageStyle"
-        :fileGetPath="fileGetPath"
-        :asyncConfig="asyncConfig"
-        :view="view"
-        :remove="remove"
+      v-if="fileView&&fileList.length>0"
+      v-model="fileList"
+      :imageStyle="imageStyle"
+      :fileGetPath="fileGetPath"
+      :asyncConfig="asyncConfig"
+      :view="view"
+      :remove="remove"
     >
     </file-view>
   </div>
@@ -35,6 +35,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import get from 'lodash-es/get'
 import merge from 'lodash-es/merge'
+import Compressor from 'compressorjs'
 
 export default {
   name: 'SUpload',
@@ -97,6 +98,12 @@ export default {
       default: () => {
         return {}
       }
+    },
+    quality: {
+      type: [Number, String],
+      default: () => {
+        return 0.82
+      }
     }
   },
   data () {
@@ -116,9 +123,9 @@ export default {
         '.csv': 'text/csv',
         '.xls': 'application/vnd.ms-excel',
         '.xlsx':
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         '.pptx':
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
@@ -193,6 +200,21 @@ export default {
     },
     handleChange () {
       const file = this.$refs.input.files[0]
+      if (file.type.indexOf('image') >= 0) {
+        new Compressor(file, {
+          quality: this.quality,
+          width: 1024,
+          success: (result) => {
+            const newFile = new window.File([result], result.name, { type: result.type })
+            this.realUpload(newFile)
+          }
+        })
+      } else {
+        this.realUpload(file)
+      }
+    },
+    realUpload (file) {
+      console.log(file)
       const access = this.checkType(file.name)
       this.loading = true
       if (!access) {
@@ -205,7 +227,7 @@ export default {
         this.$refs.input.value = ''
         this.loading = false
         this.progressRatio = 0
-        return this.$message.error(`文件${ file.name }过大!`)
+        return this.$message.error(`文件${file.name}过大!`)
       }
       if (this.mergeConfig.fileType !== 'base64') {
         const formData = new FormData()

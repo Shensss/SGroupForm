@@ -5,8 +5,7 @@
         :columns="columns"
         type="edit"
         :index="false"
-        v-model="tableData"
-        @selectChange="selectChange">
+        v-model="tableData">
     </s-group-table>
     <button @click="change"></button>
     <!--  option 操作列 -->
@@ -32,23 +31,13 @@ export default {
       columns: [
         {
           label: '类型名称',
-          key: 'checkbox',
-          type: 'checkbox',
-          options: [
-            {
-              label: '',
-              value: 1
-            }
-          ]
-        },
-        {
-          label: '类型名称',
+          type:'input',
           key: 'name',
         },
         {
           label: '类型名称',
           key: 'type',
-          type: 'dict',
+          type: 'select',
           options: [
             {
               label: '类型1',

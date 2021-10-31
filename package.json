@@ -1,6 +1,6 @@
 {
   "name": "s-group-form",
-  "version": "0.3.67",
+  "version": "0.3.8",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -15,6 +15,7 @@
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "codemirror": "^5.59.4",
+    "compressorjs": "^1.1.1",
     "core-js": "^3.6.5",
     "cross-env": "^5.2.0",
     "element-ui": "^2.4.6",

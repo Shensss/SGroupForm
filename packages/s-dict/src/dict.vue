@@ -60,7 +60,7 @@ export default {
       if (this.value || this.value === 0 || this.value === '0' || this.value === '' || Array.isArray(this.value) && this.value.length > 0) {
         if (Array.isArray(this.value)) {
           const arr = []
-          if (/\[.*\]/.test(this.options[0])) {
+          if (/\[.*\]/.test(this.options[0][this.mapper.value])) {
             this.normalDict(JSON.stringify(this.value), this.options)
           } else {
             this.value.map(val => {

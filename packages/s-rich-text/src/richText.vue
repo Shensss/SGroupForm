@@ -1,19 +1,21 @@
 <template>
   <div>
     <quill-editor
-        ref="myQuillEditor"
-        v-model="content"
-        :options="editorOption"
-        :style="inputStyle"
-        @blur="onEditorBlur($event)"
-        @focus="onEditorFocus($event)"
-        @ready="onEditorReady"
+      ref="myQuillEditor"
+      v-model="content"
+      :options="editorOption"
+      :style="inputStyle"
+      @blur="onEditorBlur($event)"
+      @focus="onEditorFocus($event)"
+      @ready="onEditorReady"
     ></quill-editor>
-    <input ref="input"
-           class="button"
-           type="file"
-           :accept="fileType"
-           @change="handleChange">
+    <input
+      ref="input"
+      class="button"
+      type="file"
+      :accept="fileType"
+      @change="handleChange"
+    >
   </div>
 </template>
 
@@ -21,7 +23,7 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import {addQuillTitle} from './zh_cn'
+import { addQuillTitle } from './zh_cn'
 import quillEditor from './editor'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -34,7 +36,7 @@ export default {
     value: String,
     asyncConfig: {
       type: Object,
-      default() {
+      default () {
         return {
           data: []
         }
@@ -42,12 +44,12 @@ export default {
     },
     inputStyle: Object,
     placeholder: String,
-    readonly: Boolean,
+    readonly: Boolean
   },
   components: {
     quillEditor
   },
-  data() {
+  data () {
     return {
       option: {},
       file: '',
@@ -65,9 +67,9 @@ export default {
         '.csv': 'text/csv',
         '.xls': 'application/vnd.ms-excel',
         '.xlsx':
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         '.pptx':
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         '.doc': 'application/msword',
         '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         '.mp4': 'audio/mp4, video/mp4'
@@ -76,7 +78,7 @@ export default {
     }
   },
   computed: {
-    fileType() {
+    fileType () {
       let fileTypeArr = []
       if (this.accept && typeof this.accept === 'string') {
         this.accept.split(',').map(item => {
@@ -95,32 +97,32 @@ export default {
       }
       return fileTypeArr.join(',')
     },
-    editor() {
+    editor () {
       return this.$refs.myQuillEditor.quill
     },
-    mergeConfig() {
+    mergeConfig () {
       return merge(this.$UploadConfig || {}, this.asyncConfig)
     },
-    editorOption() {
+    editorOption () {
       return merge(this.option, {
         placeholder: this.placeholder
       })
     },
     content: {
-      get() {
+      get () {
         return this.value
       },
-      set(val) {
+      set (val) {
         this.$emit('input', val)
       }
     }
   },
-  mounted() {
+  mounted () {
     this.content = this.value
     this.initUploadImage()
   },
   methods: {
-    checkType(fileName) {
+    checkType (fileName) {
       if (!this.accept) return true
       const index = fileName.lastIndexOf('.')
       const extension = fileName.substring(index).toLowerCase()
@@ -132,7 +134,7 @@ export default {
         return false
       }
     },
-    handleChange() {
+    handleChange () {
       const file = this.$refs.input.files[0]
       const access = this.checkType(file.name)
       if (!access) {
@@ -155,8 +157,8 @@ export default {
           Authorization: Cookies.get('sessionId')
         }, this.mergeConfig.headers || {})
       }).then(res => {
-        const {data} = res
-        const item = get(data, this.mergeConfig.listPath)
+        const { data } = res
+        const item = get(data, this.mergeConfig.listPath || 'data')
         item.name = item[this.mergeConfig.nameKey]
         item.url = item[this.mergeConfig.urlKey]
         let Range = this.editor.getSelection()
@@ -173,26 +175,26 @@ export default {
         this.$refs.input.value = ''
       })
     },
-    initUploadImage() {
+    initUploadImage () {
       this.editor.getModule('toolbar').addHandler('image', this.imgHandler)
       this.editor.getModule('toolbar').addHandler('video', this.videoHandler)
     },
-    imgHandler() {
+    imgHandler () {
       this.accept = this.imageAccept
       this.uploadType = 'image'
       this.$refs.input.click()
     },
-    videoHandler() {
+    videoHandler () {
       this.accept = this.videoAccept
       this.uploadType = 'video'
       this.$refs.input.click()
     },
     // 失去焦点事件
-    onEditorBlur() {
+    onEditorBlur () {
       this.$emit('blur')
     },
     // 获得焦点事件
-    onEditorFocus(quill) {
+    onEditorFocus (quill) {
       if (this.readonly) {
         quill.enable(false)
       } else {
@@ -201,18 +203,18 @@ export default {
       }
     },
     // 准备富文本编辑器
-    onEditorReady() {
+    onEditorReady () {
       addQuillTitle()
     },
     // 内容改变事件
-    onEditorChange({quill, html, text}) {
+    onEditorChange ({ quill, html, text }) {
       this.$emit('change', html)
     }
   }
 }
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .ql-snow .ql-picker {
   line-height: 1;
 }

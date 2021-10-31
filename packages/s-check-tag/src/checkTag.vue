@@ -3,16 +3,20 @@
     <span v-if="showAllPick&&flag" class="el-tag noColor" @click="pickAll">全选</span>
     <span v-if="showAllPick&&!flag" class="el-tag noColor" @click="pickNone">全不选</span>
     <template v-for="item in list">
-      <el-tag v-if="item.check"
-              :key="item[mapper.value]"
-              :size="size"
-              :disable-transitions="true"
-              @close="remove(item)"
-              :closable="!readonly">
+      <el-tag
+          v-if="item.check"
+          :key="item[mapper.value]"
+          :size="size"
+          :disable-transitions="true"
+          @close="remove(item)"
+          :closable="!readonly"
+      >
         {{ item[mapper.label] }}
       </el-tag>
-      <span @click="pick(item)" v-else-if="!readonly" class="el-tag noColor"
-            :key="item[mapper.value]">
+      <span
+          @click="pick(item)" v-else-if="!readonly" class="el-tag noColor"
+          :key="item[mapper.value]"
+      >
                 {{ item[mapper.label] }}
             </span>
     </template>
@@ -85,6 +89,8 @@ export default {
       this.list.map(item => {
         if (this.value.indexOf(item[this.mapper.value]) >= 0) {
           this.$set(item, 'check', true)
+        } else {
+          this.$set(item, 'check', false)
         }
       })
     },

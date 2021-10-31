@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs')
 const join = path.join
 const webpack = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 function getEntries (path) {
     let files = fs.readdirSync(resolve(path))
     const entries = files.reduce((ret, item) => {
@@ -103,8 +102,7 @@ const buildConfig = {
             new webpack.ProvidePlugin({
                 'window.Quill': 'quill/dist/quill.js',
                 'Quill': 'quill/dist/quill.js'
-            }),
-            new BundleAnalyzerPlugin()
+            })
         ]
     },
     chainWebpack: config => {

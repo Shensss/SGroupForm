@@ -1,5 +1,5 @@
 <template>
-  <img :src="domain+useUrl" @error="error=true" :alt="name" :title="name" @click="$emit('preview')"/>
+  <img :src="domain+useUrl" @error="error=true" @click="$emit('preview')"/>
 </template>
 
 <script>

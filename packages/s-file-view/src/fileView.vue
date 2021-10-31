@@ -1,50 +1,67 @@
 <template>
   <div class="fileView">
-    <ul v-if="view==='file'"
-        class="fileList">
-      <li v-for="(item,index) in viewList"
-          v-show="item.name"
-          :key="'file'+index">
+    <ul
+      v-if="view==='file'"
+      class="fileList"
+    >
+      <li
+        v-for="(item,index) in showLength?viewList.slice(0,showLength):viewList"
+        v-show="item.name"
+        :key="'file'+index"
+      >
         <p @click="previewHandle(item)">
           <svg class="icon" aria-hidden="true">
-            <use :xlink:href="item.name|typeFilter"/>
+            <use :xlink:href="item.name|typeFilter" />
           </svg>
           {{ item.name }}
         </p>
         <span>
           <svg class="icon" aria-hidden="true" @click="download(item)">
-             <use xlink:href="#icon-download"/>
+             <use xlink:href="#icon-download" />
           </svg>
           <svg v-if="remove" class="icon" aria-hidden="true" @click="removeFile(item)">
-            <use xlink:href="#icon-remove"/>
+            <use xlink:href="#icon-remove" />
           </svg>
         </span>
       </li>
     </ul>
-    <viewer v-if="view==='image'"
-            ref="viewer"
-            :images="images">
-      <ul class="imageList"
-          :class="{remove:remove}">
-        <li v-for="(item,index) in viewList"
-            :key="'file'+index"
-            :style="imageStyle">
+    <viewer
+      v-if="view==='image'"
+      ref="viewer"
+      :images="images"
+    >
+      <ul
+        class="imageList"
+        :class="{remove:remove}"
+      >
+        <li
+          v-show="showLength?index<showLength:true"
+          v-for="(item,index) in viewList"
+          :key="'file'+index"
+          :style="imageStyle"
+        >
           <template
-              v-if="String(item.url).indexOf('.mp4')>0||item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'">
-            <video :src="mergeConfig.domain+item.url"
-                   @click="viewVideo(item.url)"/>
+            v-if="String(item.url).indexOf('.mp4')>0||item.name && item.name.substr(item.name.lastIndexOf('.')).slice('.')==='.mp4'"
+          >
+            <video
+              :src="mergeConfig.domain+item.url"
+              @click="viewVideo(item.url)"
+            />
             <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
-              <use xlink:href="#icon-remove"/>
+              <use xlink:href="#icon-remove" />
             </svg>
           </template>
           <template v-else>
-            <s-image :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item" @preview="previewHandler"></s-image>
+            <s-image
+              :fileGetPath="fileGetPath" :domain="mergeConfig.domain" :value="item"
+              @preview="previewHandler"
+            ></s-image>
             <div class="iconGroup">
               <svg class="icon" aria-hidden="true" v-if="remove" @click="removeFile(item)">
-                <use xlink:href="#icon-remove"/>
+                <use xlink:href="#icon-remove" />
               </svg>
               <svg class="icon" aria-hidden="true" v-if="preview" @click="previewHandler">
-                <use xlink:href="#icon-yulan"/>
+                <use xlink:href="#icon-yulan" />
               </svg>
             </div>
           </template>
@@ -52,23 +69,23 @@
       </ul>
     </viewer>
     <div v-if="view==='slot'" class="fileViewSlot">
-      <slot :data="viewList"/>
+      <slot :data="viewList" />
     </div>
     <div v-if="model" class="model">
-      <i class="el-icon el-icon-close" @click="model=false"/>
-      <video controls :src="mergeConfig.domain+current"/>
+      <i class="el-icon el-icon-close" @click="model=false" />
+      <video controls :src="mergeConfig.domain+current" />
     </div>
   </div>
 </template>
 <script>
 import merge from 'lodash-es/merge'
-import {removeObjWithArr} from '../../utils'
+import { removeObjWithArr } from '../../utils'
 import SImage from '../../s-image/src/sImage'
 
 export default {
   name: 'SFileView',
   filters: {
-    typeFilter(name) {
+    typeFilter (name) {
       const type = name && name.substr(name.lastIndexOf('.')).slice('.')
       switch (type) {
         case '.pdf':
@@ -100,7 +117,7 @@ export default {
   props: {
     value: {
       type: [Array, String],
-      default() {
+      default () {
         return []
       }
     },
@@ -112,13 +129,14 @@ export default {
       type: Boolean,
       default: true
     },
+    showLength: Number,
     view: {
       type: String,
       default: 'file'
     },
     imageStyle: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     },
@@ -128,12 +146,12 @@ export default {
     },
     asyncConfig: {
       type: Object,
-      default() {
+      default () {
         return {}
       }
     }
   },
-  data() {
+  data () {
     return {
       current: '',
       model: false,
@@ -144,54 +162,64 @@ export default {
     SImage
   },
   computed: {
-    images() {
+    images () {
       return this.viewList
     },
-    mergeConfig() {
+    mergeConfig () {
       return merge(this.$UploadConfig, this.asyncConfig)
     }
   },
   watch: {
     value: {
       deep: true,
-      handler() {
+      handler () {
         this.buildViewList()
       }
     }
   },
-  created() {
+  created () {
     this.buildViewList()
   },
   methods: {
-    previewHandler() {
-      this.$refs.viewer.rebuildViewer()
-      this.$refs.viewer.$viewer.show()
+    previewHandler () {
+      if (this.preview) {
+        this.$refs.viewer.rebuildViewer()
+        this.$refs.viewer.$viewer.show()
+      }
     },
-    viewVideo(url) {
+    viewVideo (url) {
       this.current = url
       this.model = true
     },
-    removeFile(item) {
+    removeFile (item) {
       removeObjWithArr(this.viewList, item)
       this.$emit('input', this.viewList)
     },
-    download(item) {
+    download (item) {
       const a = document.createElement('a')
       a.setAttribute('download', '')
-      a.setAttribute('href', this.mergeConfig.domain + item.url)
+      if (item.url.indexOf('http') >= 0) {
+        a.setAttribute('href', item.url)
+      } else {
+        a.setAttribute('href', this.mergeConfig.domain + item.url)
+      }
       a.click()
     },
-    previewHandle(item) {
+    previewHandle (item) {
       const type = item.name.substr(item.name.lastIndexOf('.'))
       switch (type) {
         case '.pdf':
         case '.xls':
         case '.xlsx':
         default:
-          window.open(this.mergeConfig.domain + item.url)
+          if (item.url.indexOf('http') >= 0) {
+            window.open(item.url)
+          } else {
+            window.open(this.mergeConfig.domain + item.url)
+          }
       }
     },
-    buildViewList() {
+    buildViewList () {
       let viewList = []
       if (this.value && typeof this.value === 'string') {
         if (this.value.indexOf('[{') < 0) {
@@ -231,6 +259,11 @@ export default {
   }
 }
 </script>
+<style>
+.viewer-title {
+  display: none !important;
+}
+</style>
 <style lang="scss" scoped>
 .icon {
   width: 1em;
