@@ -5,9 +5,10 @@
       v-if="!btnView"
       :loading="loading"
       v-bind="btnProps"
+      type="primary"
       @click="clickHandle"
     >
-      <template v-if="loading">正在上传（{{ progressRatio }}%）</template>
+      <template v-if="loading">upload（{{ progressRatio }}%）</template>
       <template v-else>{{ btnProps.text }}</template>
     </el-button>
     <span :class="fileList.length<length" />
@@ -15,7 +16,7 @@
       <i class="el-icon-plus" />
     </div>
     <span v-html="tips"></span>
-    <input ref="input" type="file" :accept="fileType" @change="handleChange" />
+    <input style="display: none" ref="input" type="file" :accept="fileType" @change="handleChange" />
     <file-view
       v-if="fileView&&fileList.length>0"
       v-model="fileList"
@@ -200,12 +201,12 @@ export default {
     },
     handleChange () {
       const file = this.$refs.input.files[0]
-      if (file.type.indexOf('image') >= 0) {
+      if (file.type.indexOf('image') >= 0 && this.quality < 1) {
         new Compressor(file, {
           quality: this.quality,
-          width: 1024,
+          maxWidth: 1024,
           success: (result) => {
-            const newFile = new window.File([result], result.name, { type: result.type })
+            const newFile = new window.File([result], result.name.toLowerCase(), { type: result.type.toLowerCase() })
             this.realUpload(newFile)
           }
         })
@@ -214,7 +215,6 @@ export default {
       }
     },
     realUpload (file) {
-      console.log(file)
       const access = this.checkType(file.name)
       this.loading = true
       if (!access) {
