@@ -13,43 +13,59 @@ import STime from './s-time/index'
 import SImage from './s-image/index'
 import SNumber from './s-number/index'
 import SSelectRange from './s-select-range'
-import {version} from '../package.json'
+import { version } from '../package.json'
 
-const components = [SGroupLayout, SGroupForm, SNumber,STime, SSelectRange, SCode, SImage, SUpload, SFileView, SRichText, SDict, STreeDict, SText, SGroupTable, SCheckTag]
+const components = [
+	SGroupLayout,
+	SGroupForm,
+	SNumber,
+	STime,
+	SSelectRange,
+	SCode,
+	SImage,
+	SUpload,
+	SFileView,
+	SRichText,
+	SDict,
+	STreeDict,
+	SText,
+	SGroupTable,
+	SCheckTag
+]
 const install = function (Vue, opt) {
-    // 判断是否安装
-    if (install.installed) {
-        return
-    }
-    components.forEach((component) => {
-        if (opt && component.name === 'SGroupForm') {
-            Vue.use(component, opt)
-        } else {
-            Vue.use(component)
-        }
-    })
+	// 判断是否安装
+	if (install.installed) {
+		return
+	}
+	components.forEach((component) => {
+		if (opt && component.name === 'SGroupForm') {
+			Vue.use(component, opt)
+		} else {
+			Vue.use(component)
+		}
+	})
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue)
+	install(window.Vue)
 }
 
 export default {
-    version,
-    install,
-    SGroupLayout,
-    SUpload,
-    SNumber,
-    STime,
-    SFileView,
-    SRichText,
-    SGroupForm,
-    SDict,
-    STreeDict,
-    SText,
-    SGroupTable,
-    SCheckTag,
-    SSelectRange,
-    SCode,
-    SImage
+	version,
+	install,
+	SGroupLayout,
+	SUpload,
+	SNumber,
+	STime,
+	SFileView,
+	SRichText,
+	SGroupForm,
+	SDict,
+	STreeDict,
+	SText,
+	SGroupTable,
+	SCheckTag,
+	SSelectRange,
+	SCode,
+	SImage
 }

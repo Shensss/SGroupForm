@@ -1,7 +1,22 @@
+import QuillBetterTable from 'quill-better-table'
+
 export default {
     theme: 'snow',
     boundary: document.body,
     modules: {
+        table: false,  // disable table module
+        'better-table': {
+            operationMenu: {
+                items: {
+                    unmergeCells: {
+                        text: 'Another unmerge cells name'
+                    }
+                }
+            }
+        },
+        keyboard: {
+            bindings: QuillBetterTable.keyboardBindings
+        },
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
