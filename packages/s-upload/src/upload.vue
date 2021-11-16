@@ -103,7 +103,7 @@ export default {
     quality: {
       type: [Number, String],
       default: () => {
-        return 0.82
+        return 1
       }
     }
   },

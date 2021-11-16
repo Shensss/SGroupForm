@@ -26,8 +26,25 @@ export default {
 			form: [
 				{
 					label: 'aaa：',
+					key: 'aa1',
+					type: 'input',
+					props: {
+						clearable: true
+					},
+					rule: [
+						{
+							required: true,
+							trigger: 'change'
+						}
+					]
+				},
+				{
+					label: 'aaa：',
 					key: 'aa',
-					type: 'richText',
+					type: 'upload',
+					props: {
+						size: 0
+					},
 					rule: [
 						{
 							required: true,
