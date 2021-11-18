@@ -41,7 +41,7 @@ export default {
 				{
 					label: 'aaa：',
 					key: 'aa',
-					type: 'upload',
+					type: 'richText',
 					props: {
 						size: 0
 					},
@@ -53,12 +53,14 @@ export default {
 					]
 				}
 			],
-			formData: {}
+			formData: {
+				aa:'<p>123131</p>'
+			}
 		}
 	},
 	methods: {
 		onchange () {
-			this.formData.aa = []
+			this.formData.aa = ''
 		},
 		submit () {
 			console.log(this.formData)

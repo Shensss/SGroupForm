@@ -94,7 +94,10 @@ export default {
 
 				// Set editor content
 				if (this.value || this.content) {
-					this.quill.pasteHTML(this.value || this.content)
+					let delta = this.quill.clipboard.convert({
+						html: this.value || this.content
+					})
+					this.quill.setContents(delta)
 				}
 
 				// Disabled editor
@@ -133,7 +136,10 @@ export default {
 			if (this.quill) {
 				if (newVal && newVal !== this.Content) {
 					this.Content = newVal
-					this.quill.pasteHTML(newVal)
+					let delta = this.quill.clipboard.convert({
+						html: newVal
+					})
+					this.quill.setContents(delta)
 				} else if (!newVal) {
 					this.quill.setText('')
 				}
@@ -144,7 +150,10 @@ export default {
 			if (this.quill) {
 				if (newVal && newVal !== this.Content) {
 					this.Content = newVal
-					this.quill.pasteHTML(newVal)
+					let delta = this.quill.clipboard.convert({
+						html: newVal
+					})
+					this.quill.setContents(delta)
 				} else if (!newVal) {
 					this.quill.setText('')
 				}
