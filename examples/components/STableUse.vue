@@ -7,7 +7,8 @@
         :index="false"
         v-model="tableData">
     </s-group-table>
-    <button @click="change"></button>
+    <button @click="addRow">+</button>
+    <button @click="change">ssss</button>
     <!--  option 操作列 -->
     <!--  props  element的表格属性 -->
     <!--  page-config 分页 -->
@@ -61,20 +62,6 @@ export default {
       ],
       tableData: [],
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.tableData = [
-        {checkbox: [], isd: 12, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 132, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 142, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 152, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 162, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 172, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 182, name: '张三', type: '类型1', time: '2020-01-01'},
-        {checkbox: [], isd: 912, name: '张三', type: '类型1', time: '2020-01-01'},
-      ]
-    }, 100)
   },
   methods: {
     addRow() {

@@ -15,7 +15,7 @@
     <options-tag v-if="item.type&&optionsTag.indexOf(item.type)>=0"
                  :mapper="mergeMapper(item)"
                  @change="$emit('change',item,scope.row)"
-                 v-model="scope.row[item.key]"
+                 v-model="model"
                  :config="item">
     </options-tag>
     <self-tag v-if="item.type&&selfTag.indexOf(item.type)>=0"
@@ -51,7 +51,8 @@ export default {
         return this.value
       },
       set(val) {
-        this.$emit('change', val)
+	      console.log(val)
+	      this.$emit('change', val)
         this.$emit('input', val)
       }
     }
