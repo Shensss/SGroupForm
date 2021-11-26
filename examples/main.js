@@ -9,14 +9,14 @@ import SGroupForm from '../packages'
 Vue.use(SGroupForm, {
   UploadConfig: {
     getType: 'JSON',
-    path: '/szzt/pc/upload/file',
+    path: '/tl_construction_api/pc/upload/file',
     data: [
       {
         key: 'fileArray',
         value: 'file',
       },
     ],
-    domain: 'http://121.40.133.115:8180/api/',
+    domain: '',
     listPath: 'data.resultList[0]',
     urlKey: 'fileUrl',
     nameKey: 'originalFilename',

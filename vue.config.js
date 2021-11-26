@@ -34,12 +34,12 @@ const devConfig = {
                     '^/node-szzt': '/api'
                 }
             },
-            '/szzt': {
-                target: 'http://121.40.133.115:8180',
+            '/tl_construction_api': {
+                target: 'http://121.40.133.115:8600',
                 // target: 'http://192.168.3.2:8180',
                 changeOrigin: true, // 允许websockets跨域
                 pathRewrite: {
-                    '^/szzt': '/xh_uc_front_api'
+                    '^/tl_construction_api': '/tl_construction_api'
                 }
             }
         },

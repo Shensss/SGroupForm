@@ -27,9 +27,9 @@ export default {
 				{
 					label: 'aaa：',
 					key: 'aa1',
-					type: 'input',
+					type: 'upload',
 					props: {
-						clearable: true
+						clearable: true,
 					},
 					rule: [
 						{
@@ -54,7 +54,7 @@ export default {
 				}
 			],
 			formData: {
-				aa:'<p>123131</p>'
+				aa: '<p>123131</p>'
 			}
 		}
 	},
